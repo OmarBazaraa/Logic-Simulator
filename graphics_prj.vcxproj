@@ -126,13 +126,13 @@
     </Bscmake>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\..\Sobeih%27s\Source\Repos\Logic-Simulator2\Actions\Load.cpp" />
     <ClCompile Include="Actions\AddConnection.cpp" />
     <ClCompile Include="Actions\AddGate.cpp" />
     <ClCompile Include="Actions\Copy.cpp" />
     <ClCompile Include="Actions\Cut.cpp" />
     <ClCompile Include="Actions\Delete.cpp" />
     <ClCompile Include="Actions\Edit.cpp" />
+    <ClCompile Include="Actions\Load.cpp" />
     <ClCompile Include="Actions\Paste.cpp" />
     <ClCompile Include="Actions\RedoAction.cpp" />
     <ClCompile Include="Actions\Save.cpp" />
@@ -202,7 +202,6 @@
     <ClCompile Include="Utilities\Utility.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\..\Sobeih%27s\Source\Repos\Logic-Simulator2\Actions\Load.h" />
     <ClInclude Include="Actions\Action.h" />
     <ClInclude Include="Actions\AddConnection.h" />
     <ClInclude Include="Actions\AddGate.h" />
@@ -210,6 +209,7 @@
     <ClInclude Include="Actions\Cut.h" />
     <ClInclude Include="Actions\Delete.h" />
     <ClInclude Include="Actions\Edit.h" />
+    <ClInclude Include="Actions\Load.h" />
     <ClInclude Include="Actions\Paste.h" />
     <ClInclude Include="Actions\RedoAction.h" />
     <ClInclude Include="Actions\Save.h" />

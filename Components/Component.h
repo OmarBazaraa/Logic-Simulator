@@ -28,9 +28,6 @@ public:
 	/* Returns the ID of the component */
 	int GetID() const;
 
-	/* Toggle selected state of the component */
-	void ToggleSelection();
-
 	/* Sets the selection of the component */
 	void SetSelected(bool s);
 

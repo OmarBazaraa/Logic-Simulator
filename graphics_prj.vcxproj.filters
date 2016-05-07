@@ -216,7 +216,7 @@
     <ClCompile Include="Actions\RedoAction.cpp">
       <Filter>Actions</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\Sobeih%27s\Source\Repos\Logic-Simulator2\Actions\Load.cpp">
+    <ClCompile Include="Actions\Load.cpp">
       <Filter>Actions</Filter>
     </ClCompile>
   </ItemGroup>
@@ -398,7 +398,7 @@
     <ClInclude Include="Actions\RedoAction.h">
       <Filter>Actions</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\Sobeih%27s\Source\Repos\Logic-Simulator2\Actions\Load.h">
+    <ClInclude Include="Actions\Load.h">
       <Filter>Actions</Filter>
     </ClInclude>
   </ItemGroup>
