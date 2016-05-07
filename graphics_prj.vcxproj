@@ -1,0 +1,267 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{AA10A871-5060-4858-9CB5-CAE63E0A749B}</ProjectGuid>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <PlatformToolset>v140</PlatformToolset>
+    <UseOfMfc>false</UseOfMfc>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <PlatformToolset>v140</PlatformToolset>
+    <UseOfMfc>false</UseOfMfc>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="$(VCTargetsPath)Microsoft.CPP.UpgradeFromVC60.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="$(VCTargetsPath)Microsoft.CPP.UpgradeFromVC60.props" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>11.0.61030.0</_ProjectFileVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <OutDir>.\Release\</OutDir>
+    <IntDir>.\Release\</IntDir>
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <OutDir>.\Debug\</OutDir>
+    <IntDir>.\Debug\</IntDir>
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Midl>
+      <TypeLibraryName>.\Release/graphics_prj.tlb</TypeLibraryName>
+      <HeaderFileName />
+    </Midl>
+    <ClCompile>
+      <Optimization>MaxSpeed</Optimization>
+      <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <StringPooling>true</StringPooling>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <PrecompiledHeaderOutputFile>.\Release/graphics_prj.pch</PrecompiledHeaderOutputFile>
+      <AssemblerListingLocation>.\Release/</AssemblerListingLocation>
+      <ObjectFileName>.\Release/</ObjectFileName>
+      <ProgramDataBaseFileName>.\Release/</ProgramDataBaseFileName>
+      <WarningLevel>Level3</WarningLevel>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <Culture>0x0409</Culture>
+    </ResourceCompile>
+    <Link>
+      <AdditionalDependencies>odbc32.lib;odbccp32.lib;winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <OutputFile>.\Release/graphics_prj.exe</OutputFile>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <ProgramDatabaseFile>.\Release/graphics_prj.pdb</ProgramDatabaseFile>
+      <SubSystem>Console</SubSystem>
+      <TargetMachine>MachineX86</TargetMachine>
+    </Link>
+    <Bscmake>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <OutputFile>.\Release/graphics_prj.bsc</OutputFile>
+    </Bscmake>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Midl>
+      <TypeLibraryName>.\Debug/graphics_prj.tlb</TypeLibraryName>
+      <HeaderFileName />
+    </Midl>
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MinimalRebuild>true</MinimalRebuild>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <PrecompiledHeaderOutputFile>.\Debug/graphics_prj.pch</PrecompiledHeaderOutputFile>
+      <AssemblerListingLocation>.\Debug/</AssemblerListingLocation>
+      <ObjectFileName>.\Debug/</ObjectFileName>
+      <ProgramDataBaseFileName>.\Debug/</ProgramDataBaseFileName>
+      <BrowseInformation>true</BrowseInformation>
+      <WarningLevel>Level3</WarningLevel>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <Culture>0x0409</Culture>
+    </ResourceCompile>
+    <Link>
+      <AdditionalDependencies>odbc32.lib;odbccp32.lib;winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <OutputFile>.\Debug/graphics_prj.exe</OutputFile>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <ProgramDatabaseFile>.\Debug/graphics_prj.pdb</ProgramDatabaseFile>
+      <SubSystem>Console</SubSystem>
+      <TargetMachine>MachineX86</TargetMachine>
+    </Link>
+    <Bscmake>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <OutputFile>.\Debug/graphics_prj.bsc</OutputFile>
+    </Bscmake>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="Actions\AddConnection.cpp" />
+    <ClCompile Include="Actions\AddGate.cpp" />
+    <ClCompile Include="Actions\Copy.cpp" />
+    <ClCompile Include="Actions\Cut.cpp" />
+    <ClCompile Include="Actions\Delete.cpp" />
+    <ClCompile Include="Actions\Edit.cpp" />
+    <ClCompile Include="Actions\Paste.cpp" />
+    <ClCompile Include="Actions\RedoAction.cpp" />
+    <ClCompile Include="Actions\Save.cpp" />
+    <ClCompile Include="Actions\Select.cpp" />
+    <ClCompile Include="Actions\TruthTable.cpp" />
+    <ClCompile Include="Actions\UndoAction.cpp" />
+    <ClCompile Include="CMUgraphicsLib\auxil.cpp" />
+    <ClCompile Include="CMUgraphicsLib\CMUgraphics.cpp" />
+    <ClCompile Include="CMUgraphicsLib\image.cpp" />
+    <ClCompile Include="CMUgraphicsLib\jpegload.c" />
+    <ClCompile Include="CMUgraphicsLib\keyqueue.cpp" />
+    <ClCompile Include="CMUgraphicsLib\mousequeue.cpp" />
+    <ClCompile Include="CMUgraphicsLib\windowinput.cpp" />
+    <ClCompile Include="CMUgraphicsLib\jpeg\jcomapi.c" />
+    <ClCompile Include="CMUgraphicsLib\jpeg\jcparam.c" />
+    <ClCompile Include="CMUgraphicsLib\jpeg\jdapimin.c" />
+    <ClCompile Include="CMUgraphicsLib\jpeg\jdapistd.c" />
+    <ClCompile Include="CMUgraphicsLib\jpeg\jdatasrc.c" />
+    <ClCompile Include="CMUgraphicsLib\jpeg\jdcoefct.c" />
+    <ClCompile Include="CMUgraphicsLib\jpeg\jdcolor.c" />
+    <ClCompile Include="CMUgraphicsLib\jpeg\jddctmgr.c" />
+    <ClCompile Include="CMUgraphicsLib\jpeg\jdhuff.c" />
+    <ClCompile Include="CMUgraphicsLib\jpeg\jdinput.c" />
+    <ClCompile Include="CMUgraphicsLib\jpeg\jdmainct.c" />
+    <ClCompile Include="CMUgraphicsLib\jpeg\jdmarker.c" />
+    <ClCompile Include="CMUgraphicsLib\jpeg\jdmaster.c" />
+    <ClCompile Include="CMUgraphicsLib\jpeg\jdmerge.c" />
+    <ClCompile Include="CMUgraphicsLib\jpeg\jdphuff.c" />
+    <ClCompile Include="CMUgraphicsLib\jpeg\jdpostct.c" />
+    <ClCompile Include="CMUgraphicsLib\jpeg\jdsample.c" />
+    <ClCompile Include="CMUgraphicsLib\jpeg\jdtrans.c" />
+    <ClCompile Include="CMUgraphicsLib\jpeg\jerror.c" />
+    <ClCompile Include="CMUgraphicsLib\jpeg\jidctflt.c" />
+    <ClCompile Include="CMUgraphicsLib\jpeg\jidctfst.c" />
+    <ClCompile Include="CMUgraphicsLib\jpeg\jidctint.c" />
+    <ClCompile Include="CMUgraphicsLib\jpeg\jidctred.c" />
+    <ClCompile Include="CMUgraphicsLib\jpeg\jmemmgr.c" />
+    <ClCompile Include="CMUgraphicsLib\jpeg\jmemnobs.c" />
+    <ClCompile Include="CMUgraphicsLib\jpeg\jquant1.c" />
+    <ClCompile Include="CMUgraphicsLib\jpeg\jquant2.c" />
+    <ClCompile Include="CMUgraphicsLib\jpeg\jutils.c" />
+    <ClCompile Include="Components\AND.cpp" />
+    <ClCompile Include="Components\AND3.cpp" />
+    <ClCompile Include="Components\Buffer.cpp" />
+    <ClCompile Include="Components\Component.cpp" />
+    <ClCompile Include="Components\Connection.cpp" />
+    <ClCompile Include="Components\Gate.cpp" />
+    <ClCompile Include="Components\LogicGate.cpp" />
+    <ClCompile Include="Components\LED.cpp" />
+    <ClCompile Include="Components\NAND.cpp" />
+    <ClCompile Include="Components\NOR.cpp" />
+    <ClCompile Include="Components\NOR3.cpp" />
+    <ClCompile Include="Components\NOT.cpp" />
+    <ClCompile Include="Components\OR.cpp" />
+    <ClCompile Include="ApplicationManager.cpp" />
+    <ClCompile Include="Components\Switch.cpp" />
+    <ClCompile Include="Components\XNOR.cpp" />
+    <ClCompile Include="Components\XOR.cpp" />
+    <ClCompile Include="Components\XOR3.cpp" />
+    <ClCompile Include="GUI\Input.cpp" />
+    <ClCompile Include="GUI\Output.cpp" />
+    <ClCompile Include="Main.cpp" />
+    <ClCompile Include="Demo.cpp" />
+    <ClCompile Include="Pins\InputPin.cpp" />
+    <ClCompile Include="Pins\OutputPin.cpp" />
+    <ClCompile Include="Pins\Pin.cpp" />
+    <ClCompile Include="Utilities\Utility.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Actions\Action.h" />
+    <ClInclude Include="Actions\AddConnection.h" />
+    <ClInclude Include="Actions\AddGate.h" />
+    <ClInclude Include="Actions\Copy.h" />
+    <ClInclude Include="Actions\Cut.h" />
+    <ClInclude Include="Actions\Delete.h" />
+    <ClInclude Include="Actions\Edit.h" />
+    <ClInclude Include="Actions\Paste.h" />
+    <ClInclude Include="Actions\RedoAction.h" />
+    <ClInclude Include="Actions\Save.h" />
+    <ClInclude Include="Actions\Select.h" />
+    <ClInclude Include="Actions\TruthTable.h" />
+    <ClInclude Include="Actions\UndoAction.h" />
+    <ClInclude Include="CMUgraphicsLib\auxil.h" />
+    <ClInclude Include="CMUgraphicsLib\CMUgraphics.h" />
+    <ClInclude Include="CMUgraphicsLib\colors.h" />
+    <ClInclude Include="CMUgraphicsLib\error.h" />
+    <ClInclude Include="CMUgraphicsLib\image.h" />
+    <ClInclude Include="CMUgraphicsLib\jpegload.h" />
+    <ClInclude Include="CMUgraphicsLib\keyqueue.h" />
+    <ClInclude Include="CMUgraphicsLib\mousequeue.h" />
+    <ClInclude Include="CMUgraphicsLib\version.h" />
+    <ClInclude Include="CMUgraphicsLib\windowinput.h" />
+    <ClInclude Include="CMUgraphicsLib\jpeg\jconfig.h" />
+    <ClInclude Include="CMUgraphicsLib\jpeg\jdct.h" />
+    <ClInclude Include="CMUgraphicsLib\jpeg\jdhuff.h" />
+    <ClInclude Include="CMUgraphicsLib\jpeg\jerror.h" />
+    <ClInclude Include="CMUgraphicsLib\jpeg\jinclude.h" />
+    <ClInclude Include="CMUgraphicsLib\jpeg\jmemsys.h" />
+    <ClInclude Include="CMUgraphicsLib\jpeg\jmorecfg.h" />
+    <ClInclude Include="CMUgraphicsLib\jpeg\jpegint.h" />
+    <ClInclude Include="CMUgraphicsLib\jpeg\jpeglib.h" />
+    <ClInclude Include="CMUgraphicsLib\jpeg\jversion.h" />
+    <ClInclude Include="Components\AND.h" />
+    <ClInclude Include="Components\AND3.h" />
+    <ClInclude Include="Components\Buffer.h" />
+    <ClInclude Include="Components\Component.h" />
+    <ClInclude Include="Components\Connection.h" />
+    <ClInclude Include="Components\Gate.h" />
+    <ClInclude Include="Components\LogicGate.h" />
+    <ClInclude Include="Components\LED.h" />
+    <ClInclude Include="Components\NAND.h" />
+    <ClInclude Include="Components\NOR.h" />
+    <ClInclude Include="Components\NOR3.h" />
+    <ClInclude Include="Components\NOT.h" />
+    <ClInclude Include="Components\OR.h" />
+    <ClInclude Include="ApplicationManager.h" />
+    <ClInclude Include="Components\Switch.h" />
+    <ClInclude Include="Components\XNOR.h" />
+    <ClInclude Include="Components\XOR.h" />
+    <ClInclude Include="Components\XOR3.h" />
+    <ClInclude Include="GUI\Input.h" />
+    <ClInclude Include="GUI\Output.h" />
+    <ClInclude Include="GUI\UserInterface.h" />
+    <ClInclude Include="Pins\InputPin.h" />
+    <ClInclude Include="Pins\OutputPin.h" />
+    <ClInclude Include="Pins\Pin.h" />
+    <ClInclude Include="Utilities\Defs.h" />
+    <ClInclude Include="Utilities\Utility.h" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
