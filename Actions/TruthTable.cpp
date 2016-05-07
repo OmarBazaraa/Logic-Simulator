@@ -149,7 +149,7 @@ int TruthTable::TestGate(Component*c) {
 int TruthTable::ToInt(string k) {
 	int x = 0;
 	for (int i = 0; i < k.length(); i++)
-		x += (k[i] - '0')*pow(2, k.length() - 1 - i);
+		x += (k[i] - '0')*(int)pow(2, k.length() - 1 - i);
 	return x;
 }
 

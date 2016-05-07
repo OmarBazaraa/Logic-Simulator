@@ -89,11 +89,6 @@ void Connection::Save(ofstream& file) {
 
 }
 
-/* Loads the states of the component */
-void Connection::Load() {
-
-}
-
 /* Returns the Add-ActionType of the component */
 ActionType Connection::GetAddActionType() const {
 	return ActionType::ADD_CONNECTION;

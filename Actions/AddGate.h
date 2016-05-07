@@ -27,7 +27,7 @@ private:
 
 public:
 	/* Constructor */
-	AddGate(ApplicationManager* pAppMan, ActionType actType);
+	AddGate(ApplicationManager* pAppMan, ActionType actType, int x = -1, int y = -1, string k = "");
 
 	/* Reads parameters required for action to execute */
 	virtual bool ReadActionParameters();

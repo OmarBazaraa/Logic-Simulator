@@ -18,11 +18,11 @@ bool Save::Execute() {
 	Component**ComponentList = mAppManager->GetComponentList();
 	write << ComponentCount << endl;
 	for (int i = 0; i < ComponentCount; i++)
-		if (!ComponentList[i]->IsDeleted())
+		if (!(ComponentList[i]->IsDeleted() || dynamic_cast<Connection*>(ComponentList[i])))
 			ComponentList[i]->Save(write);
 	write << "Connections\n";
 	for (int i = 0; i < ComponentCount; i++)
-		if (ComponentList[i]->IsDeleted())
+		if (!ComponentList[i]->IsDeleted() && dynamic_cast<Connection*>(ComponentList[i]))
 			ComponentList[i]->Save(write);
 	write << "-1\n";
 	

@@ -22,13 +22,9 @@ void Buffer::Draw(Output* pOut) {
 
 /* Saves the states of the component*/
 void Buffer::Save(ofstream& file) {
-
+	file << "BUFFER " << mID << " " << mLabel << " " << (mGfxInfo.x1 + mGfxInfo.x2) / 2 << " " << (mGfxInfo.y1 + mGfxInfo.y2) / 2 << endl;
 }
 
-/* Loads the states of the component */
-void Buffer::Load() {
-
-}
 
 /* Returns the Add-ActionType of the component */
 ActionType Buffer::GetAddActionType() const {

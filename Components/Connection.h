@@ -57,9 +57,6 @@ public:
 	/* Saves the states of the component */
 	virtual void Save(ofstream& file);
 
-	/* Loads the states of the component */
-	virtual void Load();
-
 	/* Returns the Add-ActionType of the component */
 	virtual ActionType GetAddActionType() const;
 };

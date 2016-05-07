@@ -1,7 +1,10 @@
 #include "AddGate.h"
 
 /* Constructor */
-AddGate::AddGate(ApplicationManager* pAppMan, ActionType actType) : Action(pAppMan) {
+AddGate::AddGate(ApplicationManager* pAppMan, ActionType actType, int x, int y, string k) : Action(pAppMan) {
+	mLabel = k;
+	mX = x;
+	mY = y;
 	mActType = actType;
 	mGate = NULL;
 }
@@ -10,16 +13,17 @@ AddGate::AddGate(ApplicationManager* pAppMan, ActionType actType) : Action(pAppM
 bool AddGate::ReadActionParameters() {
 	Input* pIn = mAppManager->GetInput();
 	Output* pOut = mAppManager->GetOutput();
+	if (mX < 0 && mY < 0) {
 
-	pOut->PrintMsg(GetActionMsg());
-	pIn->GetPointClicked(mX, mY);
-	pOut->ClearStatusBar();
+		pOut->PrintMsg(GetActionMsg());
+		pIn->GetPointClicked(mX, mY);
+		pOut->ClearStatusBar();
 
-	if (!pOut->IsDrawingArea(mY)) {
-		pOut->PrintMsg("Invalid position. Operation was cancelled");
-		return false;
+		if (!pOut->IsDrawingArea(mY)) {
+			pOut->PrintMsg("Invalid position. Operation was cancelled");
+			return false;
+		}
 	}
-
 	CalculateDimensions();
 
 	if (!pOut->IsEmptyArea(mGfxInfo)) {

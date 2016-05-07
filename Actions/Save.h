@@ -3,6 +3,7 @@
 #include "..\Components\Component.h"
 #include "..\ApplicationManager.h"
 #include "..\Utilities\Utility.h"
+#include "..\Components\Connection.h"
 #include <fstream>
 
 class Save : public Action

@@ -25,12 +25,7 @@ void NAND::Draw(Output* pOut) {
 
 /* Saves the states of the component*/
 void NAND::Save(ofstream& file) {
-
-}
-
-/* Loads the states of the component */
-void NAND::Load() {
-
+	file << "NAND " << mID << " " << mLabel << " " << (mGfxInfo.x1 + mGfxInfo.x2) / 2 << " " << (mGfxInfo.y1 + mGfxInfo.y2) / 2 << endl;
 }
 
 /* Returns the Add-ActionType of the component */

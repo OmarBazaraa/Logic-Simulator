@@ -11,7 +11,7 @@
 #include "Actions\Edit.h"
 #include "Actions\UndoAction.h"
 #include "Actions\RedoAction.h"
-
+#include "Actions\Load.h"
 /* Constructor */
 ApplicationManager::ApplicationManager() {
 	mCompCount = 0;
@@ -122,6 +122,7 @@ void ApplicationManager::ExecuteAction(ActionType actType) {
 			pOut->PrintMsg("Saved");
 			break;
 		case LOAD:
+			pAct = new Load(this);
 			pOut->PrintMsg("LOAD");
 			//TODO:
 			break;

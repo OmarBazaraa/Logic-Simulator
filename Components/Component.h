@@ -1,7 +1,7 @@
 #pragma once
 #include "..\Utilities\Defs.h"
 #include "..\GUI\Output.h"
-
+#include<fstream>
 /*
 	Base abstract class for all components: Gate, Switch, Connection and LED.
 */
@@ -81,9 +81,6 @@ public:
 
 	/* Saves the states of the component */
 	virtual void Save(ofstream& file) = 0;
-
-	/* Loads the states of the component */
-	virtual void Load() = 0;
 
 	/* Returns the Add-ActionType of the component */
 	virtual ActionType GetAddActionType() const = 0;

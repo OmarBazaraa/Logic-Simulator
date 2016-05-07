@@ -126,6 +126,7 @@
     </Bscmake>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\..\..\Sobeih%27s\Source\Repos\Logic-Simulator2\Actions\Load.cpp" />
     <ClCompile Include="Actions\AddConnection.cpp" />
     <ClCompile Include="Actions\AddGate.cpp" />
     <ClCompile Include="Actions\Copy.cpp" />
@@ -201,6 +202,7 @@
     <ClCompile Include="Utilities\Utility.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\..\..\Sobeih%27s\Source\Repos\Logic-Simulator2\Actions\Load.h" />
     <ClInclude Include="Actions\Action.h" />
     <ClInclude Include="Actions\AddConnection.h" />
     <ClInclude Include="Actions\AddGate.h" />
