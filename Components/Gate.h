@@ -1,7 +1,6 @@
 #pragma once
 #include "Component.h"
-#include "..\Pins\InputPin.h"
-#include "..\Pins\OutputPin.h"
+#include "..\Pins\Pin.h"
 
 /*
 	Base class for all types of gates
@@ -16,10 +15,10 @@ public:
 	void SetGraphicsInfo(Output* pOut, const GraphicsInfo& gfxInfo);
 
 	/* Returns the input pin number n (0-indexed) of the component */
-	virtual InputPin* GetInputPin(int n) = 0;
+	virtual Pin* GetInputPin(int n) = 0;
 
 	/* Returns the output pin of the component */
-	virtual OutputPin* GetOutputPin() = 0;
+	virtual Pin* GetOutputPin() = 0;
 
 	/* Returns the input pin coordiantes of the gate */
 	virtual void GetInputPinCoordinates(int& x, int& y, int& n);

@@ -23,24 +23,24 @@ vector<GraphicsInfo> Connection::GetPath() const {
 }
 
 /* Sets the source pin of the connection */
-void Connection::SetSourcePin(OutputPin* pSrcPin) {
+void Connection::SetSourcePin(Pin* pSrcPin) {
 	mSrcPin = pSrcPin;
 	pSrcPin->ConnectTo(this);
 }
 
 /* Returns the source pin of the connection */
-OutputPin* Connection::GetSourcePin() const {
+Pin* Connection::GetSourcePin() const {
 	return mSrcPin;
 }
 
 /* Sets the destination pin of the connection */
-void Connection::SetDestinationPin(InputPin* pDstPin) {
+void Connection::SetDestinationPin(Pin* pDstPin) {
 	mDstPin = pDstPin;
-	pDstPin->SetConnection(this);
+	pDstPin->ConnectTo(this);
 }
 
 /* Returns the destination pin of the connection */
-InputPin* Connection::GetDestinationPin() const {
+Pin* Connection::GetDestinationPin() const {
 	return mDstPin;
 }
 

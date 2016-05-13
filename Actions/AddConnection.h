@@ -12,8 +12,8 @@ private:
 	GraphicsInfo mGfxInfo;			// The parameters (coordinates) required to draw the connection
 	vector<GraphicsInfo>* mPath;	// The path of the connection
 	string mLabel;					// The label of the component
-	OutputPin* mSrcPin;				// Pointer to the source pin
-	InputPin* mDstPin;				// Pointer to the destination pin
+	Pin* mSrcPin;					// Pointer to the source pin
+	Pin* mDstPin;					// Pointer to the destination pin
 	Connection* mConnection;		// Pointer to the added connection
 
 public:

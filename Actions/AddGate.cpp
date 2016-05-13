@@ -13,8 +13,8 @@ AddGate::AddGate(ApplicationManager* pAppMan, ActionType actType, int x, int y, 
 bool AddGate::ReadActionParameters() {
 	Input* pIn = mAppManager->GetInput();
 	Output* pOut = mAppManager->GetOutput();
-	if (mX < 0 && mY < 0) {
 
+	if (mX < 0 && mY < 0) {
 		pOut->PrintMsg(GetActionMsg());
 		pIn->GetPointClicked(mX, mY);
 		pOut->ClearStatusBar();
@@ -24,15 +24,13 @@ bool AddGate::ReadActionParameters() {
 			return false;
 		}
 	}
+
 	CalculateDimensions();
 
 	if (!pOut->IsEmptyArea(mGfxInfo)) {
 		pOut->PrintMsg("Invalid position. Operation was cancelled");
 		return false;
 	}
-
-	//mLabel = pIn->GetSrting(pOut, "Please enter a label for the gate:");
-	//pOut->ClearStatusBar();
 
 	return true;
 }

@@ -1,15 +1,14 @@
 #pragma once
 #include "Component.h"
-#include "../Pins/InputPin.h"
-#include "../Pins/OutputPin.h"
+#include "../Pins/Pin.h"
 #include <vector>
 
 class Connection : public Component
 {
 private:
 	vector<GraphicsInfo> mPath;		// The path of the connection
-	OutputPin* mSrcPin;				// The source pin of this connection (an output pin of a certain Component)
-	InputPin* mDstPin;				// The destination pin of this connection (an input pin of a certain Component)
+	Pin* mSrcPin;					// The source pin of this connection (an output pin of a certain Component)
+	Pin* mDstPin;					// The destination pin of this connection (an input pin of a certain Component)
 
 public:
 	/* Constructor */
@@ -22,16 +21,16 @@ public:
 	vector<GraphicsInfo> GetPath() const;
 
 	/* Sets the source pin of the connection */
-	void SetSourcePin(OutputPin* pSrcPin);
+	void SetSourcePin(Pin* pSrcPin);
 
 	/* Returns the source pin of the connection */
-	OutputPin* GetSourcePin() const;
+	Pin* GetSourcePin() const;
 
 	/* Sets the destination pin of the connection */
-	void SetDestinationPin(InputPin* pDstPin);
+	void SetDestinationPin(Pin* pDstPin);
 
 	/* Returns the destination pin of the connection */
-	InputPin* GetDestinationPin() const;
+	Pin* GetDestinationPin() const;
 
 	/* Calculates the output according to the inputs */
 	virtual void Operate();

@@ -6,12 +6,12 @@ Switch::Switch(Output* pOut, const GraphicsInfo& gfxInfo, int fanOut) : Gate(pOu
 }
 
 /* Returns the input pin number n (0-indexed) of the component */
-InputPin* Switch::GetInputPin(int n) {
+Pin* Switch::GetInputPin(int n) {
 	return NULL;
 }
 
 /* Returns the output pin of the component */
-OutputPin* Switch::GetOutputPin() {
+Pin* Switch::GetOutputPin() {
 	return &mOutputPin;
 }
 

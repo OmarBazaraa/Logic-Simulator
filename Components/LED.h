@@ -5,17 +5,17 @@
 class LED : public Gate
 {
 private:
-	InputPin mInputPin;	// The input pin of the LED
+	Pin mInputPin;	// The input pin of the LED
 
 public:
 	/* Constructor */
 	LED(Output* pOut, const GraphicsInfo& gfxInfo);
 
 	/* Returns the input pin number n (0-indexed) of the component */
-	virtual InputPin* GetInputPin(int n);
+	virtual Pin* GetInputPin(int n);
 
 	/* Returns the output pin of the component */
-	virtual OutputPin* GetOutputPin();
+	virtual Pin* GetOutputPin();
 
 	/* Sets the status of the input pin number n (0-indexed) */
 	virtual void SetInputPinStatus(int n, Status s);

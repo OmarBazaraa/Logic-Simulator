@@ -4,17 +4,17 @@
 class Switch : public Gate
 {
 private:
-	OutputPin mOutputPin;	// The output pin of the switch
+	Pin mOutputPin;	// The output pin of the switch
 
 public:
 	/* Constructor */
 	Switch(Output* pOut, const GraphicsInfo& gfxInfo, int fanout);
 
 	/* Returns the input pin number n (0-indexed) of the component */
-	virtual InputPin* GetInputPin(int n);
+	virtual Pin* GetInputPin(int n);
 
 	/* Returns the output pin of the component */
-	virtual OutputPin* GetOutputPin();
+	virtual Pin* GetOutputPin();
 
 	/* Sets the status of the input pin number n (0-indexed) */
 	virtual void SetInputPinStatus(int n, Status s);

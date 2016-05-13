@@ -196,8 +196,6 @@
     <ClCompile Include="GUI\Output.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Demo.cpp" />
-    <ClCompile Include="Pins\InputPin.cpp" />
-    <ClCompile Include="Pins\OutputPin.cpp" />
     <ClCompile Include="Pins\Pin.cpp" />
     <ClCompile Include="Utilities\Utility.cpp" />
   </ItemGroup>
@@ -257,8 +255,6 @@
     <ClInclude Include="GUI\Input.h" />
     <ClInclude Include="GUI\Output.h" />
     <ClInclude Include="GUI\UserInterface.h" />
-    <ClInclude Include="Pins\InputPin.h" />
-    <ClInclude Include="Pins\OutputPin.h" />
     <ClInclude Include="Pins\Pin.h" />
     <ClInclude Include="Utilities\Defs.h" />
     <ClInclude Include="Utilities\Utility.h" />

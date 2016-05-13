@@ -121,12 +121,6 @@
     <ClCompile Include="CMUgraphicsLib\windowinput.cpp">
       <Filter>CMUgraphics Library</Filter>
     </ClCompile>
-    <ClCompile Include="Pins\InputPin.cpp">
-      <Filter>Pins</Filter>
-    </ClCompile>
-    <ClCompile Include="Pins\OutputPin.cpp">
-      <Filter>Pins</Filter>
-    </ClCompile>
     <ClCompile Include="Pins\Pin.cpp">
       <Filter>Pins</Filter>
     </ClCompile>
@@ -301,12 +295,6 @@
     </ClInclude>
     <ClInclude Include="GUI\UserInterface.h">
       <Filter>GUI</Filter>
-    </ClInclude>
-    <ClInclude Include="Pins\InputPin.h">
-      <Filter>Pins</Filter>
-    </ClInclude>
-    <ClInclude Include="Pins\OutputPin.h">
-      <Filter>Pins</Filter>
     </ClInclude>
     <ClInclude Include="Pins\Pin.h">
       <Filter>Pins</Filter>

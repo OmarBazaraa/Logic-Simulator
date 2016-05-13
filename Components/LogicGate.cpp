@@ -3,19 +3,20 @@
 /* Constructor */
 LogicGate::LogicGate(Output* pOut, const GraphicsInfo& gfxInfo, int inputs, int fanOut) : Gate(pOut, gfxInfo), mOutputPin(fanOut) {
 	mInputsCount = inputs;
-	mInputPins = new InputPin[inputs];
+	mInputPins = new Pin[inputs];
 
-	// Associate all input pins to this gate
+	// Associate all input & output pins to this gate
 	for (int i = 0; i < mInputsCount; i++) mInputPins[i].SetComponent(this);
+	mOutputPin.SetComponent(this);
 }
 
 /* Returns the input pin number n (0-indexed) of the component */
-InputPin* LogicGate::GetInputPin(int n) {
+Pin* LogicGate::GetInputPin(int n) {
 	return &mInputPins[n];
 }
 
 /* Returns the output pin of the component */
-OutputPin* LogicGate::GetOutputPin() {
+Pin* LogicGate::GetOutputPin() {
 	return &mOutputPin;
 }
 

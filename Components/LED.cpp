@@ -6,12 +6,12 @@ LED::LED(Output* pOut, const GraphicsInfo& gfxInfo) : Gate(pOut, gfxInfo) {
 }
 
 /* Returns the input pin number n (0-indexed) of the component */
-InputPin* LED::GetInputPin(int n) {
+Pin* LED::GetInputPin(int n) {
 	return &mInputPin;
 }
 
 /* Returns the output pin of the component */
-OutputPin* LED::GetOutputPin() {
+Pin* LED::GetOutputPin() {
 	return NULL;
 }
 
