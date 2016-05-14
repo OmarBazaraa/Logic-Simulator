@@ -12,6 +12,7 @@
 #include "Actions\UndoAction.h"
 #include "Actions\RedoAction.h"
 #include "Actions\Load.h"
+#include "Actions\Move.h"
 /* Constructor */
 ApplicationManager::ApplicationManager() {
 	mCompCount = 0;
@@ -140,6 +141,10 @@ void ApplicationManager::ExecuteAction(ActionType actType) {
 			break;
 		case SELECT:
 			pAct = new Select(this);
+			break;
+		case MOVE:
+			pOut->PrintMsg("MOVE");
+			pAct = new Move(this);
 			break;
 		case STATUS_BAR:
 			pOut->PrintMsg("STATUS BAR");

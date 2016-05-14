@@ -379,6 +379,10 @@ vector<GraphicsInfo>* Output::GetConnectionPath(const GraphicsInfo& gfxInfo) {
 	return (u != dst ? NULL : GenerateConnectionPath(src, dst, parents));
 }
 
+window * Output::getWindow() {
+	return pWind;
+}
+
 /* Generate the connection path */
 vector<GraphicsInfo>* Output::GenerateConnectionPath(Node& src, Node& dst, Node parents[UI.HorPinsCount][UI.VerPinsCount]) {
 	vector<GraphicsInfo>* path = new vector<GraphicsInfo>;

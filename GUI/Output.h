@@ -87,6 +87,9 @@ public:
 	/* Returns the shortest available path for the connection, null if no path found */
 	vector<GraphicsInfo>* GetConnectionPath(const GraphicsInfo& gfxInfo);
 
+	/* Returns a pointer to the window needed for the move action*/
+	window* getWindow();
+
 	/* Destructor */
 	~Output();
 
