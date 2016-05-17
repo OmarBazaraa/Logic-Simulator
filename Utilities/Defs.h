@@ -50,6 +50,7 @@ enum ActionType {
 
 	CHANGE_SWITCH,		// Change switch status in simulation mode
 	SELECT,				// Select a component, a connection
+	HOVER,				// Hover over a certain Item or a component
 	MOVE,				// Move a component, a connection
 
 	TOOL_BAR,			// A click on an empty place in the toolbar

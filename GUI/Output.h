@@ -1,4 +1,5 @@
 #pragma once
+
 #include "..\Utilities\Defs.h"
 #include "..\Utilities\Utility.h"
 #include "..\GUI\UserInterface.h"
@@ -16,6 +17,7 @@ class Output
 private:
 	window* pWind;					// Pointer to the graphical Window object
 	PinInfo** mPinGrid;				// Grid containing the information of each pin
+	image WindowImage;				// Image to the current look of the window
 
 public:
 	/* Constructor that initializes the user interface */
@@ -87,8 +89,38 @@ public:
 	/* Returns the shortest available path for the connection, null if no path found */
 	vector<GraphicsInfo>* GetConnectionPath(const GraphicsInfo& gfxInfo);
 
-	/* Returns a pointer to the window needed for the move action*/
-	window* getWindow();
+	/* Stores and returns an image with certain coordinates */
+	void StoreImage(image &imgThis, const unsigned usX, const unsigned short usY, const unsigned short usWidth, const unsigned short usHeight);
+
+	/* Get information on the current state of the mouse buttons and it's position */
+	buttonstate GetButtonState(const button btMouse, int &iX, int &iY);
+
+	/* Draws a given Image to the window */
+	void DrawImage(const image &imgThis, const int iX, const int iY, const int iWidth, const int iHeight);
+
+	/* Sets the Brush with a certain color */
+	color SetBrush(const color &colBrush);
+
+	/* Sets the Pen with a certain color */
+	color SetPen(const color c,int width);
+
+	/* Draws a line from a ceratin to a certain coordinates */
+	void DrawLine(const int iX1, const int iY1, const int iX2, const int iY2, const drawstyle dsStyle = FRAME);
+
+	/* Waits for click from the mouse */
+	clicktype WaitMouseClick(int &iX, int &iY);
+
+	/* Draws a Rectangle From given Coordinates */
+	void DrawRectangle(const int iX1, const int iY1, const int iX2, const int iY2, const drawstyle dsStyle = FRAME, const int iWidth = 0, const int iHeight = 0);
+
+	/* Flushes all the press to the mouse queue */
+	void FlushMouseQueue();
+
+	/* Stores the current window looking and puts it in the window variable */
+	void StoreWindowImage();
+
+	/* Returns the window Image */
+	image GetWindowImage();
 
 	/* Destructor */
 	~Output();

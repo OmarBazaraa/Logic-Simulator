@@ -379,8 +379,48 @@ vector<GraphicsInfo>* Output::GetConnectionPath(const GraphicsInfo& gfxInfo) {
 	return (u != dst ? NULL : GenerateConnectionPath(src, dst, parents));
 }
 
-window * Output::getWindow() {
-	return pWind;
+void Output::StoreImage(image & imgThis, const unsigned usX, const unsigned short usY, const unsigned short usWidth, const unsigned short usHeight) {
+	pWind->StoreImage(imgThis, usX, usY, usWidth, usHeight);
+}
+
+buttonstate Output::GetButtonState(const button btMouse, int & iX, int & iY) {
+	return pWind->GetButtonState(btMouse, iX, iY);
+}
+
+void Output::DrawImage(const image & imgThis, const int iX, const int iY, const int iWidth, const int iHeight) {
+	pWind->DrawImage(&imgThis, iX, iY, iWidth, iHeight);
+}
+
+color Output::SetBrush(const color & colBrush) {
+	return pWind->SetBrush(colBrush);
+}
+
+color Output::SetPen(const color c, int width) {
+	return pWind->SetPen(c, width);
+}
+
+void Output::DrawLine(const int iX1, const int iY1, const int iX2, const int iY2, const drawstyle dsStyle) {
+	pWind->DrawLine(iX1, iY1, iX2, iY2, dsStyle);
+}
+
+clicktype Output::WaitMouseClick(int & iX, int & iY) {
+	return pWind->WaitMouseClick(iX, iY);
+}
+
+void Output::DrawRectangle(const int iX1, const int iY1, const int iX2, const int iY2, const drawstyle dsStyle, const int iWidth, const int iHeight) {
+	pWind->DrawRectangle(iX1, iY1, iX2, iY2, dsStyle, iWidth, iHeight);
+}
+
+void Output::FlushMouseQueue() {
+	pWind->FlushMouseQueue();
+}
+
+void Output::StoreWindowImage() {
+	pWind->StoreImage(WindowImage, 0, 0, UI.Width, UI.Height);
+}
+
+image Output::GetWindowImage() {
+	return WindowImage;
 }
 
 /* Generate the connection path */

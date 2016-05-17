@@ -40,6 +40,6 @@ public:
 	/* Destructor */
 	virtual ~Move();
 private:
-	bool ValidCoordinates(int x, int y, Component * Comp);
-	GraphicsInfo CalculateDimensions(Component* Comp,int x, int y, int &w, int &h);
+	bool ValidCoordinates(int dx, int dy, Component * Comp);
+	GraphicsInfo CalculateDimensions(Component* Comp,int dx, int dy);
 };

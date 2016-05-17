@@ -1,4 +1,5 @@
 #pragma once
+
 #include "..\Utilities\Defs.h"
 #include "..\GUI\UserInterface.h"
 #include "..\CMUgraphicsLib\CMUgraphics.h"
@@ -29,7 +30,7 @@ public:
 	string GetSrting(Output* pOut, string msg, string str) const;
 
 	/* Reads the user's selection and determine the desired action */
-	ActionType GetUserAction();
+	ActionType GetUserAction(Output* pOut);
 
 	/* Destructor */
 	~Input();

@@ -13,6 +13,8 @@
 #include "Actions\RedoAction.h"
 #include "Actions\Load.h"
 #include "Actions\Move.h"
+#include "Actions\Hover.h"
+
 /* Constructor */
 ApplicationManager::ApplicationManager() {
 	mCompCount = 0;
@@ -56,7 +58,7 @@ stack<Action*>* ApplicationManager::GetRedoStack() {
 
 /* Reads the required action from the user and returns the corresponding action type */
 ActionType ApplicationManager::GetUserAction() {
-	return pIn->GetUserAction(); 	
+	return pIn->GetUserAction(pOut);
 }
 
 /* Creates an action and executes it */
@@ -141,6 +143,9 @@ void ApplicationManager::ExecuteAction(ActionType actType) {
 			break;
 		case SELECT:
 			pAct = new Select(this);
+			break;
+		case HOVER:
+			pAct = new Hover(this);
 			break;
 		case MOVE:
 			pOut->PrintMsg("MOVE");

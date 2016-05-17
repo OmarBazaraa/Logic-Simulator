@@ -20,15 +20,43 @@ bool Select::Execute() {
 	Output* pOut = mAppManager->GetOutput();
 	Component* pComp = pOut->GetComponentAtPin(mX, mY);
 	Component** list = mAppManager->GetComponentList();
+
+	image Window;
+	pOut->StoreImage(Window, 0, 0, UI.Width, UI.Height);
 	
 	// Toggle the selection state of the selected component
 	if (pComp != NULL) {
+		pOut->WaitMouseClick(mX, mY);
 		pComp->Select();
 		for (int i = 0; i < n; i++) if (list[i]->IsSelected()) selectedCount++, pComp = list[i];
 	}
 	// Selecting empty area leads to deselecting all components
 	else {
 		for (int i = 0; i < n; i++) list[i]->SetSelected(false);
+		int OldX = mX, OldY = mY, Xpast = mX, Ypast = mY;
+		while (pOut->GetButtonState(LEFT_BUTTON, mX, mY) == BUTTON_DOWN) {
+			if (mX != Xpast || mY != Ypast) {
+				pOut->DrawImage(Window, 0, 0, UI.Width, UI.Height);
+				pOut->SetBrush(UI.SelectionColor);
+				pOut->SetPen(UI.SelectionColor, 2);
+				pOut->DrawRectangle(OldX, OldY, mX, mY, FRAME);
+				Xpast = mX;
+				Ypast = mY;
+			}
+		}
+		for (int i = 0; i < n; i++) {
+			GraphicsInfo GfxInfo = list[i]->GetGraphicsInfo();
+			if ((GfxInfo.x1 > min(mX, OldX) && GfxInfo.x1 < max(mX, OldX)) || (GfxInfo.x2 > min(mX, OldX) && GfxInfo.x2 < max(mX, OldX)) || (GfxInfo.x1 > min(mX, OldX) && GfxInfo.x2 < max(mX, OldX)) || ((GfxInfo.x2 > min(mX, OldX) && GfxInfo.x1 < max(mX, OldX)))) {
+				if ((GfxInfo.y1 > min(mY, OldY) && GfxInfo.y1 < max(mY, OldY)) || (GfxInfo.y2 > min(mY, OldY) && GfxInfo.y2 < max(mY, OldY)) || (GfxInfo.y1 > min(mY, OldY) && GfxInfo.y2 < max(mY, OldY)) || (GfxInfo.y2 > min(mY, OldY) && GfxInfo.y1 < max(mY, OldY))) {
+					list[i]->SetSelected(true);
+					pComp = list[i];
+					selectedCount++;
+				}
+			}
+		}
+		pOut->DrawImage(Window, 0, 0, UI.Width, UI.Height);
+		pOut->ClearDrawingArea();
+		pOut->FlushMouseQueue();
 	}
 
 	// Reflect selected components to the screen
