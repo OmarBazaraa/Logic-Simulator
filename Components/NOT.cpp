@@ -13,7 +13,7 @@ void NOT::Operate() {
 /* Draws the NOT gate */
 void NOT::Draw(Output* pOut) {
 	if (!mDeleted) {
-		pOut->DrawNOT(mGfxInfo, mSelected);
+		pOut->DrawNOT(mGfxInfo, mSelected, mOutputPin.GetStatus() == Status::HIGH);
 	}
 }
 

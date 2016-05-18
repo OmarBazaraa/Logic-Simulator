@@ -20,6 +20,13 @@ bool Simulate::Execute() {
 /*Tests the output on a led*/
 int Simulate::TestGate(Component*c) {
 
+	int n = visited.size();
+	visited.insert(c);
+	if(c==NULL || n==visited.size()){
+		mAppManager->ExecuteAction(DESIGN_MODE);
+		mAppManager->GetOutput()->PrintMsg("Error !! : Components are not connected properly.");
+	}
+
 	if (dynamic_cast<Switch*>(c))
 		return c->GetOutputPinStatus();
 

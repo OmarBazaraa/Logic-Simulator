@@ -19,7 +19,7 @@ void NOR3::Operate() {
 /* Draws the NOR3 gate */
 void NOR3::Draw(Output* pOut) {
 	if (!mDeleted) {
-		pOut->DrawNOR3(mGfxInfo, mSelected);
+		pOut->DrawNOR3(mGfxInfo, mSelected, mOutputPin.GetStatus() == Status::HIGH);
 	}
 }
 

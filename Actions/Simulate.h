@@ -1,4 +1,5 @@
 #pragma once
+#include<set>
 #include<string>
 #include "Action.h"
 #include "..\GUI\UserInterface.h"
@@ -13,15 +14,13 @@
 using namespace std;
 class Simulate : public Action
 {
+	set<Component*> visited;
 public:
 	/* Constructor */
 	Simulate(ApplicationManager* pAppMan);
 
 	/* Executes action */
 	virtual bool Execute();
-
-	/*Test input*/
-	void Test();
 
 	/*Tests the output on a led*/
 	int TestGate(Component*);
