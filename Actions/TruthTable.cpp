@@ -54,11 +54,15 @@ bool TruthTable::Execute() {
 	int count = mAppManager->GetComponentsCount();
 	leds = new LED*[count];
 	switches = new Switch*[count];
+	switchesDefault = new int[count];
 	for (int i = 0; i < count; i++) {
-		if (dynamic_cast<LED*>(list[i]) && !list[i]->IsDeleted())
+		if (dynamic_cast<LED*>(list[i]) && !list[i]->IsDeleted()) {
 			leds[ledsCount++] = (LED*)list[i];
-		else if (dynamic_cast<Switch*>(list[i]) && !list[i]->IsDeleted())
-			switches[switchesCount++] = (Switch*)list[i];
+		}
+		else if (dynamic_cast<Switch*>(list[i]) && !list[i]->IsDeleted()) {
+			switches[switchesCount] = (Switch*)list[i];
+			switchesDefault[switchesCount++] = list[i]->GetOutputPinStatus();
+		}
 	}
 	rows = pow(2, switchesCount);
 	columns = ledsCount + switchesCount;
@@ -69,7 +73,9 @@ bool TruthTable::Execute() {
 		canDraw = 0;
 	DrawHeaders();
 	CreateCompinations("");
-
+	for(int i=0;i<switchesCount;i++){
+		switches[i]->GetOutputPin()->SetStatus((Status)switchesDefault[i]);
+	}
 	return false;
 }
 

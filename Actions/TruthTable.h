@@ -16,6 +16,7 @@ class TruthTable : public Action
 {
 	LED**leds;              // List of existing leds
 	Switch**switches;       // List of existing switches
+	int*switchesDefault;
 	int rows;               // Number of rows in truth table
 	int columns;            // Number of columns in truth table
 	int switchesCount;      // Number of switches in design

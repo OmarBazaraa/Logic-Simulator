@@ -325,13 +325,13 @@ void Output::DrawBuffer(const GraphicsInfo& gfxInfo, bool selected) const {
 
 /* Draws Switch */
 void Output::DrawSwitch(const GraphicsInfo& gfxInfo, bool selected, bool on) const {
-	string dir = (selected ? "Images\\gates\\switch_on.jpg" : "Images\\gates\\switch_off.jpg");
+	string dir = (selected||on ? "Images\\gates\\switch_on.jpg" : "Images\\gates\\switch_off.jpg");
 	pWind->DrawImage(dir, gfxInfo.x1, gfxInfo.y1, UI.SwitchWidth, UI.SwitchHeight);
 }
 
 /* Draws LED */
 void Output::DrawLED(const GraphicsInfo& gfxInfo, bool selected, bool on) const {
-	string dir = (selected ? "Images\\gates\\led_on.jpg" : "Images\\gates\\led_off.jpg");
+	string dir = (selected||on ? "Images\\gates\\led_on.jpg" : "Images\\gates\\led_off.jpg");
 	pWind->DrawImage(dir, gfxInfo.x1, gfxInfo.y1, UI.LedWidth, UI.LedHeight);
 }
 
