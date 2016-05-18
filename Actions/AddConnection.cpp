@@ -91,17 +91,14 @@ bool AddConnection::DetectSourceComponent() {
 	if (comp == NULL) {
 		return false;
 	}
-	else if (dynamic_cast<Gate*>(comp) != NULL) {
-		Gate* gate = (Gate*)comp;
-		gate->GetOutputPinCoordinates(mGfxInfo.x1, mGfxInfo.y1);
-		mSrcPin = gate->GetOutputPin();
+	else {
+		Gate* gate;
 
-		if (mSrcPin == NULL || mSrcPin->IsFull()) {
-			return false;
-		}
-	}
-	else if (dynamic_cast<Connection*>(comp) != NULL) {
-		Gate* gate = ((Connection*)comp)->GetSourcePin()->GetGate();
+		if (dynamic_cast<Gate*>(comp) != NULL)
+			gate = (Gate*)comp;
+		else
+			gate = ((Connection*)comp)->GetSourcePin()->GetGate();
+
 		gate->GetOutputPinCoordinates(mGfxInfo.x1, mGfxInfo.y1);
 		mSrcPin = gate->GetOutputPin();
 

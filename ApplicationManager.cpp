@@ -12,6 +12,8 @@
 #include "Actions\UndoAction.h"
 #include "Actions\RedoAction.h"
 #include "Actions\Load.h"
+#include "Actions\Move.h"
+#include "Actions\Hover.h"
 
 /* Constructor */
 ApplicationManager::ApplicationManager() {
@@ -19,7 +21,7 @@ ApplicationManager::ApplicationManager() {
 	mCopiedComp = NULL;
 	mCompList = new Component*[MAX_COMPONENTS];
 	for (int i = 0; i < MAX_COMPONENTS; i++) mCompList[i] = NULL;
-	
+
 	// Creates the Input/Output objects and initialize the GUI
 	pOut = new Output();
 	pIn = pOut->CreateInput();
@@ -67,7 +69,7 @@ Output* ApplicationManager::GetOutput() {
 
 /* Reads the required action from the user and returns the corresponding action type */
 ActionType ApplicationManager::GetUserAction() {
-	return pIn->GetUserAction(); 	
+	return pIn->GetUserAction(pOut);
 }
 
 /* Creates an action and executes it */
@@ -152,6 +154,13 @@ void ApplicationManager::ExecuteAction(ActionType actType) {
 			break;
 		case SELECT:
 			pAct = new Select(this);
+			break;
+		case HOVER:
+			pAct = new Hover(this);
+			break;
+		case MOVE:
+			pOut->PrintMsg("MOVE");
+			pAct = new Move(this);
 			break;
 		case STATUS_BAR:
 			pOut->PrintMsg("STATUS BAR");

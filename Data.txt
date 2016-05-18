@@ -1,0 +1,5 @@
+2
+SWITCH 1 Switch 630 315
+XNOR 2 XNOR 890 355
+Connections
+-1

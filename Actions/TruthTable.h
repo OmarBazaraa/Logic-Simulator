@@ -1,4 +1,6 @@
 #pragma once
+#include<fstream>
+#include<string>
 #include "Action.h"
 #include "..\GUI\UserInterface.h"
 #include "..\ApplicationManager.h"
@@ -7,7 +9,9 @@
 #include "..\CMUgraphicsLib\CMUgraphics.h"
 #include "..\Components\LED.h"
 #include "..\Components\Switch.h"
+#include"..\Components\LogicGate.h"
 #include "..\Components\Connection.h"
+using namespace std;
 class TruthTable : public Action
 {
 	LED**leds;              // List of existing leds
@@ -17,6 +21,8 @@ class TruthTable : public Action
 	int switchesCount;      // Number of switches in design
 	int ledsCount;          // Number of leds in design
 	window* pWind;			// Pointer to the graphical Window object
+	bool canDraw;           // If you can write on window or not
+	ofstream write;         // txt file to write truth table
 public:
 	/* Constructor */
 	TruthTable(ApplicationManager* pAppMan);
@@ -31,7 +37,7 @@ public:
 	void ChangeTitle(const string& title) const;
 
 	/*Clears the drawing area */
-    void ClearDrawingArea() const;
+	void ClearDrawingArea() const;
 
 	/*Draws truth table*/
 	void DrawTruthTable() const;
@@ -49,7 +55,7 @@ public:
 	int TestGate(Component*);
 
 	/*Draw headers*/
-	void DrawHeaders() const;
+	void DrawHeaders();
 
 	/* Reads parameters required for action to execute */
 	virtual bool ReadActionParameters() { return true; }

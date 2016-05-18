@@ -7,7 +7,7 @@
 class AddConnection : public Action
 {
 private:
-	int mDstPinIndex;
+	int mDstPinIndex;				// The index of the destination pin
 	GraphicsInfo mGfxInfo;			// The parameters (coordinates) required to draw the connection
 	vector<GraphicsInfo>* mPath;	// The path of the connection
 	string mLabel;					// The label of the component

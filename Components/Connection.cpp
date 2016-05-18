@@ -4,13 +4,15 @@
 Connection::Connection(Output* pOut, const GraphicsInfo& gfxInfo, const vector<GraphicsInfo>& path) {
 	mLabel = "Connection";
 	SetPath(pOut, gfxInfo, path);
+	mSrcPin = NULL;
+	mDstPin = NULL;
 }
 
 /* Sets the new path of the connection, needed in edit action */
 void Connection::SetPath(Output* pOut, const GraphicsInfo& gfxInfo, const vector<GraphicsInfo>& path) {
 	// Clear previous path
 	pOut->ClearConnectionPins(mPath);
-
+	
 	// Update path
 	mGfxInfo = gfxInfo;
 	mPath = path;
@@ -18,7 +20,7 @@ void Connection::SetPath(Output* pOut, const GraphicsInfo& gfxInfo, const vector
 }
 
 /* Updates the path of the connection */
-void Connection::UpdatePath(Output* pOut, const vector<GraphicsInfo>& path) {
+void Connection::UpdatePath(Output* pOut) {
 	// Clear previous path
 	pOut->ClearConnectionPins(mPath);
 
@@ -37,6 +39,10 @@ vector<GraphicsInfo> Connection::GetPath() const {
 
 /* Sets the source pin of the connection */
 void Connection::SetSourcePin(Pin* pSrcPin) {
+	if (mSrcPin != NULL) {
+		mSrcPin->RemoveConnection(this);
+	}
+
 	mSrcPin = pSrcPin;
 	pSrcPin->ConnectTo(this);
 }
@@ -48,6 +54,10 @@ Pin* Connection::GetSourcePin() const {
 
 /* Sets the destination pin of the connection */
 void Connection::SetDestinationPin(Pin* pDstPin, int index) {
+	if (mDstPin != NULL) {
+		mDstPin->RemoveConnection(this);
+	}
+
 	mDstPinIndex = index;
 	mDstPin = pDstPin;
 	pDstPin->ConnectTo(this);
@@ -56,6 +66,11 @@ void Connection::SetDestinationPin(Pin* pDstPin, int index) {
 /* Returns the destination pin of the connection */
 Pin* Connection::GetDestinationPin() const {
 	return mDstPin;
+}
+
+/* Returns the destination pin index of the connection */
+int Connection::GetDestinationPinIndex() const {
+	return mDstPinIndex;
 }
 
 /* Sets the status of the input pin number n (0-indexed) */
