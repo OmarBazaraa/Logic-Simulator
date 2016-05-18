@@ -39,7 +39,7 @@ void Switch::Operate() {
 /* Draws the Switch gate */
 void Switch::Draw(Output* pOut) {
 	if (!mDeleted) {
-		pOut->DrawSwitch(mGfxInfo, mSelected);
+		pOut->DrawSwitch(mGfxInfo, mSelected, mOutputPin.GetStatus() == Status::HIGH);
 	}
 }
 

@@ -22,7 +22,7 @@ void Buffer::Operate() {
 /* Draws the Buffer gate */
 void Buffer::Draw(Output* pOut) {
 	if (!mDeleted) {
-		pOut->DrawBuffer(mGfxInfo, mSelected);
+		pOut->DrawBuffer(mGfxInfo, mSelected, mOutputPin.GetStatus() == Status::HIGH);
 	}
 }
 

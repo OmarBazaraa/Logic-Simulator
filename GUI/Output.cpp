@@ -276,7 +276,7 @@ void Output::DrawLabel(const GraphicsInfo& gfxInfo, const string& label) const {
 }
 
 /* Draws AND gate */
-void Output::DrawAND(const GraphicsInfo& gfxInfo, bool selected) const {
+void Output::DrawAND(const GraphicsInfo& gfxInfo, bool selected, bool on) const {
 	//string dir = (selected ? "Images\\gates\\and_highlighted.jpg" : "Images\\gates\\and.jpg");
 	//pWind->DrawImage(dir, gfxInfo.x1, gfxInfo.y1, UI.AndGateWidth, UI.AndGateHeight);
 
@@ -292,80 +292,80 @@ void Output::DrawAND(const GraphicsInfo& gfxInfo, bool selected) const {
 }
 
 /* Draws OR gate */
-void Output::DrawOR(const GraphicsInfo& gfxInfo, bool selected) const {
-	string dir = (selected ? "Images\\gates\\or_highlighted.jpg" : "Images\\gates\\or.jpg");
+void Output::DrawOR(const GraphicsInfo& gfxInfo, bool selected, bool on) const {
+	string dir = (selected && UI.AppMode == DESIGN || on && UI.AppMode == SIMULATION ? "Images\\gates\\or_highlighted.jpg" : "Images\\gates\\or.jpg");
 	pWind->DrawImage(dir, gfxInfo.x1, gfxInfo.y1, UI.OrGateWidth, UI.OrGateHeight);
 }
 
 /* Draws NOT gate */
-void Output::DrawNOT(const GraphicsInfo& gfxInfo, bool selected) const {
-	string dir = (selected ? "Images\\gates\\not_highlighted.jpg" : "Images\\gates\\not.jpg");
+void Output::DrawNOT(const GraphicsInfo& gfxInfo, bool selected, bool on) const {
+	string dir = (selected && UI.AppMode == DESIGN || on && UI.AppMode == SIMULATION ? "Images\\gates\\not_highlighted.jpg" : "Images\\gates\\not.jpg");
 	pWind->DrawImage(dir, gfxInfo.x1, gfxInfo.y1, UI.NotGateWidth, UI.NotGateHeight);
 }
 
 /* Draws NAND gate */
-void Output::DrawNAND(const GraphicsInfo& gfxInfo, bool selected) const {
-	string dir = (selected ? "Images\\gates\\nand_highlighted.jpg" : "Images\\gates\\nand.jpg");
+void Output::DrawNAND(const GraphicsInfo& gfxInfo, bool selected, bool on) const {
+	string dir = (selected && UI.AppMode == DESIGN || on && UI.AppMode == SIMULATION ? "Images\\gates\\nand_highlighted.jpg" : "Images\\gates\\nand.jpg");
 	pWind->DrawImage(dir, gfxInfo.x1, gfxInfo.y1, UI.NandGateWidth, UI.NandGateHeight);
 }
 
 /* Draws NOR gate */
-void Output::DrawNOR(const GraphicsInfo& gfxInfo, bool selected) const {
-	string dir = (selected ? "Images\\gates\\nor_highlighted.jpg" : "Images\\gates\\nor.jpg");
+void Output::DrawNOR(const GraphicsInfo& gfxInfo, bool selected, bool on) const {
+	string dir = (selected && UI.AppMode == DESIGN || on && UI.AppMode == SIMULATION ? "Images\\gates\\nor_highlighted.jpg" : "Images\\gates\\nor.jpg");
 	pWind->DrawImage(dir, gfxInfo.x1, gfxInfo.y1, UI.NorGateWidth, UI.NorGateHeight);
 }
 
 /* Draws XOR gate */
-void Output::DrawXOR(const GraphicsInfo& gfxInfo, bool selected) const {
-	string dir = (selected ? "Images\\gates\\xor_highlighted.jpg" : "Images\\gates\\xor.jpg");
+void Output::DrawXOR(const GraphicsInfo& gfxInfo, bool selected, bool on) const {
+	string dir = (selected && UI.AppMode == DESIGN || on && UI.AppMode == SIMULATION ? "Images\\gates\\xor_highlighted.jpg" : "Images\\gates\\xor.jpg");
 	pWind->DrawImage(dir, gfxInfo.x1, gfxInfo.y1, UI.XorGateWidth, UI.XorGateHeight);
 }
 
 /* Draws XNOR gate */
-void Output::DrawXNOR(const GraphicsInfo& gfxInfo, bool selected) const {
-	string dir = (selected ? "Images\\gates\\xnor_highlighted.jpg" : "Images\\gates\\xnor.jpg");
+void Output::DrawXNOR(const GraphicsInfo& gfxInfo, bool selected, bool on) const {
+	string dir = (selected && UI.AppMode == DESIGN || on && UI.AppMode == SIMULATION ? "Images\\gates\\xnor_highlighted.jpg" : "Images\\gates\\xnor.jpg");
 	pWind->DrawImage(dir, gfxInfo.x1, gfxInfo.y1, UI.XnorGateWidth, UI.XnorGateHeight);
 }
 
 /* Draws AND3 gate */
-void Output::DrawAND3(const GraphicsInfo& gfxInfo, bool selected) const {
-	string dir = (selected ? "Images\\gates\\and3_highlighted.jpg" : "Images\\gates\\and3.jpg");
+void Output::DrawAND3(const GraphicsInfo& gfxInfo, bool selected, bool on) const {
+	string dir = (selected && UI.AppMode == DESIGN || on && UI.AppMode == SIMULATION ? "Images\\gates\\and3_highlighted.jpg" : "Images\\gates\\and3.jpg");
 	pWind->DrawImage(dir, gfxInfo.x1, gfxInfo.y1, UI.And3GateWidth, UI.And3GateHeight);
 }
 
 /* Draws NOR3 gate */
-void Output::DrawNOR3(const GraphicsInfo& gfxInfo, bool selected) const {
-	string dir = (selected ? "Images\\gates\\nor3_highlighted.jpg" : "Images\\gates\\nor3.jpg");
+void Output::DrawNOR3(const GraphicsInfo& gfxInfo, bool selected, bool on) const {
+	string dir = (selected && UI.AppMode == DESIGN || on && UI.AppMode == SIMULATION ? "Images\\gates\\nor3_highlighted.jpg" : "Images\\gates\\nor3.jpg");
 	pWind->DrawImage(dir, gfxInfo.x1, gfxInfo.y1, UI.Nor3GateWidth, UI.Nor3GateHeight);
 }
 
 /* Draws XOR3 gate */
-void Output::DrawXOR3(const GraphicsInfo& gfxInfo, bool selected) const {
-	string dir = (selected ? "Images\\gates\\xor3_highlighted.jpg" : "Images\\gates\\xor3.jpg");
+void Output::DrawXOR3(const GraphicsInfo& gfxInfo, bool selected, bool on) const {
+	string dir = (selected && UI.AppMode == DESIGN || on && UI.AppMode == SIMULATION ? "Images\\gates\\xor3_highlighted.jpg" : "Images\\gates\\xor3.jpg");
 	pWind->DrawImage(dir, gfxInfo.x1, gfxInfo.y1, UI.Xor3GateWidth, UI.Xor3GateHeight);
 }
 
 /* Draws Buffer gate */
-void Output::DrawBuffer(const GraphicsInfo& gfxInfo, bool selected) const {
-	string dir = (selected ? "Images\\gates\\buffer_highlighted.jpg" : "Images\\gates\\buffer.jpg");
+void Output::DrawBuffer(const GraphicsInfo& gfxInfo, bool selected, bool on) const {
+	string dir = (selected && UI.AppMode == DESIGN || on && UI.AppMode == SIMULATION ? "Images\\gates\\buffer_highlighted.jpg" : "Images\\gates\\buffer.jpg");
 	pWind->DrawImage(dir, gfxInfo.x1, gfxInfo.y1, UI.BufferGateWidth, UI.BufferGateHeight);
 }
 
 /* Draws Switch */
 void Output::DrawSwitch(const GraphicsInfo& gfxInfo, bool selected, bool on) const {
-	string dir = (selected ? "Images\\gates\\switch_on.jpg" : "Images\\gates\\switch_off.jpg");
+	string dir = (selected && UI.AppMode == DESIGN || on && UI.AppMode == SIMULATION ? "Images\\gates\\switch_on.jpg" : "Images\\gates\\switch_off.jpg");
 	pWind->DrawImage(dir, gfxInfo.x1, gfxInfo.y1, UI.SwitchWidth, UI.SwitchHeight);
 }
 
 /* Draws LED */
 void Output::DrawLED(const GraphicsInfo& gfxInfo, bool selected, bool on) const {
-	string dir = (selected ? "Images\\gates\\led_on.jpg" : "Images\\gates\\led_off.jpg");
+	string dir = (selected && UI.AppMode == DESIGN || on && UI.AppMode == SIMULATION ? "Images\\gates\\led_on.jpg" : "Images\\gates\\led_off.jpg");
 	pWind->DrawImage(dir, gfxInfo.x1, gfxInfo.y1, UI.LedWidth, UI.LedHeight);
 }
 
 /* Draws connection */
 void Output::DrawConnection(const vector<GraphicsInfo>& path, bool selected, bool on) {
-	pWind->SetPen(selected ? UI.SelectionColor : WHITE, 2);
+	pWind->SetPen(selected && UI.AppMode == DESIGN || on && UI.AppMode == SIMULATION ? UI.SelectionColor : WHITE, 2);
 
 	for (int i = 0; i < (int)path.size(); i++) {
 		pWind->DrawLine(path[i].x1, path[i].y1, path[i].x2, path[i].y2);

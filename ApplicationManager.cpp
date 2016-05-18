@@ -14,7 +14,7 @@
 #include "Actions\Load.h"
 #include "Actions\Move.h"
 #include "Actions\Hover.h"
-
+#include "Actions\Simulate.h"
 /* Constructor */
 ApplicationManager::ApplicationManager() {
 	mCompCount = 0;
@@ -120,7 +120,7 @@ void ApplicationManager::ExecuteAction(ActionType actType) {
 			pOut->PrintMsg("SIMULATION MODE");
 			UI.AppMode = Mode::SIMULATION;
 			pOut->CreateToolBar();
-			//TODO:
+			pAct = new Simulate(this);
 			break;
 		case DESIGN_MODE:
 			pOut->PrintMsg("DESIGN MODE");

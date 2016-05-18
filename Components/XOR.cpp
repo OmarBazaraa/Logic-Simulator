@@ -25,7 +25,7 @@ void XOR::Operate() {
 /* Draws the XOR gate */
 void XOR::Draw(Output* pOut) {
 	if (!mDeleted) {
-		pOut->DrawXOR(mGfxInfo, mSelected);
+		pOut->DrawXOR(mGfxInfo, mSelected, mOutputPin.GetStatus() == Status::HIGH);
 	}
 }
 

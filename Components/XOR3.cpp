@@ -19,7 +19,7 @@ void XOR3::Operate() {
 /* Draws the XOR3 gate */
 void XOR3::Draw(Output* pOut) {
 	if (!mDeleted) {
-		pOut->DrawXOR3(mGfxInfo, mSelected);
+		pOut->DrawXOR3(mGfxInfo, mSelected, mOutputPin.GetStatus() == Status::HIGH);
 	}
 }
 
