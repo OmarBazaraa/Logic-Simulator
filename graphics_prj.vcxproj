@@ -263,6 +263,9 @@
     <ClInclude Include="Utilities\Defs.h" />
     <ClInclude Include="Utilities\Utility.h" />
   </ItemGroup>
+  <ItemGroup>
+    <Text Include="..\..\..\..\Sobeih%27s\Source\Repos\Logic-Simulator\TruthTable.txt" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
