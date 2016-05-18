@@ -14,10 +14,11 @@ class ApplicationManager
 private:
 	int mCompCount;				// Actual number of components
 	Component** mCompList;		// List of all components
-	Input* pIn;					// Pointer to the Input class
-	Output* pOut;				// Pointer to the Output class
+	Component* mCopiedComp;		// Pointer to the last copied/cut component
 	stack<Action*> mUndoStack;	// Stack holding the done actions
 	stack<Action*> mRedoStack;	// Stack holding the un-done actions
+	Input* pIn;					// Pointer to the Input class
+	Output* pOut;				// Pointer to the Output class
 
 public:
 	/* Constructor */
@@ -29,17 +30,23 @@ public:
 	/* Returns the list of components */
 	Component** GetComponentList() const;
 
-	/* Returns a pointer to Input object */
-	Input* GetInput();
+	/* Sets the last copied/cut component */
+	void SetCopiedComp(Component* pComp);
 
-	/* Returns a pointer to Output object */
-	Output* GetOutput();
+	/* Returns the last copied/cut component */
+	Component* GetCopiedComp() const;
 
 	/* Returns the stack of done actions */
 	stack<Action*>* GetUndoStack();
 
 	/* Returns the stack of un-done actions */
 	stack<Action*>* GetRedoStack();
+
+	/* Returns a pointer to Input object */
+	Input* GetInput();
+
+	/* Returns a pointer to Output object */
+	Output* GetOutput();
 
 	/* Reads the required action from the user and returns the corresponding action type */
 	ActionType GetUserAction();

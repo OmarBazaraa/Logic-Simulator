@@ -2,8 +2,8 @@
 
 /* Constructor */
 Connection::Connection(Output* pOut, const GraphicsInfo& gfxInfo, const vector<GraphicsInfo>& path) {
-	SetPath(pOut, gfxInfo, path);
 	mLabel = "Connection";
+	SetPath(pOut, gfxInfo, path);
 }
 
 /* Sets the new path of the connection, needed in edit action */
@@ -14,6 +14,19 @@ void Connection::SetPath(Output* pOut, const GraphicsInfo& gfxInfo, const vector
 	// Update path
 	mGfxInfo = gfxInfo;
 	mPath = path;
+	pOut->MarkConnectionPins(mPath, this);
+}
+
+/* Updates the path of the connection */
+void Connection::UpdatePath(Output* pOut, const vector<GraphicsInfo>& path) {
+	// Clear previous path
+	pOut->ClearConnectionPins(mPath);
+
+	// Update path
+	mSrcPin->GetGate()->GetOutputPinCoordinates(mGfxInfo.x1, mGfxInfo.y1);
+	mDstPin->GetGate()->GetInputPinCoordinates(mGfxInfo.x2, mGfxInfo.y2, mDstPinIndex);
+
+	mPath = *(pOut->GetConnectionPath(mGfxInfo));
 	pOut->MarkConnectionPins(mPath, this);
 }
 
@@ -34,7 +47,8 @@ Pin* Connection::GetSourcePin() const {
 }
 
 /* Sets the destination pin of the connection */
-void Connection::SetDestinationPin(Pin* pDstPin) {
+void Connection::SetDestinationPin(Pin* pDstPin, int index) {
+	mDstPinIndex = index;
 	mDstPin = pDstPin;
 	pDstPin->ConnectTo(this);
 }
@@ -42,11 +56,6 @@ void Connection::SetDestinationPin(Pin* pDstPin) {
 /* Returns the destination pin of the connection */
 Pin* Connection::GetDestinationPin() const {
 	return mDstPin;
-}
-
-/* Calculates the output according to the inputs */
-void Connection::Operate() {
-	mDstPin->SetStatus(mSrcPin->GetStatus());
 }
 
 /* Sets the status of the input pin number n (0-indexed) */
@@ -64,6 +73,11 @@ int Connection::GetOutputPinStatus() const {
 	return mDstPin->GetStatus();
 }
 
+/* Calculates the output according to the inputs */
+void Connection::Operate() {
+	mDstPin->SetStatus(mSrcPin->GetStatus());
+}
+
 /* Draws the connection */
 void Connection::Draw(Output* pOut) {
 	if (!mDeleted) {
@@ -75,12 +89,16 @@ void Connection::Draw(Output* pOut) {
 void Connection::Delete(Output* pOut) {
 	mSelected = false;
 	mDeleted = true;
+	mSrcPin->RemoveConnection(this);
+	mDstPin->RemoveConnection(this);
 	pOut->ClearConnectionPins(mPath);
 }
 
 /* Restores the component after being deleted */
 void Connection::Restore(Output* pOut) {
 	mDeleted = false;
+	mSrcPin->ConnectTo(this);
+	mDstPin->ConnectTo(this);
 	pOut->MarkConnectionPins(mPath, this);
 }
 

@@ -5,6 +5,12 @@ NOT::NOT(Output* pOut, const GraphicsInfo& gfxInfo, int fanOut) : LogicGate(pOut
 	mLabel = "NOT";
 }
 
+/* Returns the input pin coordiantes of the gate according to its index */
+void NOT::GetInputPinCoordinates(int& x, int& y, int n) {
+	x = mGfxInfo.x1 - UI.PinMargin;
+	y = mGfxInfo.y1 + UI.PinMargin + UI.PinOffset;
+}
+
 /* Calculates the output of the NOT gate */
 void NOT::Operate() {
 	mOutputPin.SetStatus(mInputPins[0].GetStatus() == Status::LOW ? Status::HIGH : Status::LOW);

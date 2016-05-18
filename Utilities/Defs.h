@@ -4,10 +4,10 @@
 	This header file contains some defenitions to be used all over the application
 */
 
-#define MAX_COMPONENTS	200	// Maximum number of components
-#define MAX_CONNECTIONS	20	// Maximum number of input pins that can be connected to any output pin
-#define GATES_FANOUT	5
-#define SWITCH_FANOUT	10
+#define MAX_COMPONENTS	400	// Maximum number of components
+#define MAX_CONNECTIONS	5	// Maximum number of input pins that can be connected to any output pin
+#define GATES_FANOUT	3
+#define SWITCH_FANOUT	3
 #define LED_FANOUT		0
 
 #ifndef NULL
@@ -119,12 +119,14 @@ enum PinType {
 
 /* Infromation of what the pin is containing */
 struct PinInfo {
-	PinType type;
-	Component* comp;
+	PinType Type;
+	Component* Comp;
+	Component* PreviousComp;	// Used to get the overlapped connection
 
 	PinInfo() {
-		type = PinType::EMPTY;
-		comp = NULL;
+		Type = PinType::EMPTY;
+		Comp = NULL;
+		PreviousComp = NULL;
 	}
 };
 

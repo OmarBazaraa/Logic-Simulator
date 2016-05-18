@@ -6,8 +6,8 @@ LogicGate::LogicGate(Output* pOut, const GraphicsInfo& gfxInfo, int inputs, int 
 	mInputPins = new Pin[inputs];
 
 	// Associate all input & output pins to this gate
-	for (int i = 0; i < mInputsCount; i++) mInputPins[i].SetComponent(this);
-	mOutputPin.SetComponent(this);
+	for (int i = 0; i < mInputsCount; i++) mInputPins[i].SetGate(this);
+	mOutputPin.SetGate(this);
 }
 
 /* Returns the input pin number n (0-indexed) of the component */
@@ -35,11 +35,33 @@ int LogicGate::GetOutputPinStatus() const {
 	return mOutputPin.GetStatus();
 }
 
-/* Returns the input pin coordiantes of the gate */
-void LogicGate::GetInputPinCoordinates(int& x, int& y, int& n) {
-	n = (y - mGfxInfo.y1) / UI.PinOffset;
-	x = mGfxInfo.x1 - UI.PinMargin;
-	y = mGfxInfo.y1 + (n * UI.PinOffset) + UI.PinMargin;
+/* Returns the selected input pin index */
+int LogicGate::GetInputPinIndex(int x, int y) {
+	int h = (mGfxInfo.y2 - mGfxInfo.y1);
+	int n = (y - mGfxInfo.y1) * mInputsCount / h;
+
+	return n;
+}
+
+/* Deletes the component */
+void LogicGate::Delete(Output* pOut) {
+	mSelected = false;
+	mDeleted = true;
+	mOutputPin.Delete(pOut);
+	for (int i = 0; i < mInputsCount; i++) {
+		mInputPins[i].Delete(pOut);
+	}
+	pOut->MarkPins(mGfxInfo, PinType::EMPTY, NULL);
+}
+
+/* Restores the component after being deleted */
+void LogicGate::Restore(Output* pOut) {
+	mDeleted = false;
+	mOutputPin.Restore(pOut);
+	for (int i = 0; i < mInputsCount; i++) {
+		mInputPins[i].Restore(pOut);
+	}
+	pOut->MarkPins(mGfxInfo, PinType::GATE, this);
 }
 
 /* Destructor */

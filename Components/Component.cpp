@@ -5,7 +5,6 @@ int Component::sCount = 1;
 /* Constructor */
 Component::Component() : mID(sCount++) {
 	mSelected = false;
-	mCopied = false;
 	mDeleted = false;
 }
 
@@ -27,16 +26,6 @@ void Component::SetSelected(bool s) {
 /* Returns whether the component is selected or not */
 bool Component::IsSelected() const {
 	return mSelected;
-}
-
-/* Sets the copy state of the component */
-void Component::SetCopied(bool c) {
-	mCopied = c;
-}
-
-/* Returns whether the component is copied or not */
-bool Component::IsCopied() const {
-	return mCopied;
 }
 
 /* Returns whether the component is deleted or not */

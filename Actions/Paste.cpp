@@ -7,54 +7,32 @@ Paste::Paste(ApplicationManager* pAppMan) : Action(pAppMan) {
 
 /* Reads parameters required for action to execute */
 bool Paste::ReadActionParameters() {
-	return true;
+	mComp = mAppManager->GetCopiedComp();
+	return (mComp != NULL);
 }
 
+/* Executes action */
 bool Paste::Execute() {
-	int n = mAppManager->GetComponentsCount();
-	Component** list = mAppManager->GetComponentList();
-	Action* pAct = NULL;
-
-	for (int i = 0; i < n; i++) {
-		if (list[i]->IsCopied()) {
-			
-			if (dynamic_cast<Gate*>(list[i])) {
-				pAct = new AddGate(mAppManager, list[i]->GetAddActionType());
-			}
-			else {
-				pAct = new AddConnection(mAppManager);
-			}
-
-			pAct->Execute();
-			mPastedActions.push_back(pAct);
-			mAppManager->UpdateInterface();
-		}
-	}
-
-	if (mPastedActions.empty()) {
+	if (!ReadActionParameters()) {
 		return false;
 	}
 
+	mAct = new AddGate(mAppManager, mComp->GetAddActionType());
+	mAct->Execute();
 	return true;
 }
 
 /* Undo action */
 void Paste::Undo() {
-	for (int i = 0; i < (int)mPastedActions.size(); i++) {
-		mPastedActions[i]->Undo();
-	}
+	mAct->Undo();
 }
 
 /* Redo action */
 void Paste::Redo() {
-	for (int i = 0; i < (int)mPastedActions.size(); i++) {
-		mPastedActions[i]->Redo();
-	}
+	mAct->Redo();
 }
 
 /* Destructor */
 Paste::~Paste() {
-	for (int i = 0; i < (int)mPastedActions.size(); i++) {
-		delete mPastedActions[i];
-	}
+
 }

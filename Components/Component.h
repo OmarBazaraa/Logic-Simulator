@@ -13,7 +13,6 @@ private:
 protected:
 	const int mID;			// The ID of the component
 	bool mSelected;			// Whether this component is selected or not
-	bool mCopied;			// Whether this component is copied or not, needed for COPY & PASTE actions
 	bool mDeleted;			// Whether this component is deleted or not, needed for UNDO & REDO actions
 	string mLabel;			// The component's label (title)
 	GraphicsInfo mGfxInfo;	// The parameters (coordinates) required to draw a component
@@ -33,12 +32,6 @@ public:
 
 	/* Returns whether the component is selected or not */
 	bool IsSelected() const;
-
-	/* Sets the copy state of the component */
-	void SetCopied(bool c);
-
-	/* Returns whether the component is copied or not */
-	bool IsCopied() const;
 
 	/* Returns whether the component is deleted or not */
 	bool IsDeleted() const;

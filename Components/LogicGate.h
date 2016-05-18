@@ -30,8 +30,14 @@ public:
 	/* Returns the status of the output pin */
 	virtual int GetOutputPinStatus() const;
 
-	/* Returns the input pin coordiantes of the gate */
-	virtual void GetInputPinCoordinates(int& x, int& y, int& n);
+	/* Returns the selected input pin index */
+	virtual int GetInputPinIndex(int x, int y);
+
+	/* Deletes the component */
+	virtual void Delete(Output* pOut);
+
+	/* Restores the component after being deleted */
+	virtual void Restore(Output* pOut);
 
 	/* Destructor */
 	~LogicGate();

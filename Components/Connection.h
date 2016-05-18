@@ -1,14 +1,16 @@
 #pragma once
 #include "Component.h"
+#include "Gate.h"
 #include "../Pins/Pin.h"
 #include <vector>
 
 class Connection : public Component
 {
 private:
-	vector<GraphicsInfo> mPath;		// The path of the connection
+	int mDstPinIndex;
 	Pin* mSrcPin;					// The source pin of this connection (an output pin of a certain Component)
 	Pin* mDstPin;					// The destination pin of this connection (an input pin of a certain Component)
+	vector<GraphicsInfo> mPath;		// The path of the connection
 
 public:
 	/* Constructor */
@@ -16,6 +18,9 @@ public:
 
 	/* Sets the new path of the connection, needed in edit action */
 	void SetPath(Output* pOut, const GraphicsInfo& gfxInfo, const vector<GraphicsInfo>& path);
+
+	/* Updates the path of the connection */
+	void UpdatePath(Output* pOut, const vector<GraphicsInfo>& path);
 
 	/* Returns the path of the connection */
 	vector<GraphicsInfo> GetPath() const;
@@ -27,13 +32,10 @@ public:
 	Pin* GetSourcePin() const;
 
 	/* Sets the destination pin of the connection */
-	void SetDestinationPin(Pin* pDstPin);
+	void SetDestinationPin(Pin* pDstPin, int index);
 
 	/* Returns the destination pin of the connection */
 	Pin* GetDestinationPin() const;
-
-	/* Calculates the output according to the inputs */
-	virtual void Operate();
 
 	/* Sets the status of the input pin number n (0-indexed) */
 	virtual void SetInputPinStatus(int n, Status s);
@@ -43,6 +45,9 @@ public:
 
 	/* Returns the status of the output pin, if LED returns -1 */
 	virtual int GetOutputPinStatus() const;
+
+	/* Calculates the output according to the inputs */
+	virtual void Operate();
 
 	/* Draws the connection */
 	virtual void Draw(Output* pOut);

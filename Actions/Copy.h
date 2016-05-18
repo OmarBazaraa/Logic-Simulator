@@ -2,9 +2,14 @@
 #include "..\Actions\Action.h"
 #include "..\ApplicationManager.h"
 #include "..\Components\Component.h"
+#include "..\Components\Connection.h"
 
 class Copy : public Action
 {
+private:
+	int mX, mY;				// The point clicked by the user
+	Component* mComp;		// Pointer to the copied component
+
 public:
 	/* Constructor */
 	Copy(ApplicationManager* pAppMan);

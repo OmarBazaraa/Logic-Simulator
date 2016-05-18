@@ -20,17 +20,14 @@ public:
 	/* Returns the output pin of the component */
 	virtual Pin* GetOutputPin() = 0;
 
-	/* Returns the input pin coordiantes of the gate */
-	virtual void GetInputPinCoordinates(int& x, int& y, int& n);
+	/* Returns the selected input pin index */
+	virtual int GetInputPinIndex(int x, int y);
+
+	/* Returns the input pin coordiantes of the gate according to its index */
+	virtual void GetInputPinCoordinates(int& x, int& y, int n);
 
 	/* Returns the output pin coordiantes of the gate */
 	virtual void GetOutputPinCoordinates(int& x, int& y);
-
-	/* Deletes the component */
-	virtual void Delete(Output* pOut);
-
-	/* Restores the component after being deleted */
-	virtual void Restore(Output* pOut);
 
 	/* Destructor */
 	virtual ~Gate();

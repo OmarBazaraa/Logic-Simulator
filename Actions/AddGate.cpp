@@ -1,12 +1,12 @@
 #include "AddGate.h"
 
 /* Constructor */
-AddGate::AddGate(ApplicationManager* pAppMan, ActionType actType, int x, int y, string k) : Action(pAppMan) {
-	mLabel = k;
-	mX = x;
-	mY = y;
+AddGate::AddGate(ApplicationManager* pAppMan, ActionType actType, int x, int y, string label) : Action(pAppMan) {
 	mActType = actType;
 	mGate = NULL;
+	mX = x;
+	mY = y;
+	mLabel = label;
 }
 
 /* Reads parameters required for action to execute */

@@ -4,12 +4,12 @@
 #include "..\Actions\AddConnection.h"
 #include "..\ApplicationManager.h"
 #include "..\Components\Gate.h"
-#include <vector>
 
 class Paste : public Action
 {
 private:
-	vector<Action*> mPastedActions;
+	Component* mComp;		// Pointer to the pasted component
+	Action* mAct;			// Add component action
 
 public:
 	/* Constructor */

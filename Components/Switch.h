@@ -34,6 +34,12 @@ public:
 	/* Selects the component */
 	virtual void Select();
 
+	/* Deletes the component */
+	virtual void Delete(Output* pOut);
+
+	/* Restores the component after being deleted */
+	virtual void Restore(Output* pOut);
+
 	/* Saves the states of the component*/
 	virtual void Save(ofstream& file);
 

@@ -3,6 +3,7 @@
 /* Constructor */
 LED::LED(Output* pOut, const GraphicsInfo& gfxInfo) : Gate(pOut, gfxInfo) {
 	mLabel = "LED";
+	mInputPin.SetGate(this);
 }
 
 /* Returns the input pin number n (0-indexed) of the component */
@@ -30,6 +31,12 @@ int LED::GetOutputPinStatus() const {
 	return -1;
 }
 
+/* Returns the input pin coordiantes of the gate according to its index */
+void LED::GetInputPinCoordinates(int& x, int& y, int n) {
+	x = mGfxInfo.x1 - UI.PinMargin;
+	y = mGfxInfo.y2 - UI.PinMargin;
+}
+
 /* Calculates the output of the LED */
 void LED::Operate() {
 	return;
@@ -40,6 +47,21 @@ void LED::Draw(Output* pOut) {
 	if (!mDeleted) {
 		pOut->DrawLED(mGfxInfo, mSelected, mInputPin.GetStatus() == Status::HIGH);
 	}
+}
+
+/* Deletes the component */
+void LED::Delete(Output* pOut) {
+	mSelected = false;
+	mDeleted = true;
+	mInputPin.Delete(pOut);
+	pOut->MarkPins(mGfxInfo, PinType::EMPTY, NULL);
+}
+
+/* Restores the component after being deleted */
+void LED::Restore(Output* pOut) {
+	mDeleted = false;
+	mInputPin.Restore(pOut);
+	pOut->MarkPins(mGfxInfo, PinType::GATE, this);
 }
 
 /* Saves the states of the component*/

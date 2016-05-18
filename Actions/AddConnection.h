@@ -1,7 +1,6 @@
 #pragma once
 #include "..\Actions\Action.h"
 #include "..\ApplicationManager.h"
-#include "..\Utilities\Utility.h"
 #include "..\Components\Gate.h"
 #include "..\Components\Connection.h"
 

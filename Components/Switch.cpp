@@ -3,6 +3,7 @@
 /* Constructor */
 Switch::Switch(Output* pOut, const GraphicsInfo& gfxInfo, int fanOut) : Gate(pOut, gfxInfo), mOutputPin(fanOut) {
 	mLabel = "Switch";
+	mOutputPin.SetGate(this);
 }
 
 /* Returns the input pin number n (0-indexed) of the component */
@@ -51,6 +52,21 @@ void Switch::Select() {
 		bool out = (mOutputPin.GetStatus() == Status::HIGH);
 		mOutputPin.SetStatus(out ? Status::LOW : Status::HIGH);
 	}
+}
+
+/* Deletes the component */
+void Switch::Delete(Output* pOut) {
+	mSelected = false;
+	mDeleted = true;
+	mOutputPin.Delete(pOut);
+	pOut->MarkPins(mGfxInfo, PinType::EMPTY, NULL);
+}
+
+/* Restores the component after being deleted */
+void Switch::Restore(Output* pOut) {
+	mDeleted = false;
+	mOutputPin.Restore(pOut);
+	pOut->MarkPins(mGfxInfo, PinType::GATE, this);
 }
 
 /* Saves the states of the component*/

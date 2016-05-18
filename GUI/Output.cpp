@@ -41,7 +41,7 @@ window* Output::CreateWind(int w, int h, int x, int y) const {
 /* Returns the grid of pins */
 Component* Output::GetComponentAtPin(int x, int y) const {
 	getPinIndices(x, y);
-	return mPinGrid[x][y].comp;
+	return mPinGrid[x][y].Comp;
 }
 
 /* Chnages the title of the Window */
@@ -154,8 +154,8 @@ void Output::MarkPins(const GraphicsInfo& gfxInfo, PinType mark, Component* comp
 
 	for (int x = x1; x < x2; x++) {
 		for (int y = y1; y < y2; y++) {
-			mPinGrid[x][y].type = mark;
-			mPinGrid[x][y].comp = comp;
+			mPinGrid[x][y].Type = mark;
+			mPinGrid[x][y].Comp = comp;
 		}
 	}
 }
@@ -172,8 +172,15 @@ void Output::MarkConnectionPins(const vector<GraphicsInfo>& path, Component* com
 			if (x1 > x2) swap(x1, x2);
 
 			for (int x = x1; x <= x2; x++) {
-				mPinGrid[x][y].type = (mPinGrid[x][y].type == EMPTY) ? HOR_CONNECTION : INTERSECTING_CONNECTIONS;
-				mPinGrid[x][y].comp = comp;
+				if (mPinGrid[x][y].Type == EMPTY) {
+					mPinGrid[x][y].Type = PinType::HOR_CONNECTION;
+				}
+				else {
+					mPinGrid[x][y].Type = PinType::INTERSECTING_CONNECTIONS;
+					mPinGrid[x][y].PreviousComp = mPinGrid[x][y].Comp;
+				}
+				
+				mPinGrid[x][y].Comp = comp;
 			}
 		}
 		// Vertical line
@@ -185,8 +192,15 @@ void Output::MarkConnectionPins(const vector<GraphicsInfo>& path, Component* com
 			if (y1 > y2) swap(y1, y2);
 
 			for (int y = y1; y <= y2; y++) {
-				mPinGrid[x][y].type = (mPinGrid[x][y].type == EMPTY) ? VER_CONNECTION : INTERSECTING_CONNECTIONS;
-				mPinGrid[x][y].comp = comp;
+				if (mPinGrid[x][y].Type == EMPTY) {
+					mPinGrid[x][y].Type = PinType::VER_CONNECTION;
+				}
+				else {
+					mPinGrid[x][y].Type = PinType::INTERSECTING_CONNECTIONS;
+					mPinGrid[x][y].PreviousComp = mPinGrid[x][y].Comp;
+				}
+
+				mPinGrid[x][y].Comp = comp;
 			}
 		}
 	}
@@ -204,8 +218,15 @@ void Output::ClearConnectionPins(const vector<GraphicsInfo>& path) {
 			if (x1 > x2) swap(x1, x2);
 
 			for (int x = x1; x <= x2; x++) {
-				mPinGrid[x][y].type = (mPinGrid[x][y].type == INTERSECTING_CONNECTIONS) ? VER_CONNECTION : EMPTY;
-				mPinGrid[x][y].comp = NULL;
+				if (mPinGrid[x][y].Type == INTERSECTING_CONNECTIONS) {
+					mPinGrid[x][y].Type = PinType::VER_CONNECTION;
+					mPinGrid[x][y].Comp = mPinGrid[x][y].PreviousComp;
+					mPinGrid[x][y].PreviousComp = NULL;
+				}
+				else {
+					mPinGrid[x][y].Type = PinType::EMPTY;
+					mPinGrid[x][y].Comp = NULL;
+				}
 			}
 		}
 		// Vertical line
@@ -217,8 +238,15 @@ void Output::ClearConnectionPins(const vector<GraphicsInfo>& path) {
 			if (y1 > y2) swap(y1, y2);
 
 			for (int y = y1; y <= y2; y++) {
-				mPinGrid[x][y].type = (mPinGrid[x][y].type == INTERSECTING_CONNECTIONS) ? HOR_CONNECTION : EMPTY;
-				mPinGrid[x][y].comp = NULL;
+				if (mPinGrid[x][y].Type == INTERSECTING_CONNECTIONS) {
+					mPinGrid[x][y].Type = PinType::HOR_CONNECTION;
+					mPinGrid[x][y].Comp = mPinGrid[x][y].PreviousComp;
+					mPinGrid[x][y].PreviousComp = NULL;
+				}
+				else {
+					mPinGrid[x][y].Type = PinType::EMPTY;
+					mPinGrid[x][y].Comp = NULL;
+				}
 			}
 		}
 	}
@@ -233,7 +261,7 @@ bool Output::IsEmptyArea(const GraphicsInfo& gfxInfo) const {
 
 	for (int x = x1; x < x2; x++) {
 		for (int y = y1; y < y2; y++) {
-			if (mPinGrid[x][y].type != PinType::EMPTY) return false;	// Occupied area
+			if (mPinGrid[x][y].Type != PinType::EMPTY) return false;	// Occupied area
 		}
 	}
 
@@ -428,9 +456,9 @@ bool Output::IsValidNode(const Node& cur, const Node& par) {
 	if (cur.x < 0 || cur.x >= UI.HorPinsCount || cur.y < 0 || cur.y >= UI.VerPinsCount)
 		return false;
 
-	return mPinGrid[cur.x][cur.y].type == PinType::EMPTY
-		|| (cur.y == par.y && mPinGrid[cur.x][cur.y].type == PinType::VER_CONNECTION)
-		|| (cur.x == par.x && mPinGrid[cur.x][cur.y].type == PinType::HOR_CONNECTION);
+	return mPinGrid[cur.x][cur.y].Type == PinType::EMPTY
+		|| (cur.y == par.y && mPinGrid[cur.x][cur.y].Type == PinType::VER_CONNECTION)
+		|| (cur.x == par.x && mPinGrid[cur.x][cur.y].Type == PinType::HOR_CONNECTION);
 }
 
 /* Destructor */
