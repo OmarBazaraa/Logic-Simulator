@@ -69,17 +69,17 @@ public:
 	void DrawLabel(const GraphicsInfo& gfxInfo, const string& label) const;
 
 	/* Draws components */
-	void DrawAND(const GraphicsInfo& gfxInfo, bool selected = false, bool on = false) const;
-	void DrawOR(const GraphicsInfo& gfxInfo, bool selected = false, bool on = false) const;
-	void DrawNOT(const GraphicsInfo& gfxInfo, bool selected = false, bool on = false) const;
-	void DrawNAND(const GraphicsInfo& gfxInfo, bool selected = false, bool on = false) const;
-	void DrawNOR(const GraphicsInfo& gfxInfo, bool selected = false, bool on = false) const;
-	void DrawXOR(const GraphicsInfo& gfxInfo, bool selected = false, bool on = false) const;
-	void DrawXNOR(const GraphicsInfo& gfxInfo, bool selected = false, bool on = false) const;
-	void DrawAND3(const GraphicsInfo& gfxInfo, bool selected = false, bool on = false) const;
-	void DrawNOR3(const GraphicsInfo& gfxInfo, bool selected = false, bool on = false) const;
-	void DrawXOR3(const GraphicsInfo& gfxInfo, bool selected = false, bool on = false) const;
-	void DrawBuffer(const GraphicsInfo& gfxInfo, bool selected = false, bool on = false) const;
+	void DrawAND(const GraphicsInfo& gfxInfo, bool selected = false) const;
+	void DrawOR(const GraphicsInfo& gfxInfo, bool selected = false) const;
+	void DrawNOT(const GraphicsInfo& gfxInfo, bool selected = false) const;
+	void DrawNAND(const GraphicsInfo& gfxInfo, bool selected = false) const;
+	void DrawNOR(const GraphicsInfo& gfxInfo, bool selected = false) const;
+	void DrawXOR(const GraphicsInfo& gfxInfo, bool selected = false) const;
+	void DrawXNOR(const GraphicsInfo& gfxInfo, bool selected = false) const;
+	void DrawAND3(const GraphicsInfo& gfxInfo, bool selected = false) const;
+	void DrawNOR3(const GraphicsInfo& gfxInfo, bool selected = false) const;
+	void DrawXOR3(const GraphicsInfo& gfxInfo, bool selected = false) const;
+	void DrawBuffer(const GraphicsInfo& gfxInfo, bool selected = false) const;
 	void DrawSwitch(const GraphicsInfo& gfxInfo, bool selected = false, bool on = false) const;
 	void DrawLED(const GraphicsInfo& gfxInfo, bool selected = false, bool on = false) const;
 

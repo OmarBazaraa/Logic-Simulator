@@ -50,6 +50,8 @@ void Switch::Select() {
 	else {
 		bool out = (mOutputPin.GetStatus() == Status::HIGH);
 		mOutputPin.SetStatus(out ? Status::LOW : Status::HIGH);
+		
+
 	}
 }
 
