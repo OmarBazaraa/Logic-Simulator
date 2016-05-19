@@ -128,15 +128,15 @@ void TruthTable::Test(string k) {
 	write << endl;
 }
 
-/*Tests the output on a led*/
+/* Tests the output on a led */
 int TruthTable::TestGate(Component*c) {
 	if (dynamic_cast<Switch*>(c))return c->GetOutputPinStatus();
-	if (dynamic_cast<LED*>(c))return TestGate(((LED*)c)->GetInputPin(0)->GetGate());
+	if (dynamic_cast<LED*>(c))return TestGate(((LED*)c)->GetInputPin(0)->GetConnection(0));
 	if (dynamic_cast<Connection*>(c))return TestGate(((Connection*)c)->GetSourcePin()->GetGate());
 	else if (dynamic_cast<LogicGate*>(c)) {
 		for (int i = 0;; i++)
-			if (((LogicGate*)c)->GetInputPin(i)->GetGate())
-				((LogicGate*)c)->SetInputPinStatus(i, Status(TestGate(((LogicGate*)c)->GetInputPin(i)->GetGate())));
+			if (((LogicGate*)c)->GetInputPin(i)->GetConnection(0))
+				((LogicGate*)c)->SetInputPinStatus(i, Status(TestGate(((LogicGate*)c)->GetInputPin(i)->GetConnection(0))));
 			else break;
 			((LogicGate*)c)->Operate();
 			return ((LogicGate*)c)->GetOutputPinStatus();

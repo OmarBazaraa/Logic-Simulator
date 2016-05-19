@@ -25,7 +25,7 @@ void NOR::Operate() {
 /* Draws the NOR gate */
 void NOR::Draw(Output* pOut) {
 	if (!mDeleted) {
-		pOut->DrawNOR(mGfxInfo, mSelected, mOutputPin.GetStatus() == Status::HIGH);
+		pOut->DrawNOR(mGfxInfo, mSelected);
 	}
 }
 

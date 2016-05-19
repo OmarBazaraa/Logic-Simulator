@@ -1,6 +1,6 @@
 #pragma once
 #include "Gate.h"
-
+#include"..\Actions\Simulate.h"
 class Switch : public Gate
 {
 private:

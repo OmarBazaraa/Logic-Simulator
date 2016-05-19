@@ -25,7 +25,7 @@ void XNOR::Operate() {
 /* Draws the XNOR gate */
 void XNOR::Draw(Output* pOut) {
 	if (!mDeleted) {
-		pOut->DrawXNOR(mGfxInfo, mSelected, mOutputPin.GetStatus() == Status::HIGH);
+		pOut->DrawXNOR(mGfxInfo, mSelected);
 	}
 }
 

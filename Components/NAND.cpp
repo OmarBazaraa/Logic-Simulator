@@ -25,7 +25,7 @@ void NAND::Operate() {
 /* Draws the NAND gate */
 void NAND::Draw(Output* pOut) {
 	if (!mDeleted) {
-		pOut->DrawNAND(mGfxInfo, mSelected, mOutputPin.GetStatus() == Status::HIGH);
+		pOut->DrawNAND(mGfxInfo, mSelected);
 	}
 }
 

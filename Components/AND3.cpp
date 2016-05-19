@@ -19,7 +19,7 @@ void AND3::Operate() {
 /* Draws the AND3 gate */
 void AND3::Draw(Output* pOut) {
 	if (!mDeleted) {
-		pOut->DrawAND3(mGfxInfo, mSelected, mOutputPin.GetStatus() == Status::HIGH);
+		pOut->DrawAND3(mGfxInfo, mSelected);
 	}
 }
 

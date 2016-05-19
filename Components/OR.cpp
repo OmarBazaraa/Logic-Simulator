@@ -25,7 +25,7 @@ void OR::Operate() {
 /* Draws the OR gate */
 void OR::Draw(Output* pOut) {
 	if (!mDeleted) {
-		pOut->DrawOR(mGfxInfo, mSelected, mOutputPin.GetStatus() == Status::HIGH);
+		pOut->DrawOR(mGfxInfo, mSelected);
 	}
 }
 

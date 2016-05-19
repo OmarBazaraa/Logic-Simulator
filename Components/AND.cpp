@@ -25,7 +25,7 @@ void AND::Operate() {
 /* Draws the AND gate */
 void AND::Draw(Output* pOut) {
 	if (!mDeleted) {
-		pOut->DrawAND(mGfxInfo, mSelected, mOutputPin.GetStatus()==Status::HIGH);
+		pOut->DrawAND(mGfxInfo, mSelected);
 	}
 }
 
