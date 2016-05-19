@@ -41,6 +41,9 @@ public:
 	/* Checks if this pin is full or not */
 	bool IsFull() const;
 
+	/* Returns the connection connected to the pin */
+	Connection* GetConnection(int index);
+
 	/* Deletes the pin which removes all connected connections from the pin */
 	void Delete(Output* pOut);
 

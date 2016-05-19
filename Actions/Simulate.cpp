@@ -27,26 +27,29 @@ int Simulate::TestGate(Component*c) {
 		mAppManager->GetOutput()->PrintMsg("Error !! : Components are not connected properly.");
 	}*/
 
-	if (dynamic_cast<Switch*>(c))
-		return c->GetOutputPinStatus();
+	if (c) {
+		if (dynamic_cast<Switch*>(c))
+			return c->GetOutputPinStatus();
 
-	if (dynamic_cast<LED*>(c))
-		return TestGate(((LED*)c)->GetInputPin(0)->GetGate());
+		else if (dynamic_cast<LED*>(c))
+			return TestGate(((LED*)c)->GetInputPin(0)->GetConnection(0));
 
-	if (dynamic_cast<Connection*>(c))
-		return TestGate(((Connection*)c)->GetSourcePin()->GetGate());
+		else if (dynamic_cast<Connection*>(c))
+			return TestGate(((Connection*)c)->GetSourcePin()->GetGate());
 
-	else if (dynamic_cast<LogicGate*>(c)) {
-		
-		for (int i = 0;; i++) {
-			if (((LogicGate*)c)->GetInputPin(i)->GetGate()) {
-				((LogicGate*)c)->SetInputPinStatus(i, Status(TestGate(((LogicGate*)c)->GetInputPin(i)->GetGate())));
+		else if (dynamic_cast<LogicGate*>(c)) {
+
+			for (int i = 0;; i++) {
+				if (((LogicGate*)c)->GetInputPin(i)->GetConnection(0)) {
+					((LogicGate*)c)->SetInputPinStatus(i, Status(TestGate(((LogicGate*)c)->GetInputPin(i)->GetConnection(0))));
+				}
+				else break;
 			}
-			else break;
-		}
 			((LogicGate*)c)->Operate();
 			return ((LogicGate*)c)->GetOutputPinStatus();
+		}
 	}
+	else 0;
 }
 
 Simulate::~Simulate()
