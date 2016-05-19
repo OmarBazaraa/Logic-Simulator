@@ -126,7 +126,9 @@ bool AddConnection::DetectDestinationComponent() {
 		if (mDstPin == NULL || mDstPin->IsFull()) {
 			return false;
 		}
+
+		return true;
 	}
 
-	return true;
+	return false;
 }

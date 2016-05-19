@@ -53,15 +53,15 @@ string Input::GetSrting(Output* pOut, string msg, string str) const {
 
 /* Reads the user's selection and determine the desired action */
 ActionType Input::GetUserAction(Output* pOut) {
-
 	int x = 0, y = 0;
-	clicktype Click = NO_CLICK;
+	clicktype click = clicktype::NO_CLICK;
 
 	/* Reads the Mouse Input */
-	while (Click == NO_CLICK) {
+	while (click == NO_CLICK) {
 		if (pWind->GetButtonState(LEFT_BUTTON, x, y) == BUTTON_DOWN) {
 			mLastX = x;
 			mLastY = y;
+
 			// User clicks on the drawing area
 			if (y >= UI.ToolBarHeight + UI.GateBarHeight && y < UI.Height - UI.StatusBarHeight) {
 				if (pOut->GetComponentAtPin(x, y) != NULL) {
@@ -73,7 +73,7 @@ ActionType Input::GetUserAction(Output* pOut) {
 				}
 				return ActionType::SELECT;
 			}
-			Click = pWind->WaitMouseClick(x,y);
+			click = pWind->WaitMouseClick(x,y);
 		}
 		else if (pWind->GetButtonState(RIGHT_BUTTON, x, y) == BUTTON_UP) {
 			return ActionType::HOVER;
@@ -82,6 +82,7 @@ ActionType Input::GetUserAction(Output* pOut) {
 
 	mLastX = x;
 	mLastY = y;
+
 	// User clicks on the tool bar
 	if (y >= 0 && y < UI.ToolBarHeight) {
 		int clickedItemOrder = x / UI.ToolItemWidth;
