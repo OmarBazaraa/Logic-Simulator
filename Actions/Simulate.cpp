@@ -13,6 +13,7 @@ bool Simulate::Execute() {
 	for (int i = 0; i < count; i++) {
 		if (dynamic_cast<LED*>(list[i]) && !list[i]->IsDeleted())
 			TestGate(list[i]);
+		visited.clear();
 	}	
 	if (stopSimulation) {
 		mAppManager->ExecuteAction(DESIGN_MODE);
