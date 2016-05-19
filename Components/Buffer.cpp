@@ -5,6 +5,12 @@ Buffer::Buffer(Output* pOut, const GraphicsInfo& gfxInfo, int fanOut) : LogicGat
 	mLabel = "Buffer";
 }
 
+/* Returns the input pin coordiantes of the gate according to its index */
+void Buffer::GetInputPinCoordinates(int& x, int& y, int n) {
+	x = mGfxInfo.x1 - UI.PinMargin;
+	y = mGfxInfo.y1 + UI.PinMargin + UI.PinOffset;
+}
+
 /* Calculates the output of the Buffer gate */
 void Buffer::Operate() {
 	//the output is as is, what you see is what you get :P xD

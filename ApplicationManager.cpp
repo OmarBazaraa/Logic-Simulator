@@ -18,6 +18,7 @@
 /* Constructor */
 ApplicationManager::ApplicationManager() {
 	mCompCount = 0;
+	mCopiedComp = NULL;
 	mCompList = new Component*[MAX_COMPONENTS];
 	for (int i = 0; i < MAX_COMPONENTS; i++) mCompList[i] = NULL;
 
@@ -36,14 +37,14 @@ Component** ApplicationManager::GetComponentList() const {
 	return mCompList;
 }
 
-/* Returns a pointer to Input object */
-Input* ApplicationManager::GetInput() {
-	return pIn;
+/* Sets the last copied/cut component */
+void ApplicationManager::SetCopiedComp(Component* pComp) {
+	mCopiedComp = pComp;
 }
 
-/* Returns a pointer to Output object */
-Output* ApplicationManager::GetOutput() {
-	return pOut;
+/* Returns the last copied/cut component */
+Component* ApplicationManager::GetCopiedComp() const {
+	return mCopiedComp;
 }
 
 /* Returns the stack of done actions */
@@ -54,6 +55,16 @@ stack<Action*>* ApplicationManager::GetUndoStack() {
 /* Returns the stack of un-done actions */
 stack<Action*>* ApplicationManager::GetRedoStack() {
 	return &mRedoStack;
+}
+
+/* Returns a pointer to Input object */
+Input* ApplicationManager::GetInput() {
+	return pIn;
+}
+
+/* Returns a pointer to Output object */
+Output* ApplicationManager::GetOutput() {
+	return pOut;
 }
 
 /* Reads the required action from the user and returns the corresponding action type */

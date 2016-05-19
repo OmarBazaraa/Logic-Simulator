@@ -434,7 +434,4 @@
       <UniqueIdentifier>{c222ee81-e301-4a90-925a-a173e46a1ee9}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
-  <ItemGroup>
-    <Text Include="..\..\..\..\Sobeih%27s\Source\Repos\Logic-Simulator\TruthTable.txt" />
-  </ItemGroup>
 </Project>

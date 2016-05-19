@@ -17,7 +17,7 @@ bool Delete::Execute() {
 	Output* pOut = mAppManager->GetOutput();
 
 	for (int i = 0; i < n; i++) {
-		if (list[i]->IsSelected()) {
+		if (list[i]->IsSelected() && !list[i]->IsDeleted()) {
 			list[i]->Delete(pOut);
 			mDeletedComps.push_back(list[i]);
 		}

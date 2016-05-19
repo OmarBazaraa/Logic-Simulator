@@ -31,16 +31,16 @@ int Simulate::TestGate(Component*c) {
 		return c->GetOutputPinStatus();
 
 	if (dynamic_cast<LED*>(c))
-		return TestGate(((LED*)c)->GetInputPin(0)->GetComponent());
+		return TestGate(((LED*)c)->GetInputPin(0)->GetGate());
 
 	if (dynamic_cast<Connection*>(c))
-		return TestGate(((Connection*)c)->GetSourcePin()->GetComponent());
+		return TestGate(((Connection*)c)->GetSourcePin()->GetGate());
 
 	else if (dynamic_cast<LogicGate*>(c)) {
 		
 		for (int i = 0;; i++) {
-			if (((LogicGate*)c)->GetInputPin(i)->GetComponent()) {
-				((LogicGate*)c)->SetInputPinStatus(i, Status(TestGate(((LogicGate*)c)->GetInputPin(i)->GetComponent())));
+			if (((LogicGate*)c)->GetInputPin(i)->GetGate()) {
+				((LogicGate*)c)->SetInputPinStatus(i, Status(TestGate(((LogicGate*)c)->GetInputPin(i)->GetGate())));
 			}
 			else break;
 		}

@@ -2,12 +2,13 @@
 #include "..\Actions\Action.h"
 #include "..\ApplicationManager.h"
 #include "..\Components\Component.h"
-#include <vector>
+#include "..\Components\Connection.h"
 
 class Cut : public Action
 {
 private:
-	vector<Component*> mCutComps;
+	int mX, mY;				// The point clicked by the user
+	Component* mComp;		// Pointer to the cut component
 
 public:
 	/* Constructor */

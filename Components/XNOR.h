@@ -7,6 +7,9 @@ public:
 	/* Constructor */
 	XNOR(Output* pOut, const GraphicsInfo& gfxInfo, int fanOut);
 
+	/* Returns the input pin coordiantes of the gate */
+	virtual void GetInputPinCoordinates(int& x, int& y, int n);
+
 	/* Calculates the output of the XNOR gate */
 	virtual void Operate();
 

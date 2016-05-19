@@ -26,11 +26,20 @@ public:
 	/* Returns the status of the output pin */
 	virtual int GetOutputPinStatus() const;
 
+	/* Returns the input pin coordiantes of the gate */
+	virtual void GetInputPinCoordinates(int& x, int& y, int n);
+
 	/* Calculates the output of the LED */
 	virtual void Operate();
 
 	/* Draws the LED */
 	virtual void Draw(Output* pOut);
+
+	/* Deletes the component */
+	virtual void Delete(Output* pOut);
+
+	/* Restores the component after being deleted */
+	virtual void Restore(Output* pOut);
 
 	/* Saves the states of the component*/
 	virtual void Save(ofstream& file);

@@ -7,6 +7,9 @@ public:
 	/* Constructor */
 	Buffer(Output* pOut, const GraphicsInfo& gfxInfo, int fanOut);
 
+	/* Returns the input pin coordiantes of the gate */
+	virtual void GetInputPinCoordinates(int& x, int& y, int n);
+
 	/* Calculates the output of the Buffer gate */
 	virtual void Operate();
 

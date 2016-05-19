@@ -5,6 +5,12 @@ NOR::NOR(Output* pOut, const GraphicsInfo& gfxInfo, int fanOut) : LogicGate(pOut
 	mLabel = "NOR";
 }
 
+/* Returns the input pin coordiantes of the gate according to its index */
+void NOR::GetInputPinCoordinates(int& x, int& y, int n) {
+	x = mGfxInfo.x1 - UI.PinMargin;
+	y = mGfxInfo.y1 + UI.PinMargin + UI.PinOffset * (n > 0 ? 2 : n);
+}
+
 /* Calculates the output of the NOR gate */
 void NOR::Operate() {
 	bool out = 0;

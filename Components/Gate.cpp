@@ -15,30 +15,21 @@ void Gate::SetGraphicsInfo(Output* pOut, const GraphicsInfo& gfxInfo) {
 	pOut->MarkPins(mGfxInfo, PinType::GATE, this);
 }
 
-/* Returns the input pin coordiantes of the gate */
-void Gate::GetInputPinCoordinates(int& x, int& y, int& n) {
-	n = 0;
+/* Returns the selected input pin index */
+int Gate::GetInputPinIndex(int x, int y) {
+	return 0;
+}
+
+/* Returns the input pin coordiantes of the gate according to its index */
+void Gate::GetInputPinCoordinates(int& x, int& y, int n) {
 	x = mGfxInfo.x1 - UI.PinMargin;
-	y = mGfxInfo.y1 + (mGfxInfo.y2 - mGfxInfo.y1) / 2;
+	y = mGfxInfo.y1 + UI.PinMargin + UI.PinOffset * n;
 }
 
 /* Returns the output pin coordiantes of the gate */
 void Gate::GetOutputPinCoordinates(int& x, int& y) {
 	x = mGfxInfo.x2 + UI.PinMargin;
 	y = mGfxInfo.y1 + (mGfxInfo.y2 - mGfxInfo.y1) / 2;
-}
-
-/* Deletes the component */
-void Gate::Delete(Output* pOut) {
-	mSelected = false;
-	mDeleted = true;
-	pOut->MarkPins(mGfxInfo, PinType::EMPTY, NULL);
-}
-
-/* Restores the component after being deleted */
-void Gate::Restore(Output* pOut) {
-	mDeleted = false;
-	pOut->MarkPins(mGfxInfo, PinType::GATE, this);
 }
 
 /* Destructor */

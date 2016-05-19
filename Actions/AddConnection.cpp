@@ -48,9 +48,6 @@ bool AddConnection::ReadActionParameters() {
 		return false;
 	}
 
-	//mLabel = pIn->GetSrting(pOut, "Please enter a label for the connection:");
-	//pOut->ClearStatusBar();
-
 	return true;
 }
 
@@ -59,12 +56,14 @@ bool AddConnection::Execute() {
 	if (!ReadActionParameters()) {
 		return false;
 	}
-		
+	
 	mConnection = new Connection(mAppManager->GetOutput(), mGfxInfo, *mPath);
 	mConnection->SetSourcePin(mSrcPin);
-	mConnection->SetDestinationPin(mDstPin);
+	mConnection->SetDestinationPin(mDstPin, mDstPinIndex);
 	mConnection->SetLabel(mLabel);
 	mAppManager->AddComponent(mConnection);
+
+	delete mPath;
 
 	return true;
 }
@@ -82,7 +81,7 @@ void AddConnection::Redo() {
 
 /* Destructor */
 AddConnection::~AddConnection() {
-	delete mPath;
+	//delete mPath;
 }
 
 /* Detects the source component of the connection */
@@ -92,18 +91,16 @@ bool AddConnection::DetectSourceComponent() {
 	if (comp == NULL) {
 		return false;
 	}
-	else if (dynamic_cast<Gate*>(comp) != NULL) {
-		Gate* gate = (Gate*)comp;
+	else {
+		Gate* gate;
+
+		if (dynamic_cast<Gate*>(comp) != NULL)
+			gate = (Gate*)comp;
+		else
+			gate = ((Connection*)comp)->GetSourcePin()->GetGate();
+
 		gate->GetOutputPinCoordinates(mGfxInfo.x1, mGfxInfo.y1);
 		mSrcPin = gate->GetOutputPin();
-
-		if (mSrcPin == NULL || mSrcPin->IsFull()) {
-			return false;
-		}
-	}
-	else if (dynamic_cast<Connection*>(comp) != NULL) {
-		Connection* connection = (Connection*)comp;
-		mSrcPin = connection->GetSourcePin();
 
 		if (mSrcPin == NULL || mSrcPin->IsFull()) {
 			return false;
@@ -116,17 +113,17 @@ bool AddConnection::DetectSourceComponent() {
 /* Detects the destination component of the connection */
 bool AddConnection::DetectDestinationComponent() {
 	Component* comp = mAppManager->GetOutput()->GetComponentAtPin(mGfxInfo.x2, mGfxInfo.y2);
-	Component* srcComp = mAppManager->GetOutput()->GetComponentAtPin(mGfxInfo.x1, mGfxInfo.y1);
 
-	if (comp == NULL || comp == srcComp) {
+	if (comp == NULL || comp == mSrcPin->GetGate()) {
 		return false;
 	}
 	else if (dynamic_cast<Gate*>(comp) != NULL) {
 		Gate* gate = (Gate*)comp;
+		mDstPinIndex = gate->GetInputPinIndex(mGfxInfo.x2, mGfxInfo.y2);
 		gate->GetInputPinCoordinates(mGfxInfo.x2, mGfxInfo.y2, mDstPinIndex);
 		mDstPin = gate->GetInputPin(mDstPinIndex);
 
-		if (mDstPin == NULL && mDstPin->IsFull()) {
+		if (mDstPin == NULL || mDstPin->IsFull()) {
 			return false;
 		}
 	}

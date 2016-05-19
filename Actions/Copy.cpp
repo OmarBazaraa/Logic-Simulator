@@ -7,20 +7,41 @@ Copy::Copy(ApplicationManager* pAppMan) : Action(pAppMan) {
 
 /* Reads parameters required for action to execute */
 bool Copy::ReadActionParameters() {
+	Input* pIn = mAppManager->GetInput();
+	Output* pOut = mAppManager->GetOutput();
+
+	pOut->PrintMsg("Please select a component to copy");
+	pIn->GetPointClicked(mX, mY);
+	pOut->ClearStatusBar();
+
+	if (!pOut->IsDrawingArea(mY)) {
+		pOut->PrintMsg("Invalid position. Operation was cancelled");
+		return false;
+	}
+
+	mComp = pOut->GetComponentAtPin(mX, mY);
+
+	if (mComp == NULL) {
+		pOut->PrintMsg("No component was selected. Operation was cancelled");
+		return false;
+	}
+	else if (dynamic_cast<Connection*>(mComp) != NULL) {
+		pOut->PrintMsg("Cannot copy a connection. Operation was cancelled");
+		return false;
+	}
+
 	return true;
 }
 
 /* Executes action */
 bool Copy::Execute() {
-	int n = mAppManager->GetComponentsCount();
-	Component** list = mAppManager->GetComponentList();
-
-	for (int i = 0; i < n; i++) {
-		list[i]->SetCopied(list[i]->IsSelected());
+	if (!ReadActionParameters()) {
+		return false;
 	}
 
+	mAppManager->SetCopiedComp(mComp);
 	mAppManager->GetOutput()->PrintMsg("Copied");
-	return false;	// To prevent adding this action to the stack
+	return false;	// To prevent adding CopyAction to the stack
 }
 
 /* Undo action */

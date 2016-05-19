@@ -7,30 +7,41 @@ Cut::Cut(ApplicationManager* pAppMan) : Action(pAppMan) {
 
 /* Reads parameters required for action to execute */
 bool Cut::ReadActionParameters() {
+	Input* pIn = mAppManager->GetInput();
+	Output* pOut = mAppManager->GetOutput();
+
+	pOut->PrintMsg("Please select a component to cut");
+	pIn->GetPointClicked(mX, mY);
+	pOut->ClearStatusBar();
+
+	if (!pOut->IsDrawingArea(mY)) {
+		pOut->PrintMsg("Invalid position. Operation was cancelled");
+		return false;
+	}
+
+	mComp = pOut->GetComponentAtPin(mX, mY);
+
+	if (mComp == NULL) {
+		pOut->PrintMsg("No component was selected. Operation was cancelled");
+		return false;
+	}
+	else if (dynamic_cast<Connection*>(mComp) != NULL) {
+		pOut->PrintMsg("Cannot cut a connection. Operation was cancelled");
+		return false;
+	}
+
 	return true;
 }
 
 /* Executes action */
 bool Cut::Execute() {
-	int n = mAppManager->GetComponentsCount();
-	Component** list = mAppManager->GetComponentList();
-	Output* pOut = mAppManager->GetOutput();
-
-	for (int i = 0; i < n; i++) {
-		if (list[i]->IsSelected()) {
-			list[i]->SetCopied(true);
-			list[i]->Delete(pOut);
-			mCutComps.push_back(list[i]);
-		}
-		else {
-			list[i]->SetCopied(false);
-		}
-	}
-
-	if (mCutComps.empty()) {
+	if (!ReadActionParameters()) {
 		return false;
 	}
 
+	Output* pOut = mAppManager->GetOutput();
+	mAppManager->SetCopiedComp(mComp);
+	mComp->Delete(pOut);
 	pOut->ClearDrawingArea();
 	pOut->PrintMsg("Cut");
 	return true;
@@ -38,17 +49,12 @@ bool Cut::Execute() {
 
 /* Undo action */
 void Cut::Undo() {
-	for (int i = 0; i < (int)mCutComps.size(); i++) {
-		mCutComps[i]->Restore(mAppManager->GetOutput());
-	}
+	mComp->Restore(mAppManager->GetOutput());
 }
 
 /* Redo action */
 void Cut::Redo() {
-	for (int i = 0; i < (int)mCutComps.size(); i++) {
-		mCutComps[i]->Delete(mAppManager->GetOutput());
-	}
-
+	mComp->Delete(mAppManager->GetOutput());
 	mAppManager->GetOutput()->ClearDrawingArea();
 }
 
