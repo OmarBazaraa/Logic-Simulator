@@ -51,10 +51,11 @@ void Switch::Select() {
 	else {
 		bool out = (mOutputPin.GetStatus() == Status::HIGH);
 		mOutputPin.SetStatus(out ? Status::LOW : Status::HIGH);
-		
-
+		Refresh(&mOutputPin);
 	}
 }
+
+
 
 /* Deletes the component */
 void Switch::Delete(Output* pOut) {
@@ -69,6 +70,22 @@ void Switch::Restore(Output* pOut) {
 	mDeleted = false;
 	mOutputPin.Restore(pOut);
 	pOut->MarkPins(mGfxInfo, PinType::GATE, this);
+}
+
+/* Simulates due to change in pin status */
+void  Switch::Refresh(Pin* p) {
+	
+	for (int i = 0; i < p->getConnectionsCount(); i++)	{
+
+		if (p->GetConnection(i)) {
+			Pin* d = p->GetConnection(i)->GetDestinationPin();
+			d->SetStatus(p->GetStatus());
+			d->GetGate()->Operate();
+			if (!dynamic_cast<LED*>(d->GetGate()))
+				Refresh(d->GetGate()->GetOutputPin());
+
+		}
+	}
 }
 
 /* Saves the states of the component*/

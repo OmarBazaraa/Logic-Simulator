@@ -365,7 +365,7 @@ void Output::DrawLED(const GraphicsInfo& gfxInfo, bool selected, bool on) const 
 
 /* Draws connection */
 void Output::DrawConnection(const vector<GraphicsInfo>& path, bool selected, bool on) {
-	pWind->SetPen(selected && UI.AppMode == DESIGN || on && UI.AppMode == SIMULATION ? UI.SelectionColor : WHITE, 2);
+	pWind->SetPen(selected && UI.AppMode == DESIGN || on && UI.AppMode == SIMULATION ? UI.SelectionColor : BLACK, 2);
 
 	for (int i = 0; i < (int)path.size(); i++) {
 		pWind->DrawLine(path[i].x1, path[i].y1, path[i].x2, path[i].y2);

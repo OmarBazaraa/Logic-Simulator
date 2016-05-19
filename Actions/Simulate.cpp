@@ -3,7 +3,7 @@
 
 /* Constructor */
 Simulate::Simulate(ApplicationManager* pAppMan) : Action(pAppMan) {
-
+	stopSimulation = 0;
 }
 
 
@@ -12,36 +12,52 @@ bool Simulate::Execute() {
 	int count = mAppManager->GetComponentsCount();
 	for (int i = 0; i < count; i++) {
 		if (dynamic_cast<LED*>(list[i]) && !list[i]->IsDeleted())
-			list[i]->SetInputPinStatus(0,(Status)TestGate(list[i]));
+			TestGate(list[i]);
 	}	
+	if (stopSimulation) {
+		mAppManager->ExecuteAction(DESIGN_MODE);
+		mAppManager->GetOutput()->PrintMsg("Error !! : Components are not connected properly.");
+	}
 	return false;
 }
 
 /*Tests the output on a led*/
 int Simulate::TestGate(Component*c) {
 
-	/*int n = visited.size();
-	visited.insert(c);
-	if(c==NULL || n==visited.size()){
-		mAppManager->ExecuteAction(DESIGN_MODE);
-		mAppManager->GetOutput()->PrintMsg("Error !! : Components are not connected properly.");
-	}*/
-
+	int n = visited.size();
+	if (c)
+		visited.insert(c);
+	else
+		return -1;
+	if(n==visited.size()) {
+		stopSimulation = 1;
+		return -1;
+	}
+	int returnValue;
 	if (c) {
+
 		if (dynamic_cast<Switch*>(c))
 			return c->GetOutputPinStatus();
 
-		else if (dynamic_cast<LED*>(c))
-			return TestGate(((LED*)c)->GetInputPin(0)->GetConnection(0));
+		else if (dynamic_cast<LED*>(c)) {
+			returnValue = TestGate(((LogicGate*)c)->GetInputPin(0)->GetConnection(0));
+			if (returnValue > -1)
+				((Gate*)c)->SetInputPinStatus(0, (Status)returnValue);
+			return returnValue;
+		}
 
-		else if (dynamic_cast<Connection*>(c))
+		else if (dynamic_cast<Connection*>(c)) {
 			return TestGate(((Connection*)c)->GetSourcePin()->GetGate());
+		}
 
 		else if (dynamic_cast<LogicGate*>(c)) {
 
 			for (int i = 0;; i++) {
 				if (((LogicGate*)c)->GetInputPin(i)->GetConnection(0)) {
-					((LogicGate*)c)->SetInputPinStatus(i, Status(TestGate(((LogicGate*)c)->GetInputPin(i)->GetConnection(0))));
+					returnValue = TestGate(((LogicGate*)c)->GetInputPin(i)->GetConnection(0));
+					if (returnValue > -1)
+						((Gate*)c)->SetInputPinStatus(i, (Status)returnValue);
+					else break;
 				}
 				else break;
 			}

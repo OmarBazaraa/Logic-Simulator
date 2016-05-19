@@ -79,6 +79,11 @@ Connection* Pin::GetConnection(int index) {
 	else return 0;
 }
 
+/* Returns the number of connected pins */
+int Pin::getConnectionsCount() {
+	return mConnectionsCount;
+}
+
 /* Deletes the pin which removes all connected connections from the pin */
 void Pin::Delete(Output* pOut) {
 	mBackupConnections.clear();

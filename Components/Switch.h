@@ -1,6 +1,7 @@
 #pragma once
 #include "Gate.h"
 #include"..\Actions\Simulate.h"
+#include"..\Components\LED.h"
 class Switch : public Gate
 {
 private:
@@ -39,6 +40,9 @@ public:
 
 	/* Restores the component after being deleted */
 	virtual void Restore(Output* pOut);
+
+	/* Simulates due to change in pin status */
+	void  Refresh(Pin* p);
 
 	/* Saves the states of the component*/
 	virtual void Save(ofstream& file);

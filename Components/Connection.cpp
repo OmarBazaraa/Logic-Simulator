@@ -96,7 +96,7 @@ void Connection::Operate() {
 /* Draws the connection */
 void Connection::Draw(Output* pOut) {
 	if (!mDeleted) {
-		pOut->DrawConnection(mPath, mSelected); //mSrcPin->GetStatus() == Status::HIGH
+		pOut->DrawConnection(mPath, mSelected, mSrcPin->GetStatus() == Status::HIGH);
 	}
 }
 

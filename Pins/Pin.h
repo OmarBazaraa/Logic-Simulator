@@ -44,6 +44,9 @@ public:
 	/* Returns the connection connected to the pin */
 	Connection* GetConnection(int index);
 
+	/* Returns the number of connected pins */
+	int getConnectionsCount();
+
 	/* Deletes the pin which removes all connected connections from the pin */
 	void Delete(Output* pOut);
 

@@ -15,6 +15,7 @@ using namespace std;
 class Simulate : public Action
 {
 	set<Component*> visited;
+	bool stopSimulation;
 public:
 	/* Constructor */
 	Simulate(ApplicationManager* pAppMan);
