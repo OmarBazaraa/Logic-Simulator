@@ -32,10 +32,10 @@ bool Move::Execute() {
 	pOut->StoreImage(DrawingArea, 0, 0, UI.Width, UI.Height);
 
 	if (pComp != NULL && pComp->IsSelected()) {
-		int LastX = mX, LastY = mY;
+		int prvX = mX, prvY = mY;
 		while (pOut->GetButtonState(LEFT_BUTTON, mX, mY) == BUTTON_DOWN) {
 			dx = mX - oldX, dy = mY - oldY;
-			if (LastX != mX || LastY != mY) {
+			if (prvX != mX || prvY != mY) {
 				pOut->DrawImage(DrawingArea, 0, 0, UI.Width, UI.Height);
 				for (int i = 0; i < n; i++) {
 					if (list[i]->IsSelected()) {
@@ -46,8 +46,8 @@ bool Move::Execute() {
 						pOut->DrawLine(x, y, x + dx, y + dy);
 					}
 				}
-				LastX = mX;
-				LastY = mY;
+				prvX = mX;
+				prvY = mY;
 			}
 		}
 		pOut->DrawImage(DrawingArea, 0, 0, UI.Width, UI.Height);
@@ -91,7 +91,6 @@ bool Move::Execute() {
 	return false;	// To prevent adding this action to the stack
 }
 
-
 bool Move::ValidCoordinates(int dx, int dy,Component* Comp) {
 	ActionType actType = Comp->GetAddActionType();
 	Output* pOut = mAppManager->GetOutput();
@@ -123,7 +122,6 @@ GraphicsInfo Move::CalculateDimensions(Component* Comp, int dx, int dy) {
 	GraphicsInfo NewGfx(NewX1, NewY1, NewX2, NewY2);
 	return NewGfx;
 }
-
 
 /* Undo action */
 void Move::Undo() {

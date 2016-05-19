@@ -33,18 +33,37 @@ bool Select::Execute() {
 	// Selecting empty area leads to deselecting all components
 	else {
 		for (int i = 0; i < n; i++) list[i]->SetSelected(false);
-		int OldX = mX, OldY = mY, Xpast = mX, Ypast = mY;
+		int startX = mX, startY = mY, prvX = mX, prvY = mY;
+
 		while (pOut->GetButtonState(LEFT_BUTTON, mX, mY) == BUTTON_DOWN) {
-			if (mX != Xpast || mY != Ypast) {
+			if (mX != prvX || mY != prvY) {
 				pOut->DrawImage(Window, 0, 0, UI.Width, UI.Height);
-				pOut->SetBrush(UI.SelectionColor);
 				pOut->SetPen(UI.SelectionColor, 2);
-				pOut->DrawRectangle(OldX, OldY, mX, mY, FRAME);
-				Xpast = mX;
-				Ypast = mY;
+				pOut->DrawRectangle(startX, startY, mX, mY, FRAME);
+				prvX = mX;
+				prvY = mY;
 			}
 		}
-		for (int i = 0; i < n; i++) {
+
+		int sX = (mX < startX) ? mX : startX;
+		int sY = (mY < startY) ? mY : startY;
+		normalizeCoordinates(sX, sY);
+
+		int eX = (mX > startX) ? mX : startX;
+		int eY = (mY > startY) ? mY : startY;
+		normalizeCoordinates(eX, eY);
+
+		for (int x = sX; x < eX; x += UI.PinOffset) {
+			for (int y = sY; y < eY; y += UI.PinOffset) {
+				pComp = pOut->GetComponentAtPin(x, y);
+
+				if (pComp != NULL) {
+					pComp->SetSelected(true);
+				}
+			}
+		}
+
+		/*for (int i = 0; i < n; i++) {
 			GraphicsInfo GfxInfo = list[i]->GetGraphicsInfo();
 			if ((GfxInfo.x1 > min(mX, OldX) && GfxInfo.x1 < max(mX, OldX)) || (GfxInfo.x2 > min(mX, OldX) && GfxInfo.x2 < max(mX, OldX)) || (GfxInfo.x1 > min(mX, OldX) && GfxInfo.x2 < max(mX, OldX)) || ((GfxInfo.x2 > min(mX, OldX) && GfxInfo.x1 < max(mX, OldX)))) {
 				if ((GfxInfo.y1 > min(mY, OldY) && GfxInfo.y1 < max(mY, OldY)) || (GfxInfo.y2 > min(mY, OldY) && GfxInfo.y2 < max(mY, OldY)) || (GfxInfo.y1 > min(mY, OldY) && GfxInfo.y2 < max(mY, OldY)) || (GfxInfo.y2 > min(mY, OldY) && GfxInfo.y1 < max(mY, OldY))) {
@@ -53,9 +72,12 @@ bool Select::Execute() {
 					selectedCount++;
 				}
 			}
-		}
+		}*/
+
+
+
 		pOut->DrawImage(Window, 0, 0, UI.Width, UI.Height);
-		pOut->ClearDrawingArea();
+		//pOut->ClearDrawingArea();
 		pOut->FlushMouseQueue();
 	}
 

@@ -206,7 +206,9 @@ bool Edit::DetectDestinationComponent() {
 		if (mNewDstPin == NULL || mNewDstPin->IsFull()) {
 			return false;
 		}
+
+		return true;
 	}
 
-	return true;
+	return false;
 }
