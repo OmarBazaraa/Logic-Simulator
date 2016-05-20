@@ -54,6 +54,16 @@ image::~image() {
     }
 }
 
+unsigned char * image::GetArr()
+{
+	return ucpImageData;
+}
+
+void image::SetArr(unsigned char * Arr)
+{
+	ucpImageData = Arr;
+}
+
 void image::Open(string strFileName, imagetype itThisType) {
 
     Open((char *) strFileName.c_str(), itThisType);

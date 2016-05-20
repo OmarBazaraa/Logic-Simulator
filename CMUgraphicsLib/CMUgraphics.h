@@ -18,6 +18,7 @@ This file was last modified on 05.16.1999
 #include "image.h"
 #include "colors.h"
 #include "version.h"
+#include "PNG.h"
 
 // Aproximate value of Pi, used in some calculations
 const double cdPi = 3.141592653589793238462643383279;
@@ -305,6 +306,9 @@ class window {
     // parameters
 	void DrawImage(const image *imgThis, const int iX, const int iY, const int iWidth = -1, const int iHeight = -1);
 	void DrawImage(const image &imgThis, const int iX, const int iY, const int iWidth = -1, const int iHeight = -1);
+
+	//Draws a PNG image to the screen with the given coordinates
+	void DrawPNG(string file_directory, int x,int y);
 
     // Get the color of the pixel at location (iX, iY)
     color GetColor(const int iX, const int iY);

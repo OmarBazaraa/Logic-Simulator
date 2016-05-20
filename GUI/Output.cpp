@@ -1,4 +1,5 @@
 #include "Output.h"
+#include "../CMUgraphicsLib/PNG.h"
 
 /* Constructor that initializes the user interface */
 Output::Output() {
@@ -351,7 +352,9 @@ void Output::DrawLabel(const GraphicsInfo& gfxInfo, const string& label) const {
 /* Draws AND gate */
 void Output::DrawAND(const GraphicsInfo& gfxInfo, bool selected) const {
 	string dir = (selected ? "Images\\components\\highlighted\\and.jpg" : "Images\\components\\active\\and.jpg");
+
 	pWind->DrawImage(dir, gfxInfo.x1, gfxInfo.y1, UI.LogicGateWidth, UI.LogicGateHeight);
+	//pWind->DrawPNG(dir, gfxInfo.x1, gfxInfo.y1);
 
 	//
 	// JUST FOR TESTING

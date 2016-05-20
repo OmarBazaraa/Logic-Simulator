@@ -222,6 +222,12 @@
     <ClCompile Include="Actions\Simulate.cpp">
       <Filter>Actions</Filter>
     </ClCompile>
+    <ClCompile Include="CMUgraphicsLib\png\LoadPNG.cpp">
+      <Filter>CMUgraphics Library</Filter>
+    </ClCompile>
+    <ClCompile Include="CMUgraphicsLib\PNG.cpp">
+      <Filter>CMUgraphics Library</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Actions\Action.h">
@@ -406,6 +412,12 @@
     </ClInclude>
     <ClInclude Include="Actions\Simulate.h">
       <Filter>Actions</Filter>
+    </ClInclude>
+    <ClInclude Include="CMUgraphicsLib\png\LoadPNG.h">
+      <Filter>CMUgraphics Library</Filter>
+    </ClInclude>
+    <ClInclude Include="CMUgraphicsLib\PNG.h">
+      <Filter>CMUgraphics Library</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

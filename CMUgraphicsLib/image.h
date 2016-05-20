@@ -58,6 +58,11 @@ class image {
     image(const char *cpFileName, imagetype itThisType = JPEG);
 	~image();
 	
+
+	//to Support PNG
+	unsigned char* GetArr();
+	void SetArr(unsigned char* Arr);
+
 	// Open an image file, currently the only value imagetype is 
 	// JPEG
 	void Open(string strFileName, imagetype itThisType = JPEG);

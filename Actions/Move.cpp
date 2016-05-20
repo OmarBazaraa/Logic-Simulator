@@ -101,7 +101,7 @@ bool Move::ValidCoordinates(int dx, int dy,Component* Comp) {
 			return true;
 		return false;
 	}
-	if (min(NewGfx.y1,NewGfx.y2) > UI.GateBarHeight + UI.ToolBarHeight  && max(NewGfx.y1,NewGfx.y2) < UI.Height - UI.StatusBarHeight && min(NewGfx.x1,NewGfx.x2) > 0 && max(NewGfx.x1, NewGfx.x2) < UI.Width && pOut->IsEmptyArea(NewGfx))
+	if (min(NewGfx.y1,NewGfx.y2) > UI.GateBarHeight + UI.ToolBarHeight  && max(NewGfx.y1,NewGfx.y2) < UI.Height - UI.StatusBarHeight && min(NewGfx.x1,NewGfx.x2) > 0 && max(NewGfx.x1, NewGfx.x2) < UI.Width && ValidArea(NewGfx))
 		return true;
 	return false;
 }
@@ -113,6 +113,10 @@ GraphicsInfo Move::CalculateDimensions(Component* Comp, int dx, int dy) {
 	NewY1 = dy + mGfx.y1;
 	NewX2 = dx + mGfx.x2;
 	NewY2 = dy + mGfx.y2;
+	if (NewX1 > NewX2)
+		swap(NewX1, NewX2);
+	if (NewY1 > NewY2)
+		swap(NewY1, NewY2);
 	if (Comp->GetAddActionType() != ActionType::ADD_CONNECTION) {
 		normalizeCoordinates(NewX1, NewY1);
 		normalizeCoordinates(NewX2, NewY2);
@@ -121,6 +125,18 @@ GraphicsInfo Move::CalculateDimensions(Component* Comp, int dx, int dy) {
 	}
 	GraphicsInfo NewGfx(NewX1, NewY1, NewX2, NewY2);
 	return NewGfx;
+}
+
+bool Move::ValidArea(GraphicsInfo & GfxInfo) {
+	Output* pOut = mAppManager->GetOutput();
+	for (int x = GfxInfo.x1; x < GfxInfo.x2; x++) {
+		for (int y = GfxInfo.y1; y < GfxInfo.y2; y++) {
+			Component* pComp = pOut->GetComponentAtPin(x, y);
+			if (pComp != NULL && !pComp->IsSelected())
+				return false;
+		}
+	}
+	return true;
 }
 
 /* Undo action */

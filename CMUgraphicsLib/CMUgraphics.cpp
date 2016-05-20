@@ -1245,6 +1245,10 @@ void window::DrawImage(const image &imgThis, const int iX, const int iY, const i
 
 }
 
+void window::DrawPNG(string file_directory, int x, int y) {
+	DrawPNGImage(this, file_directory, x, y);
+}
+
 color window::GetColor(const int iX, const int iY) {
 
     HDC dcTempBuffer;

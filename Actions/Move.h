@@ -42,4 +42,5 @@ public:
 private:
 	bool ValidCoordinates(int dx, int dy, Component * Comp);
 	GraphicsInfo CalculateDimensions(Component* Comp,int dx, int dy);
+	bool ValidArea(GraphicsInfo& GfxInfo);
 };

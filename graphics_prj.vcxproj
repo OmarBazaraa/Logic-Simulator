@@ -148,6 +148,8 @@
     <ClCompile Include="CMUgraphicsLib\jpegload.c" />
     <ClCompile Include="CMUgraphicsLib\keyqueue.cpp" />
     <ClCompile Include="CMUgraphicsLib\mousequeue.cpp" />
+    <ClCompile Include="CMUgraphicsLib\PNG.cpp" />
+    <ClCompile Include="CMUgraphicsLib\png\LoadPNG.cpp" />
     <ClCompile Include="CMUgraphicsLib\windowinput.cpp" />
     <ClCompile Include="CMUgraphicsLib\jpeg\jcomapi.c" />
     <ClCompile Include="CMUgraphicsLib\jpeg\jcparam.c" />
@@ -228,6 +230,8 @@
     <ClInclude Include="CMUgraphicsLib\jpegload.h" />
     <ClInclude Include="CMUgraphicsLib\keyqueue.h" />
     <ClInclude Include="CMUgraphicsLib\mousequeue.h" />
+    <ClInclude Include="CMUgraphicsLib\PNG.h" />
+    <ClInclude Include="CMUgraphicsLib\png\LoadPNG.h" />
     <ClInclude Include="CMUgraphicsLib\version.h" />
     <ClInclude Include="CMUgraphicsLib\windowinput.h" />
     <ClInclude Include="CMUgraphicsLib\jpeg\jconfig.h" />
