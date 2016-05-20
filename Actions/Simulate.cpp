@@ -53,7 +53,12 @@ int Simulate::TestGate(Component*c) {
 		}
 
 		else if (dynamic_cast<LED*>(c)) {
-			returnValue = TestGate(((LogicGate*)c)->GetInputPin(0)->GetConnection(0)->GetSourcePin()->GetGate());
+			if (((LogicGate*)c)->GetInputPin(0)->IsFull())
+				returnValue = TestGate(((LogicGate*)c)->GetInputPin(0)->GetConnection(0)->GetSourcePin()->GetGate());
+			else { 
+				returnValue = -1;
+				stopSimulation = 1;
+			}
 			if (returnValue > -1)
 				((Gate*)c)->SetInputPinStatus(0, (Status)returnValue);
 			return returnValue;
