@@ -33,7 +33,7 @@ enum ActionType {
 	ADD_LED,			// Add LED
 	ADD_CONNECTION,		// Add Wire Connection
 
-	ADD_LABEL,			// Add label to a component, a connection
+	//ADD_LABEL,		// Add label to a component, a connection
 	EDIT,				// Edit label of a component, a connection
 	DEL,				// Delete a component, a connection
 	COPY,				// Copy components
@@ -48,7 +48,7 @@ enum ActionType {
 	LOAD,				// Load a circuit from a file
 	EXIT,				// Exit the application
 
-	CHANGE_SWITCH,		// Change switch status in simulation mode
+	//CHANGE_SWITCH,	// Change switch status in simulation mode
 	SELECT,				// Select a component, a connection
 	HOVER,				// Hover over a certain Item or a component
 	MOVE,				// Move a component, a connection
@@ -80,19 +80,19 @@ enum ToolBarItem {
 /* Gate bar items */
 enum GateBarItem {
 	ITEM_AND,
-	ITEM_NAND,
-	ITEM_AND3,
 	ITEM_OR,
+	ITEM_NOT,
+	ITEM_NAND,
 	ITEM_NOR,
-	ITEM_NOR3,
 	ITEM_XOR,
 	ITEM_XNOR,
+	ITEM_AND3,
+	ITEM_NOR3,
 	ITEM_XOR3,
 	ITEM_BUFFER,
-	ITEM_NOT,
-	ITEM_CONNECTION,
 	ITEM_SWITCH,
 	ITEM_LED,
+	ITEM_CONNECTION,
 
 	GATES_COUNT
 };

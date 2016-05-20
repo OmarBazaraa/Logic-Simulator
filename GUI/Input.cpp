@@ -64,19 +64,24 @@ ActionType Input::GetUserAction(Output* pOut) {
 
 			// User clicks on the drawing area
 			if (y >= UI.ToolBarHeight + UI.GateBarHeight && y < UI.Height - UI.StatusBarHeight) {
+				// Move
 				if (pOut->GetComponentAtPin(x, y) != NULL) {
-					int OldX = x, OldY = y;
+					int startX = x, startY = y;
+
 					while (pWind->GetButtonState(LEFT_BUTTON, x, y) == BUTTON_DOWN) {
-						if (OldX != x || OldY != y)
+						if (startX != x || startY != y) {
 							return ActionType::MOVE;
+						}
 					}
 				}
+
+				// Select
 				return ActionType::SELECT;
 			}
 			click = pWind->WaitMouseClick(x,y);
 		}
 		else if (pWind->GetButtonState(RIGHT_BUTTON, x, y) == BUTTON_UP) {
-			return ActionType::HOVER;
+			//return ActionType::HOVER;
 		}
 	}
 

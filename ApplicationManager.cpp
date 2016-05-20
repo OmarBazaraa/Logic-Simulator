@@ -168,11 +168,14 @@ void ApplicationManager::ExecuteAction(ActionType actType) {
 			break;
 	}
 
-	if(pAct && pAct->Execute()) {
-		mUndoStack.push(pAct);
-
-		// Clear the RedoStack
-		while (!mRedoStack.empty()) delete mRedoStack.top(), mRedoStack.pop();
+	if(pAct) {
+		if (pAct->Execute()) {
+			mUndoStack.push(pAct);
+			while (!mRedoStack.empty()) delete mRedoStack.top(), mRedoStack.pop();	// Clear the RedoStack
+		}
+		else {
+			delete pAct;
+		}
 	}
 }
 
