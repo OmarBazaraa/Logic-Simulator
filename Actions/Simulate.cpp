@@ -9,29 +9,28 @@ Simulate::Simulate(ApplicationManager* pAppMan) : Action(pAppMan) {
 
 
 bool Simulate::Execute() {
+
 	Component ** list = mAppManager->GetComponentList();
 	int count = mAppManager->GetComponentsCount();
+
 	for (int i = 0; i < count; i++) {
 		if (dynamic_cast<LED*>(list[i]) && !list[i]->IsDeleted())
 			TestGate(list[i]);
-		/*
+		
 		visited.clear();
-		*/
+		
 	}	
-	/*
+	
 	if (stopSimulation) {
 		mAppManager->ExecuteAction(DESIGN_MODE);
 		mAppManager->GetOutput()->PrintMsg("Error !! : Components are not connected properly.");
 	}
-	*/
+	
 	return false;
 }
 
 /*Tests the output on a led*/
 int Simulate::TestGate(Component*c) {
-
-
-	/*
 
 	//validation
 
@@ -44,39 +43,44 @@ int Simulate::TestGate(Component*c) {
 		stopSimulation = 1;
 		return -1;
 	}
-	*/
-
 
 	int returnValue;
 	if (c) {
 
-		if (dynamic_cast<Switch*>(c))
+		if (dynamic_cast<Switch*>(c)) {
+			visited.erase(c);
 			return c->GetOutputPinStatus();
+		}
 
 		else if (dynamic_cast<LED*>(c)) {
-			returnValue = TestGate(((LogicGate*)c)->GetInputPin(0)->GetConnection(0));
+			returnValue = TestGate(((LogicGate*)c)->GetInputPin(0)->GetConnection(0)->GetSourcePin()->GetGate());
 			if (returnValue > -1)
 				((Gate*)c)->SetInputPinStatus(0, (Status)returnValue);
 			return returnValue;
 		}
 
-		else if (dynamic_cast<Connection*>(c)) {
-			return TestGate(((Connection*)c)->GetSourcePin()->GetGate());
-		}
-
 		else if (dynamic_cast<LogicGate*>(c)) {
 
-			for (int i = 0;i<2; i++) {
-				if (((LogicGate*)c)->GetInputPin(i)->GetConnection(0)) {
-					returnValue = TestGate(((LogicGate*)c)->GetInputPin(i)->GetConnection(0));
+			for (int i = 0; i<((LogicGate*)c)->GetInputsCount(); i++) {
+				if (((LogicGate*)c)->GetInputPin(i)->IsFull()) {
+					returnValue = TestGate(((LogicGate*)c)->GetInputPin(i)->GetConnection(0)->GetSourcePin()->GetGate());
 					if (returnValue > -1)
 						((Gate*)c)->SetInputPinStatus(i, (Status)returnValue);
-					else break;
+					else {
+						visited.erase(c);
+						break;
+					}
 				}
-				else break;
+				else {
+					stopSimulation = 1;
+					return -1;
+				}
 			}
+
+			visited.erase(c);
 			((LogicGate*)c)->Operate();
 			return ((LogicGate*)c)->GetOutputPinStatus();
+
 		}
 	}
 	else 0;

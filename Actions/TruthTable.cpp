@@ -76,6 +76,9 @@ bool TruthTable::Execute() {
 	for(int i=0;i<switchesCount;i++){
 		switches[i]->GetOutputPin()->SetStatus((Status)switchesDefault[i]);
 	}
+	for (int i = 0; i < ledsCount; i++) {
+		TestGate(leds[i]);
+	}
 	return false;
 }
 
@@ -134,33 +137,26 @@ int TruthTable::TestGate(Component*c) {
 	int returnValue;
 	if (c) {
 
-		if (dynamic_cast<Switch*>(c))
+		if (dynamic_cast<Switch*>(c)) {
 			return c->GetOutputPinStatus();
-
-		else if (dynamic_cast<LED*>(c)) {
-			returnValue = TestGate(((LogicGate*)c)->GetInputPin(0)->GetConnection(0));
-			if (returnValue > -1)
-				((Gate*)c)->SetInputPinStatus(0, (Status)returnValue);
-			return returnValue;
 		}
 
-		else if (dynamic_cast<Connection*>(c)) {
-			return TestGate(((Connection*)c)->GetSourcePin()->GetGate());
+		else if (dynamic_cast<LED*>(c)) {
+			returnValue = TestGate(((LogicGate*)c)->GetInputPin(0)->GetConnection(0)->GetSourcePin()->GetGate());
+			((Gate*)c)->SetInputPinStatus(0, (Status)returnValue);
+			return returnValue;
 		}
 
 		else if (dynamic_cast<LogicGate*>(c)) {
 
-			for (int i = 0; i<2; i++) {
-				if (((LogicGate*)c)->GetInputPin(i)->GetConnection(0)) {
-					returnValue = TestGate(((LogicGate*)c)->GetInputPin(i)->GetConnection(0));
-					if (returnValue > -1)
-						((Gate*)c)->SetInputPinStatus(i, (Status)returnValue);
-					else break;
-				}
-				else break;
+			for (int i = 0; i<((LogicGate*)c)->GetInputsCount(); i++) {
+				returnValue = TestGate(((LogicGate*)c)->GetInputPin(i)->GetConnection(0)->GetSourcePin()->GetGate());
+				((Gate*)c)->SetInputPinStatus(i, (Status)returnValue);
 			}
+
 			((LogicGate*)c)->Operate();
 			return ((LogicGate*)c)->GetOutputPinStatus();
+
 		}
 	}
 	else 0;

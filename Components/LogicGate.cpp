@@ -15,6 +15,11 @@ Pin* LogicGate::GetInputPin(int n) {
 	return &mInputPins[n];
 }
 
+/* Get input pins count */
+int LogicGate::GetInputsCount() {
+	return mInputsCount;
+}
+
 /* Returns the output pin of the component */
 Pin* LogicGate::GetOutputPin() {
 	return &mOutputPin;

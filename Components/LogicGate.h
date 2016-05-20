@@ -21,6 +21,9 @@ public:
 	/* Returns the output pin of the component */
 	virtual Pin* GetOutputPin();
 
+	/* Get input pins count */
+	int GetInputsCount();
+
 	/* Sets the status of the input pin number n (0-indexed) */
 	virtual void SetInputPinStatus(int n, Status s);
 
