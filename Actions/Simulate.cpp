@@ -4,6 +4,7 @@
 /* Constructor */
 Simulate::Simulate(ApplicationManager* pAppMan) : Action(pAppMan) {
 	stopSimulation = 0;
+	visited.end();
 }
 
 
@@ -13,17 +14,26 @@ bool Simulate::Execute() {
 	for (int i = 0; i < count; i++) {
 		if (dynamic_cast<LED*>(list[i]) && !list[i]->IsDeleted())
 			TestGate(list[i]);
+		/*
 		visited.clear();
+		*/
 	}	
+	/*
 	if (stopSimulation) {
 		mAppManager->ExecuteAction(DESIGN_MODE);
 		mAppManager->GetOutput()->PrintMsg("Error !! : Components are not connected properly.");
 	}
+	*/
 	return false;
 }
 
 /*Tests the output on a led*/
 int Simulate::TestGate(Component*c) {
+
+
+	/*
+
+	//validation
 
 	int n = visited.size();
 	if (c)
@@ -34,6 +44,9 @@ int Simulate::TestGate(Component*c) {
 		stopSimulation = 1;
 		return -1;
 	}
+	*/
+
+
 	int returnValue;
 	if (c) {
 
@@ -53,7 +66,7 @@ int Simulate::TestGate(Component*c) {
 
 		else if (dynamic_cast<LogicGate*>(c)) {
 
-			for (int i = 0;; i++) {
+			for (int i = 0;i<2; i++) {
 				if (((LogicGate*)c)->GetInputPin(i)->GetConnection(0)) {
 					returnValue = TestGate(((LogicGate*)c)->GetInputPin(i)->GetConnection(0));
 					if (returnValue > -1)
