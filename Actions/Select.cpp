@@ -21,76 +21,65 @@ bool Select::Execute() {
 	Component* pComp = pOut->GetComponentAtPin(mX, mY);
 	Component** list = mAppManager->GetComponentList();
 
-	image Window;
-	pOut->StoreImage(Window, 0, 0, UI.Width, UI.Height);
-	
-	// Toggle the selection state of the selected component
-	if (pComp != NULL) {
-		pOut->WaitMouseClick(mX, mY);
-		pComp->Select();
-		for (int i = 0; i < n; i++) if (list[i]->IsSelected()) selectedCount++, pComp = list[i];
-	}
-	// Selecting empty area leads to deselecting all components
-	else {
-		for (int i = 0; i < n; i++) list[i]->SetSelected(false);
-		int startX = mX, startY = mY, prvX = mX, prvY = mY;
+	int startX = mX, endX = mX;
+	int startY = mY, endY = mY;
 
-		while (pOut->GetButtonState(LEFT_BUTTON, mX, mY) == BUTTON_DOWN) {
-			if (mX != prvX || mY != prvY) {
-				pOut->DrawImage(Window, 0, 0, UI.Width, UI.Height);
-				pOut->SetPen(UI.SelectionColor, 2);
-				pOut->DrawRectangle(startX, startY, mX, mY, FRAME);
-				prvX = mX;
-				prvY = mY;
+	// Multi-selection
+	if (pComp == NULL) {
+		image wind;
+		pOut->StoreImage(wind, 0, 0, UI.Width, UI.Height);
+		pOut->SetPen(UI.SelectionColor, 2);
+
+		int minX = 0;
+		int maxX = UI.Width;
+		int minY = UI.ToolBarHeight + UI.GateBarHeight;
+		int maxY = UI.Height - UI.StatusBarHeight;
+
+		int x = startX, y = startY, prvX = x, prvY = y;
+
+		while (pOut->GetButtonState(LEFT_BUTTON, x, y) == BUTTON_DOWN) {
+			if (x < minX || x > maxX) x = prvX;
+			if (y < minY || y > maxY) y = prvY;
+
+			if (x != prvX || y != prvY) {
+				pOut->DrawImage(wind, 0, 0, UI.Width, UI.Height);
+				pOut->DrawRectangle(startX, startY, x, y, FRAME);
+				prvX = x;
+				prvY = y;
 			}
 		}
 
-		int sX = (mX < startX) ? mX : startX;
-		int sY = (mY < startY) ? mY : startY;
-		normalizeCoordinates(sX, sY);
+		startX = (x < mX) ? x : mX, endX = (x > mX) ? x : mX;
+		startY = (y < mY) ? y : mY, endY = (y > mY) ? y : mY;
 
-		int eX = (mX > startX) ? mX : startX;
-		int eY = (mY > startY) ? mY : startY;
-		normalizeCoordinates(eX, eY);
-
-		for (int x = sX; x < eX; x += UI.PinOffset) {
-			for (int y = sY; y < eY; y += UI.PinOffset) {
-				pComp = pOut->GetComponentAtPin(x, y);
-
-				if (pComp != NULL) {
-					pComp->SetSelected(true);
-				}
-			}
-		}
-
-		/*for (int i = 0; i < n; i++) {
-			GraphicsInfo GfxInfo = list[i]->GetGraphicsInfo();
-			if ((GfxInfo.x1 > min(mX, OldX) && GfxInfo.x1 < max(mX, OldX)) || (GfxInfo.x2 > min(mX, OldX) && GfxInfo.x2 < max(mX, OldX)) || (GfxInfo.x1 > min(mX, OldX) && GfxInfo.x2 < max(mX, OldX)) || ((GfxInfo.x2 > min(mX, OldX) && GfxInfo.x1 < max(mX, OldX)))) {
-				if ((GfxInfo.y1 > min(mY, OldY) && GfxInfo.y1 < max(mY, OldY)) || (GfxInfo.y2 > min(mY, OldY) && GfxInfo.y2 < max(mY, OldY)) || (GfxInfo.y1 > min(mY, OldY) && GfxInfo.y2 < max(mY, OldY)) || (GfxInfo.y2 > min(mY, OldY) && GfxInfo.y1 < max(mY, OldY))) {
-					list[i]->SetSelected(true);
-					pComp = list[i];
-					selectedCount++;
-				}
-			}
-		}*/
-
-
-
-		pOut->DrawImage(Window, 0, 0, UI.Width, UI.Height);
-		//pOut->ClearDrawingArea();
+		pOut->DrawImage(wind, 0, 0, UI.Width, UI.Height);
 		pOut->FlushMouseQueue();
 	}
 
-	// Reflect selected components to the screen
-	if (selectedCount == 1) {
+	// Clear previous selection
+	for (int i = 0; i < n; i++) list[i]->SetSelected(false);
+
+	// Highlight selected components
+	for (int x = startX; x <= endX; x += UI.PinOffset) {
+		for (int y = startY; y <= endY; y += UI.PinOffset) {
+			pComp = pOut->GetComponentAtPin(x, y);
+
+			if (pComp != NULL) {
+				pComp->Select();
+			}
+		}
+	}
+
+	// Count selected components
+	for (int i = 0; i < n; i++) if (list[i]->IsSelected()) selectedCount++, pComp = list[i];
+
+	// Reflect some information about selected components to the screen
+	if (selectedCount == 1)
 		pOut->PrintMsg("Component ID: " + to_string(pComp->GetID()) + ", Label: " + pComp->GetLabel());
-	}
-	else if (selectedCount > 1) {
+	else if (selectedCount > 1)
 		pOut->PrintMsg("Selected Components: " + to_string(selectedCount));
-	}
-	else {
+	else
 		pOut->ClearStatusBar();
-	}
 
 	return false;	// To prevent adding this action to the stack
 }

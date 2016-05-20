@@ -6,12 +6,12 @@ Output::Output() {
 	UI.AppMode = DESIGN;
 
 	// Initialize interface colors
-	UI.DrawColor = BLACK;
+	UI.BackgroundColor = color(117, 117, 117);
+	UI.DarkColor = color(66, 66, 66);
 	UI.SelectionColor = color(255, 193, 7);
-	UI.ConnectionColor = WHITE;
 	UI.MsgColor = WHITE;
-	UI.StatusBarColor = color(66, 66, 66);
-	UI.BackgroundColor = color(97, 97, 97);
+	UI.ConnectionColor = BLACK;
+	UI.ConnectionOnColor = color(139, 195, 74);
 
 	// Create and initialize the drawing window
 	pWind = CreateWind(UI.Width, UI.Height, UI.StartX, UI.StartY);
@@ -51,65 +51,138 @@ void Output::ChangeTitle(const string& title) const {
 
 /* Draws the tool bar and the gate bar */
 void Output::CreateToolBar() const {
-	string toolbar, gatebar;
+	// Prepare list of image directories for each tool item
+	string toolBarImages[TOOLS_COUNT];
+	string gateBarImages[GATES_COUNT];
 
 	if (UI.AppMode == Mode::DESIGN) {
-		toolbar = "images\\bars\\toolbar_design.jpg";
-		gatebar = "images\\bars\\gatebar_active.jpg";
+		// Tool bar
+		toolBarImages[ITEM_EDIT] = "Images\\menu\\toolbar\\active\\edit.jpg";
+		toolBarImages[ITEM_DELETE] = "Images\\menu\\toolbar\\active\\delete.jpg";
+		toolBarImages[ITEM_COPY] = "Images\\menu\\toolbar\\active\\copy.jpg";
+		toolBarImages[ITEM_CUT] = "Images\\menu\\toolbar\\active\\cut.jpg";
+		toolBarImages[ITEM_PASTE] = "Images\\menu\\toolbar\\active\\paste.jpg";
+		toolBarImages[ITEM_UNDO] = "Images\\menu\\toolbar\\active\\undo.jpg";
+		toolBarImages[ITEM_REDO] = "Images\\menu\\toolbar\\active\\redo.jpg";
+		toolBarImages[ITEM_PLAY] = "Images\\menu\\toolbar\\active\\play.jpg";
+		toolBarImages[ITEM_PAUSE] = "Images\\menu\\toolbar\\inactive\\pause.jpg";
+		toolBarImages[ITEM_TRUTHTABLE] = "Images\\menu\\toolbar\\inactive\\truth_table.jpg";
+		toolBarImages[ITEM_SAVE] = "Images\\menu\\toolbar\\active\\save.jpg";
+		toolBarImages[ITEM_LOAD] = "Images\\menu\\toolbar\\active\\load.jpg";
+		toolBarImages[ITEM_EXIT] = "Images\\menu\\toolbar\\active\\exit.jpg";
+
+		// Gate bar
+		gateBarImages[ITEM_AND] = "Images\\menu\\gatebar\\active\\and.jpg";
+		gateBarImages[ITEM_OR] = "Images\\menu\\gatebar\\active\\or.jpg";
+		gateBarImages[ITEM_NOT] = "Images\\menu\\gatebar\\active\\not.jpg";
+		gateBarImages[ITEM_NAND] = "Images\\menu\\gatebar\\active\\nand.jpg";
+		gateBarImages[ITEM_NOR] = "Images\\menu\\gatebar\\active\\nor.jpg";
+		gateBarImages[ITEM_XOR] = "Images\\menu\\gatebar\\active\\xor.jpg";
+		gateBarImages[ITEM_XNOR] = "Images\\menu\\gatebar\\active\\xnor.jpg";
+		gateBarImages[ITEM_AND3] = "Images\\menu\\gatebar\\active\\and3.jpg";
+		gateBarImages[ITEM_NOR3] = "Images\\menu\\gatebar\\active\\nor3.jpg";
+		gateBarImages[ITEM_XOR3] = "Images\\menu\\gatebar\\active\\xor3.jpg";
+		gateBarImages[ITEM_BUFFER] = "Images\\menu\\gatebar\\active\\buffer.jpg";
+		gateBarImages[ITEM_SWITCH] = "Images\\menu\\gatebar\\active\\switch.jpg";
+		gateBarImages[ITEM_LED] = "Images\\menu\\gatebar\\active\\led.jpg";
+		gateBarImages[ITEM_CONNECTION] = "Images\\menu\\gatebar\\active\\connection.jpg";
 	}
 	else {
-		toolbar = "images\\bars\\toolbar_simulation.jpg";
-		gatebar = "images\\bars\\gatebar_inactive.jpg";
+		// Tool bar
+		toolBarImages[ITEM_EDIT] = "Images\\menu\\toolbar\\inactive\\edit.jpg";
+		toolBarImages[ITEM_DELETE] = "Images\\menu\\toolbar\\inactive\\delete.jpg";
+		toolBarImages[ITEM_COPY] = "Images\\menu\\toolbar\\inactive\\copy.jpg";
+		toolBarImages[ITEM_CUT] = "Images\\menu\\toolbar\\inactive\\cut.jpg";
+		toolBarImages[ITEM_PASTE] = "Images\\menu\\toolbar\\inactive\\paste.jpg";
+		toolBarImages[ITEM_UNDO] = "Images\\menu\\toolbar\\inactive\\undo.jpg";
+		toolBarImages[ITEM_REDO] = "Images\\menu\\toolbar\\inactive\\redo.jpg";
+		toolBarImages[ITEM_PLAY] = "Images\\menu\\toolbar\\inactive\\play.jpg";
+		toolBarImages[ITEM_PAUSE] = "Images\\menu\\toolbar\\active\\pause.jpg";
+		toolBarImages[ITEM_TRUTHTABLE] = "Images\\menu\\toolbar\\active\\truth_table.jpg";
+		toolBarImages[ITEM_SAVE] = "Images\\menu\\toolbar\\inactive\\save.jpg";
+		toolBarImages[ITEM_LOAD] = "Images\\menu\\toolbar\\inactive\\load.jpg";
+		toolBarImages[ITEM_EXIT] = "Images\\menu\\toolbar\\active\\exit.jpg";
+
+		// Gate bar
+		gateBarImages[ITEM_AND] = "Images\\menu\\gatebar\\inactive\\and.jpg";
+		gateBarImages[ITEM_OR] = "Images\\menu\\gatebar\\inactive\\or.jpg";
+		gateBarImages[ITEM_NOT] = "Images\\menu\\gatebar\\inactive\\not.jpg";
+		gateBarImages[ITEM_NAND] = "Images\\menu\\gatebar\\inactive\\nand.jpg";
+		gateBarImages[ITEM_NOR] = "Images\\menu\\gatebar\\inactive\\nor.jpg";
+		gateBarImages[ITEM_XOR] = "Images\\menu\\gatebar\\inactive\\xor.jpg";
+		gateBarImages[ITEM_XNOR] = "Images\\menu\\gatebar\\inactive\\xnor.jpg";
+		gateBarImages[ITEM_AND3] = "Images\\menu\\gatebar\\inactive\\and3.jpg";
+		gateBarImages[ITEM_NOR3] = "Images\\menu\\gatebar\\inactive\\nor3.jpg";
+		gateBarImages[ITEM_XOR3] = "Images\\menu\\gatebar\\inactive\\xor3.jpg";
+		gateBarImages[ITEM_BUFFER] = "Images\\menu\\gatebar\\inactive\\buffer.jpg";
+		gateBarImages[ITEM_SWITCH] = "Images\\menu\\gatebar\\inactive\\switch.jpg";
+		gateBarImages[ITEM_LED] = "Images\\menu\\gatebar\\inactive\\led.jpg";
+		gateBarImages[ITEM_CONNECTION] = "Images\\menu\\gatebar\\inactive\\connection.jpg";
 	}
 	
-	pWind->DrawImage(toolbar, 0, 0, UI.Width, UI.ToolBarHeight);
-	pWind->DrawImage(gatebar, 0, UI.ToolBarHeight, UI.Width, UI.GateBarHeight);
+
+	pWind->SetBrush(UI.DarkColor);
+	pWind->SetPen(UI.DarkColor);
+	pWind->DrawRectangle(0, 0, UI.Width, UI.ToolBarHeight);
+
+	// Draw menu item one image at a time
+	for (int i = 0; i < TOOLS_COUNT; i++) {
+		pWind->DrawImage(toolBarImages[i], i * UI.ToolItemWidth, 0, UI.ToolItemWidth, UI.ToolBarHeight);
+	}
+
+	for (int i = 0; i < GATES_COUNT; i++) {
+		pWind->DrawImage(gateBarImages[i], i * UI.GateItemWidth, UI.ToolBarHeight, UI.GateItemWidth, UI.GateBarHeight);
+	}
+
+	// Draw a separator line between tool bar and gate bar
+	pWind->SetPen(WHITE, 1);
+	pWind->DrawLine(10, UI.ToolBarHeight, UI.Width - 10, UI.ToolBarHeight);
 }
 
 /* Draws the status bar */
 void Output::CreateStatusBar() const {
-	pWind->SetPen(UI.StatusBarColor);
-	pWind->SetBrush(UI.StatusBarColor);
+	pWind->SetPen(UI.DarkColor);
+	pWind->SetBrush(UI.DarkColor);
 	pWind->DrawRectangle(0, UI.Height - UI.StatusBarHeight, UI.Width, UI.Height);
 }
 
 /* Clears the drawing area */
 void Output::ClearDrawingArea() const {
-	pWind->SetPen(UI.BackgroundColor);
 	pWind->SetBrush(UI.BackgroundColor);
+	pWind->SetPen(UI.BackgroundColor);
 	pWind->DrawRectangle(0, UI.ToolBarHeight + UI.GateBarHeight, UI.Width, UI.Height - UI.StatusBarHeight);
 
 	//
 	// JUST FOR TESTING
 	//
-	pWind->SetPen(WHITE, 1);
-	
-	int startX = 0;
-	int endX = UI.HorPinsCount * UI.PinOffset;
-	int startY = UI.ToolBarHeight + UI.GateBarHeight;
-	int endY = startY + UI.VerPinsCount * UI.PinOffset;
+	//pWind->SetPen(WHITE, 1);
+	//
+	//int startX = 0;
+	//int endX = UI.HorPinsCount * UI.PinOffset;
+	//int startY = UI.ToolBarHeight + UI.GateBarHeight;
+	//int endY = startY + UI.VerPinsCount * UI.PinOffset;
 
-	// Vertical lines
-	for (int x = startX; x <= endX; x += UI.PinOffset) {
-		pWind->DrawLine(x, startY, x, endY);
-	}
+	//// Vertical lines
+	//for (int x = startX; x <= endX; x += UI.PinOffset) {
+	//	pWind->DrawLine(x, startY, x, endY);
+	//}
 
-	// Horizontal lines
-	for (int y = startY; y <= endY; y += UI.PinOffset) {
-		pWind->DrawLine(startX, y, endX, y);
-	}
+	//// Horizontal lines
+	//for (int y = startY; y <= endY; y += UI.PinOffset) {
+	//	pWind->DrawLine(startX, y, endX, y);
+	//}
 
-	startX += UI.PinMargin;
-	endX -= UI.PinMargin;
-	startY += UI.PinMargin;
-	endY -= UI.PinMargin;
+	//startX += UI.PinMargin;
+	//endX -= UI.PinMargin;
+	//startY += UI.PinMargin;
+	//endY -= UI.PinMargin;
 
-	// Pins
-	for (int x = startX; x <= endX; x += UI.PinOffset) {
-		for (int y = startY; y <= endY; y += UI.PinOffset) {
-			pWind->DrawPixel(x, y);
-		}
-	}
+	//// Pins
+	//for (int x = startX; x <= endX; x += UI.PinOffset) {
+	//	for (int y = startY; y <= endY; y += UI.PinOffset) {
+	//		pWind->DrawPixel(x, y);
+	//	}
+	//}
 }
 
 /* Clears the status bar */
@@ -119,8 +192,8 @@ void Output::ClearStatusBar() const {
 	int msgY = UI.Height - UI.StatusBarHeight / 2 - UI.StatusFontSize / 2;
 
 	// Overwrite using bachground color to erase the message
-	pWind->SetPen(UI.StatusBarColor);
-	pWind->SetBrush(UI.StatusBarColor);
+	pWind->SetPen(UI.DarkColor);
+	pWind->SetBrush(UI.DarkColor);
 	pWind->DrawRectangle(msgX, msgY, UI.Width, UI.Height);
 }
 
@@ -277,95 +350,114 @@ void Output::DrawLabel(const GraphicsInfo& gfxInfo, const string& label) const {
 
 /* Draws AND gate */
 void Output::DrawAND(const GraphicsInfo& gfxInfo, bool selected) const {
-	//string dir = (selected ? "Images\\gates\\and_highlighted.jpg" : "Images\\gates\\and.jpg");
-	//pWind->DrawImage(dir, gfxInfo.x1, gfxInfo.y1, UI.AndGateWidth, UI.AndGateHeight);
+	string dir = (selected ? "Images\\components\\highlighted\\and.jpg" : "Images\\components\\active\\and.jpg");
+	pWind->DrawImage(dir, gfxInfo.x1, gfxInfo.y1, UI.LogicGateWidth, UI.LogicGateHeight);
 
 	//
 	// JUST FOR TESTING
 	//
-	pWind->SetPen(UI.SelectionColor, 3);
+	/*pWind->SetPen(UI.SelectionColor, 3);
 
 	pWind->DrawLine(gfxInfo.x1, gfxInfo.y1, gfxInfo.x2, gfxInfo.y1);
 	pWind->DrawLine(gfxInfo.x1, gfxInfo.y1, gfxInfo.x1, gfxInfo.y2);
 	pWind->DrawLine(gfxInfo.x1, gfxInfo.y2, gfxInfo.x2, gfxInfo.y2);
-	pWind->DrawLine(gfxInfo.x2, gfxInfo.y1, gfxInfo.x2, gfxInfo.y2);
+	pWind->DrawLine(gfxInfo.x2, gfxInfo.y1, gfxInfo.x2, gfxInfo.y2);*/
 }
 
 /* Draws OR gate */
 void Output::DrawOR(const GraphicsInfo& gfxInfo, bool selected) const {
-	string dir = (selected && UI.AppMode == DESIGN ? "Images\\gates\\or_highlighted.jpg" : "Images\\gates\\or.jpg");
-	pWind->DrawImage(dir, gfxInfo.x1, gfxInfo.y1, UI.OrGateWidth, UI.OrGateHeight);
+	string dir = (selected ? "Images\\components\\highlighted\\or.jpg" : "Images\\components\\active\\or.jpg");
+	pWind->DrawImage(dir, gfxInfo.x1, gfxInfo.y1, UI.LogicGateWidth, UI.LogicGateHeight);
 }
 
 /* Draws NOT gate */
 void Output::DrawNOT(const GraphicsInfo& gfxInfo, bool selected) const {
-	string dir = (selected && UI.AppMode == DESIGN ? "Images\\gates\\not_highlighted.jpg" : "Images\\gates\\not.jpg");
-	pWind->DrawImage(dir, gfxInfo.x1, gfxInfo.y1, UI.NotGateWidth, UI.NotGateHeight);
+	string dir = (selected ? "Images\\components\\highlighted\\not.jpg" : "Images\\components\\active\\not.jpg");
+	pWind->DrawImage(dir, gfxInfo.x1, gfxInfo.y1, UI.LogicGateWidth, UI.LogicGateHeight);
 }
 
 /* Draws NAND gate */
 void Output::DrawNAND(const GraphicsInfo& gfxInfo, bool selected) const {
-	string dir = (selected && UI.AppMode == DESIGN ? "Images\\gates\\nand_highlighted.jpg" : "Images\\gates\\nand.jpg");
-	pWind->DrawImage(dir, gfxInfo.x1, gfxInfo.y1, UI.NandGateWidth, UI.NandGateHeight);
+	string dir = (selected ? "Images\\components\\highlighted\\nand.jpg" : "Images\\components\\active\\nand.jpg");
+	pWind->DrawImage(dir, gfxInfo.x1, gfxInfo.y1, UI.LogicGateWidth, UI.LogicGateHeight);
 }
 
 /* Draws NOR gate */
 void Output::DrawNOR(const GraphicsInfo& gfxInfo, bool selected) const {
-	string dir = (selected && UI.AppMode == DESIGN ? "Images\\gates\\nor_highlighted.jpg" : "Images\\gates\\nor.jpg");
-	pWind->DrawImage(dir, gfxInfo.x1, gfxInfo.y1, UI.NorGateWidth, UI.NorGateHeight);
+	string dir = (selected ? "Images\\components\\highlighted\\nor.jpg" : "Images\\components\\active\\nor.jpg");
+	pWind->DrawImage(dir, gfxInfo.x1, gfxInfo.y1, UI.LogicGateWidth, UI.LogicGateHeight);
 }
 
 /* Draws XOR gate */
 void Output::DrawXOR(const GraphicsInfo& gfxInfo, bool selected) const {
-	string dir = (selected && UI.AppMode == DESIGN ? "Images\\gates\\xor_highlighted.jpg" : "Images\\gates\\xor.jpg");
-	pWind->DrawImage(dir, gfxInfo.x1, gfxInfo.y1, UI.XorGateWidth, UI.XorGateHeight);
+	string dir = (selected ? "Images\\components\\highlighted\\xor.jpg" : "Images\\components\\active\\xor.jpg");
+	pWind->DrawImage(dir, gfxInfo.x1, gfxInfo.y1, UI.LogicGateWidth, UI.LogicGateHeight);
 }
 
 /* Draws XNOR gate */
 void Output::DrawXNOR(const GraphicsInfo& gfxInfo, bool selected) const {
-	string dir = (selected && UI.AppMode == DESIGN ? "Images\\gates\\xnor_highlighted.jpg" : "Images\\gates\\xnor.jpg");
-	pWind->DrawImage(dir, gfxInfo.x1, gfxInfo.y1, UI.XnorGateWidth, UI.XnorGateHeight);
+	string dir = (selected ? "Images\\components\\highlighted\\xnor.jpg" : "Images\\components\\active\\xnor.jpg");
+	pWind->DrawImage(dir, gfxInfo.x1, gfxInfo.y1, UI.LogicGateWidth, UI.LogicGateHeight);
 }
 
 /* Draws AND3 gate */
 void Output::DrawAND3(const GraphicsInfo& gfxInfo, bool selected) const {
-	string dir = (selected && UI.AppMode == DESIGN ? "Images\\gates\\and3_highlighted.jpg" : "Images\\gates\\and3.jpg");
-	pWind->DrawImage(dir, gfxInfo.x1, gfxInfo.y1, UI.And3GateWidth, UI.And3GateHeight);
+	string dir = (selected ? "Images\\components\\highlighted\\and3.jpg" : "Images\\components\\active\\and3.jpg");
+	pWind->DrawImage(dir, gfxInfo.x1, gfxInfo.y1, UI.LogicGateWidth, UI.LogicGateHeight);
 }
 
 /* Draws NOR3 gate */
 void Output::DrawNOR3(const GraphicsInfo& gfxInfo, bool selected) const {
-	string dir = (selected && UI.AppMode == DESIGN ? "Images\\gates\\nor3_highlighted.jpg" : "Images\\gates\\nor3.jpg");
-	pWind->DrawImage(dir, gfxInfo.x1, gfxInfo.y1, UI.Nor3GateWidth, UI.Nor3GateHeight);
+	string dir = (selected ? "Images\\components\\highlighted\\nor3.jpg" : "Images\\components\\active\\nor3.jpg");
+	pWind->DrawImage(dir, gfxInfo.x1, gfxInfo.y1, UI.LogicGateWidth, UI.LogicGateHeight);
 }
 
 /* Draws XOR3 gate */
 void Output::DrawXOR3(const GraphicsInfo& gfxInfo, bool selected) const {
-	string dir = (selected && UI.AppMode == DESIGN ? "Images\\gates\\xor3_highlighted.jpg" : "Images\\gates\\xor3.jpg");
-	pWind->DrawImage(dir, gfxInfo.x1, gfxInfo.y1, UI.Xor3GateWidth, UI.Xor3GateHeight);
+	string dir = (selected ? "Images\\components\\highlighted\\xor3.jpg" : "Images\\components\\active\\xor3.jpg");
+	pWind->DrawImage(dir, gfxInfo.x1, gfxInfo.y1, UI.LogicGateWidth, UI.LogicGateHeight);
 }
 
 /* Draws Buffer gate */
 void Output::DrawBuffer(const GraphicsInfo& gfxInfo, bool selected) const {
-	string dir = (selected && UI.AppMode == DESIGN ? "Images\\gates\\buffer_highlighted.jpg" : "Images\\gates\\buffer.jpg");
-	pWind->DrawImage(dir, gfxInfo.x1, gfxInfo.y1, UI.BufferGateWidth, UI.BufferGateHeight);
+	string dir = (selected ? "Images\\components\\highlighted\\buffer.jpg" : "Images\\components\\active\\buffer.jpg");
+	pWind->DrawImage(dir, gfxInfo.x1, gfxInfo.y1, UI.LogicGateWidth, UI.LogicGateHeight);
 }
 
 /* Draws Switch */
 void Output::DrawSwitch(const GraphicsInfo& gfxInfo, bool selected, bool on) const {
-	string dir = (selected && UI.AppMode == DESIGN || on && UI.AppMode == SIMULATION ? "Images\\gates\\switch_on.jpg" : "Images\\gates\\switch_off.jpg");
+	string dir;
+
+	if (on)
+		dir = "Images\\components\\active\\switch_on.jpg";
+	else
+		dir = (selected ? "Images\\components\\highlighted\\switch_off.jpg" : "Images\\components\\active\\switch_off.jpg");
+
 	pWind->DrawImage(dir, gfxInfo.x1, gfxInfo.y1, UI.SwitchWidth, UI.SwitchHeight);
 }
 
 /* Draws LED */
 void Output::DrawLED(const GraphicsInfo& gfxInfo, bool selected, bool on) const {
-	string dir = (selected && UI.AppMode == DESIGN || on && UI.AppMode == SIMULATION ? "Images\\gates\\led_on.jpg" : "Images\\gates\\led_off.jpg");
+	string dir;
+
+	if (on)
+		dir = "Images\\components\\active\\led_on.jpg";
+	else
+		dir = (selected ? "Images\\components\\highlighted\\led_off.jpg" : "Images\\components\\active\\led_off.jpg");
+
 	pWind->DrawImage(dir, gfxInfo.x1, gfxInfo.y1, UI.LedWidth, UI.LedHeight);
 }
 
 /* Draws connection */
 void Output::DrawConnection(const vector<GraphicsInfo>& path, bool selected, bool on) {
-	pWind->SetPen(selected && UI.AppMode == DESIGN || on && UI.AppMode == SIMULATION ? UI.SelectionColor : BLACK, 2);
+	color c;
+
+	if (UI.AppMode == Mode::SIMULATION)
+		c = (on ? UI.ConnectionOnColor : UI.ConnectionColor);
+	else
+		c = (selected ? UI.SelectionColor : UI.ConnectionColor);
+
+	pWind->SetPen(c, 2);
 
 	for (int i = 0; i < (int)path.size(); i++) {
 		pWind->DrawLine(path[i].x1, path[i].y1, path[i].x2, path[i].y2);
@@ -459,7 +551,7 @@ vector<GraphicsInfo>* Output::GenerateConnectionPath(Node& src, Node& dst, Node 
 	Node nxt;
 	int x1, y1, x2, y2;
 
-	x1 = dst.x * UI.PinOffset + UI.PinMargin;
+	x1 = dst.x * UI.PinOffset + UI.PinMargin - 1;
 	y1 = dst.y * UI.PinOffset + UI.PinMargin + UI.ToolBarHeight + UI.GateBarHeight;
 	x2 = dst.x * UI.PinOffset + UI.PinOffset;
 	y2 = dst.y * UI.PinOffset + UI.PinMargin + UI.ToolBarHeight + UI.GateBarHeight;
@@ -486,7 +578,7 @@ vector<GraphicsInfo>* Output::GenerateConnectionPath(Node& src, Node& dst, Node 
 	y2 = cur.y * UI.PinOffset + UI.PinMargin + UI.ToolBarHeight + UI.GateBarHeight;
 	path->push_back(GraphicsInfo(x1, y1, x2, y2));
 
-	x1 = src.x * UI.PinOffset;
+	x1 = src.x * UI.PinOffset - 2;
 	y1 = src.y * UI.PinOffset + UI.PinMargin + UI.ToolBarHeight + UI.GateBarHeight;
 	x2 = src.x * UI.PinOffset + UI.PinMargin;
 	y2 = src.y * UI.PinOffset + UI.PinMargin + UI.ToolBarHeight + UI.GateBarHeight;

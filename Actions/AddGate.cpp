@@ -105,50 +105,6 @@ void AddGate::CalculateDimensions() {
 
 	switch (mActType)
 	{
-	case ActionType::ADD_GATE_AND:
-		w = UI.PinOffset * 3; //UI.AndGateWidth;
-		h = UI.PinOffset * 3; //UI.AndGateHeight;
-		break;
-	case ActionType::ADD_GATE_OR:
-		w = UI.OrGateWidth;
-		h = UI.OrGateHeight;
-		break;
-	case ActionType::ADD_GATE_NOT:
-		w = UI.NotGateWidth;
-		h = UI.NotGateHeight;
-		break;
-	case ActionType::ADD_GATE_NAND:
-		w = UI.NandGateWidth;
-		h = UI.NandGateHeight;
-		break;
-	case ActionType::ADD_GATE_NOR:
-		w = UI.NorGateWidth;
-		h = UI.NorGateHeight;
-		break;
-	case ActionType::ADD_GATE_XOR:
-		w = UI.XorGateWidth;
-		h = UI.XorGateHeight;
-		break;
-	case ActionType::ADD_GATE_XNOR:
-		w = UI.XnorGateWidth;
-		h = UI.XnorGateHeight;
-		break;
-	case ActionType::ADD_GATE_AND3:
-		w = UI.And3GateWidth;
-		h = UI.And3GateHeight;
-		break;
-	case ActionType::ADD_GATE_NOR3:
-		w = UI.Nor3GateWidth;
-		h = UI.Nor3GateHeight;
-		break;
-	case ActionType::ADD_GATE_XOR3:
-		w = UI.Xor3GateWidth;
-		h = UI.Xor3GateHeight;
-		break;
-	case ActionType::ADD_GATE_BUFFER:
-		w = UI.BufferGateWidth;
-		h = UI.BufferGateHeight;
-		break;
 	case ActionType::ADD_SWITCH:
 		w = UI.SwitchWidth;
 		h = UI.SwitchHeight;
@@ -158,6 +114,8 @@ void AddGate::CalculateDimensions() {
 		h = UI.LedHeight;
 		break;
 	default:
+		w = UI.LogicGateWidth;
+		h = UI.LogicGateHeight;
 		break;
 	}
 

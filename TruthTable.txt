@@ -1,5 +1,5 @@
-swh ID 1   swh ID 2   led ID 4   
+swh ID 12   swh ID 13   led ID 4   
    0          0          0       
-   0          1          0       
+   0          1          1       
    1          0          1       
-   1          1          1       
+   1          1          0       

@@ -18,36 +18,26 @@ struct UserInterface
 	static const int ToolItemWidth = 50;						// Width of each item in the tool bar menu
 	static const int GateBarHeight = 75;						// Gate bar height
 	static const int GateItemWidth = 96;						// Width of each item in the gate bar menu
-	static const int StatusBarHeight = 50;						// Status bar height
+	static const int StatusBarHeight = 35;						// Status bar height
 	static const int StatusFontSize = 20;						// Status bar font size
-	static const int PinMargin = 10;							// The margin distance around the pin
+	static const int PinMargin = 8;								// The margin distance around the pin
 	static const int PinOffset = PinMargin * 2;					// The distance between two successive pins
 	static const int HorPinsCount = Width / PinOffset;
 	static const int VerPinsCount = (Height - ToolBarHeight - GateBarHeight - StatusBarHeight) / PinOffset;
 
 	// Components Dimension constants
-	static const int AndGateWidth = 79,		AndGateHeight = 45;
-	static const int OrGateWidth = 79,		OrGateHeight = 46;
-	static const int NotGateWidth = 74,		NotGateHeight = 46;
-	static const int NandGateWidth = 86,	NandGateHeight = 45;
-	static const int NorGateWidth = 86,		NorGateHeight = 46;
-	static const int XorGateWidth = 79,		XorGateHeight = 46;
-	static const int XnorGateWidth = 86,	XnorGateHeight = 46;
-	static const int And3GateWidth = 79,	And3GateHeight = 45;
-	static const int Nor3GateWidth = 86,	Nor3GateHeight = 46;
-	static const int Xor3GateWidth = 79,	Xor3GateHeight = 46;
-	static const int BufferGateWidth = 66,	BufferGateHeight = 46;
-	static const int SwitchWidth = 50,		SwitchHeight = 27;
-	static const int LedWidth = 40,			LedHeight = 51;
+	static const int LogicGateWidth = 80,	LogicGateHeight = 48;
+	static const int SwitchWidth = 48,		SwitchHeight = 48;
+	static const int LedWidth = 48,			LedHeight = 48;
 
 	Mode AppMode;	// Application Mode (design or simulation)
 
 	// Colors
-	color DrawColor;
-	color SelectionColor;
-	color ConnectionColor;
-	color MsgColor;
 	color BackgroundColor;
-	color StatusBarColor;
+	color DarkColor;
+	color SelectionColor;
+	color MsgColor;
+	color ConnectionColor;
+	color ConnectionOnColor;
 
 } UI;	// Create a single global object UI

@@ -46,7 +46,7 @@ void Switch::Draw(Output* pOut) {
 /* Selects the component */
 void Switch::Select() {
 	if (UI.AppMode == Mode::DESIGN) {
-		mSelected = !mSelected;
+		mSelected = true;
 	}
 	else {
 		bool out = (mOutputPin.GetStatus() == Status::HIGH);
@@ -54,8 +54,6 @@ void Switch::Select() {
 		Refresh(&mOutputPin);
 	}
 }
-
-
 
 /* Deletes the component */
 void Switch::Delete(Output* pOut) {
