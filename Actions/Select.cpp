@@ -15,12 +15,12 @@ bool Select::ReadActionParameters() {
 bool Select::Execute() {
 	ReadActionParameters();
 
-	int selectedCount = 0;
-	int n = mAppManager->GetComponentsCount();
 	Output* pOut = mAppManager->GetOutput();
 	Component* pComp = pOut->GetComponentAtPin(mX, mY);
 	Component** list = mAppManager->GetComponentList();
 
+	int n = mAppManager->GetComponentsCount();
+	int selectedCount = 0;
 	int startX = mX, endX = mX;
 	int startY = mY, endY = mY;
 
@@ -71,13 +71,11 @@ bool Select::Execute() {
 	}
 
 	// Count selected components
-	for (int i = 0; i < n; i++) if (list[i]->IsSelected()) selectedCount++, pComp = list[i];
+	for (int i = 0; i < n; i++) if (list[i]->IsSelected()) selectedCount++;
 
 	// Reflect some information about selected components to the screen
-	if (selectedCount == 1)
-		pOut->PrintMsg("Component Label: " + pComp->GetLabel());
-	else if (selectedCount > 1)
-		pOut->PrintMsg("Selected Components: " + to_string(selectedCount));
+	if (selectedCount > 0)
+		pOut->PrintMsg(to_string(selectedCount) + " Selected Component(s)");
 	else
 		pOut->ClearStatusBar();
 

@@ -23,7 +23,7 @@ bool Edit::ReadActionParameters() {
 	pIn->GetPointClicked(mX, mY);
 	pOut->ClearStatusBar();
 
-	if (!pOut->IsDrawingArea(mY)) {
+	if (!pOut->IsDrawingArea(mX, mY)) {
 		pOut->PrintMsg("Invalid position. Operation was cancelled");
 		return false;
 	}
@@ -37,7 +37,7 @@ bool Edit::ReadActionParameters() {
 
 	// Edit label
 	mPrvLabel = mComp->GetLabel();
-	mNewLabel = pIn->GetSrting(pOut, "Please enter a new label:", "");
+	mNewLabel = pIn->GetSrting(pOut, "Please enter a new label:", mPrvLabel);
 	pOut->ClearStatusBar();
 
 	if (!mNewLabel.empty() && mNewLabel != mPrvLabel) {
@@ -64,7 +64,7 @@ bool Edit::ReadActionParameters() {
 	pIn->GetPointClicked(mNewGfxInfo.x1, mNewGfxInfo.y1);
 	pOut->ClearStatusBar();
 
-	if (!pOut->IsDrawingArea(mNewGfxInfo.y1)) {
+	if (!pOut->IsDrawingArea(mNewGfxInfo.x1, mNewGfxInfo.y1)) {
 		pOut->PrintMsg("Invalid position. Operation was cancelled");
 		mPrvSrcPin->ConnectTo(connection);
 		mPrvDstPin->ConnectTo(connection);
@@ -82,7 +82,7 @@ bool Edit::ReadActionParameters() {
 	pIn->GetPointClicked(mNewGfxInfo.x2, mNewGfxInfo.y2);
 	pOut->ClearStatusBar();
 
-	if (!pOut->IsDrawingArea(mNewGfxInfo.y2)) {
+	if (!pOut->IsDrawingArea(mNewGfxInfo.x2, mNewGfxInfo.y2)) {
 		pOut->PrintMsg("Invalid position. Operation was cancelled");
 		mPrvSrcPin->ConnectTo(connection);
 		mPrvDstPin->ConnectTo(connection);

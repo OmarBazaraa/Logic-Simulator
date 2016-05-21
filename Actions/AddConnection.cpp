@@ -22,7 +22,7 @@ bool AddConnection::ReadActionParameters() {
 		pIn->GetPointClicked(mGfxInfo.x1, mGfxInfo.y1);
 		pOut->ClearStatusBar();
 
-		if (!pOut->IsDrawingArea(mGfxInfo.y1)) {
+		if (!pOut->IsDrawingArea(mGfxInfo.x1, mGfxInfo.y1)) {
 			pOut->PrintMsg("Invalid position. Operation was cancelled");
 			return false;
 		}
@@ -43,7 +43,7 @@ bool AddConnection::ReadActionParameters() {
 			pIn->GetPointClicked(mGfxInfo.x2, mGfxInfo.y2);
 			pOut->ClearStatusBar();
 
-			if (!pOut->IsDrawingArea(mGfxInfo.y2)) {
+			if (!pOut->IsDrawingArea(mGfxInfo.x2, mGfxInfo.y2)) {
 				pOut->PrintMsg("Invalid position. Operation was cancelled");
 				return false;
 			}

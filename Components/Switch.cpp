@@ -73,7 +73,7 @@ void Switch::Restore(Output* pOut) {
 /* Simulates due to change in pin status */
 void  Switch::Refresh(Pin* p) {
 	
-	for (int i = 0; i < p->getConnectionsCount(); i++)	{
+	for (int i = 0; i < p->GetConnectionsCount(); i++)	{
 
 		if (p->GetConnection(i)) {
 			Pin* d = p->GetConnection(i)->GetDestinationPin();

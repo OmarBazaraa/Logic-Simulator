@@ -38,14 +38,14 @@ public:
 	/* Removes the given connection from the pin */
 	bool RemoveConnection(Connection* pConnection);
 
+	/* Returns the number of connected connections to the pin */
+	int GetConnectionsCount() const;
+
 	/* Checks if this pin is full or not */
 	bool IsFull() const;
 
 	/* Returns the connection connected to the pin */
 	Connection* GetConnection(int index);
-
-	/* Returns the number of connected pins */
-	int getConnectionsCount();
 
 	/* Deletes the pin which removes all connected connections from the pin */
 	void Delete(Output* pOut);

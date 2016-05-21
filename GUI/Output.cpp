@@ -1,5 +1,5 @@
 #include "Output.h"
-#include "../CMUgraphicsLib/PNG.h"
+//#include "../CMUgraphicsLib/PNG.h"
 
 /* Constructor that initializes the user interface */
 Output::Output() {
@@ -18,6 +18,7 @@ Output::Output() {
 	pWind = CreateWind(UI.Width, UI.Height, UI.StartX, UI.StartY);
 	ChangeTitle("Logic Simulator");
 	CreateToolBar();
+	CreateGateBar();
 	CreateStatusBar();
 	ClearDrawingArea();
 
@@ -39,88 +40,64 @@ window* Output::CreateWind(int w, int h, int x, int y) const {
 	return new window(w + 14, h + 15, x, y);
 }
 
-/* Returns the grid of pins */
-Component* Output::GetComponentAtPin(int x, int y) const {
-	getPinIndices(x, y);
-	return mPinGrid[x][y].Comp;
-}
-
 /* Chnages the title of the Window */
 void Output::ChangeTitle(const string& title) const {
 	pWind->ChangeTitle(title);
 }
 
 /* Draws the tool bar and the gate bar */
-void Output::CreateToolBar() const {
+void Output::CreateToolBar(int hoverdItem) const {
 	// Prepare list of image directories for each tool item
-	string toolBarImages[TOOLS_COUNT];
-	string gateBarImages[GATES_COUNT];
+	string toolBarImages[TOOLS_COUNT], states[TOOLS_COUNT], dir;
 
+	toolBarImages[ITEM_EDIT] =			"\\edit.jpg";
+	toolBarImages[ITEM_DELETE] =		"\\delete.jpg";
+	toolBarImages[ITEM_COPY] =			"\\copy.jpg";
+	toolBarImages[ITEM_CUT] =			"\\cut.jpg";
+	toolBarImages[ITEM_PASTE] =			"\\paste.jpg";
+	toolBarImages[ITEM_UNDO] =			"\\undo.jpg";
+	toolBarImages[ITEM_REDO] =			"\\redo.jpg";
+	toolBarImages[ITEM_PLAY] =			"\\play.jpg";
+	toolBarImages[ITEM_PAUSE] =			"\\pause.jpg";
+	toolBarImages[ITEM_TRUTHTABLE] =	"\\truth_table.jpg";
+	toolBarImages[ITEM_SAVE] =			"\\save.jpg";
+	toolBarImages[ITEM_LOAD] =			"\\load.jpg";
+	toolBarImages[ITEM_EXIT] =			"\\exit.jpg";
+	
 	if (UI.AppMode == Mode::DESIGN) {
-		// Tool bar
-		toolBarImages[ITEM_EDIT] = "Images\\menu\\toolbar\\active\\edit.jpg";
-		toolBarImages[ITEM_DELETE] = "Images\\menu\\toolbar\\active\\delete.jpg";
-		toolBarImages[ITEM_COPY] = "Images\\menu\\toolbar\\active\\copy.jpg";
-		toolBarImages[ITEM_CUT] = "Images\\menu\\toolbar\\active\\cut.jpg";
-		toolBarImages[ITEM_PASTE] = "Images\\menu\\toolbar\\active\\paste.jpg";
-		toolBarImages[ITEM_UNDO] = "Images\\menu\\toolbar\\active\\undo.jpg";
-		toolBarImages[ITEM_REDO] = "Images\\menu\\toolbar\\active\\redo.jpg";
-		toolBarImages[ITEM_PLAY] = "Images\\menu\\toolbar\\active\\play.jpg";
-		toolBarImages[ITEM_PAUSE] = "Images\\menu\\toolbar\\inactive\\pause.jpg";
-		toolBarImages[ITEM_TRUTHTABLE] = "Images\\menu\\toolbar\\inactive\\truth_table.jpg";
-		toolBarImages[ITEM_SAVE] = "Images\\menu\\toolbar\\active\\save.jpg";
-		toolBarImages[ITEM_LOAD] = "Images\\menu\\toolbar\\active\\load.jpg";
-		toolBarImages[ITEM_EXIT] = "Images\\menu\\toolbar\\active\\exit.jpg";
-
-		// Gate bar
-		gateBarImages[ITEM_AND] = "Images\\menu\\gatebar\\active\\and.jpg";
-		gateBarImages[ITEM_OR] = "Images\\menu\\gatebar\\active\\or.jpg";
-		gateBarImages[ITEM_NOT] = "Images\\menu\\gatebar\\active\\not.jpg";
-		gateBarImages[ITEM_NAND] = "Images\\menu\\gatebar\\active\\nand.jpg";
-		gateBarImages[ITEM_NOR] = "Images\\menu\\gatebar\\active\\nor.jpg";
-		gateBarImages[ITEM_XOR] = "Images\\menu\\gatebar\\active\\xor.jpg";
-		gateBarImages[ITEM_XNOR] = "Images\\menu\\gatebar\\active\\xnor.jpg";
-		gateBarImages[ITEM_AND3] = "Images\\menu\\gatebar\\active\\and3.jpg";
-		gateBarImages[ITEM_NOR3] = "Images\\menu\\gatebar\\active\\nor3.jpg";
-		gateBarImages[ITEM_XOR3] = "Images\\menu\\gatebar\\active\\xor3.jpg";
-		gateBarImages[ITEM_BUFFER] = "Images\\menu\\gatebar\\active\\buffer.jpg";
-		gateBarImages[ITEM_SWITCH] = "Images\\menu\\gatebar\\active\\switch.jpg";
-		gateBarImages[ITEM_LED] = "Images\\menu\\gatebar\\active\\led.jpg";
-		gateBarImages[ITEM_CONNECTION] = "Images\\menu\\gatebar\\active\\connection.jpg";
+		states[ITEM_EDIT] = "active";
+		states[ITEM_DELETE] = "active";
+		states[ITEM_COPY] = "active";
+		states[ITEM_CUT] = "active";
+		states[ITEM_PASTE] = "active";
+		states[ITEM_UNDO] = "active";
+		states[ITEM_REDO] = "active";
+		states[ITEM_PLAY] = "active";
+		states[ITEM_PAUSE] = "inactive";
+		states[ITEM_TRUTHTABLE] = "inactive";
+		states[ITEM_SAVE] = "active";
+		states[ITEM_LOAD] = "active";
+		states[ITEM_EXIT] = "active";
 	}
 	else {
-		// Tool bar
-		toolBarImages[ITEM_EDIT] = "Images\\menu\\toolbar\\inactive\\edit.jpg";
-		toolBarImages[ITEM_DELETE] = "Images\\menu\\toolbar\\inactive\\delete.jpg";
-		toolBarImages[ITEM_COPY] = "Images\\menu\\toolbar\\inactive\\copy.jpg";
-		toolBarImages[ITEM_CUT] = "Images\\menu\\toolbar\\inactive\\cut.jpg";
-		toolBarImages[ITEM_PASTE] = "Images\\menu\\toolbar\\inactive\\paste.jpg";
-		toolBarImages[ITEM_UNDO] = "Images\\menu\\toolbar\\inactive\\undo.jpg";
-		toolBarImages[ITEM_REDO] = "Images\\menu\\toolbar\\inactive\\redo.jpg";
-		toolBarImages[ITEM_PLAY] = "Images\\menu\\toolbar\\inactive\\play.jpg";
-		toolBarImages[ITEM_PAUSE] = "Images\\menu\\toolbar\\active\\pause.jpg";
-		toolBarImages[ITEM_TRUTHTABLE] = "Images\\menu\\toolbar\\active\\truth_table.jpg";
-		toolBarImages[ITEM_SAVE] = "Images\\menu\\toolbar\\inactive\\save.jpg";
-		toolBarImages[ITEM_LOAD] = "Images\\menu\\toolbar\\inactive\\load.jpg";
-		toolBarImages[ITEM_EXIT] = "Images\\menu\\toolbar\\active\\exit.jpg";
-
-		// Gate bar
-		gateBarImages[ITEM_AND] = "Images\\menu\\gatebar\\inactive\\and.jpg";
-		gateBarImages[ITEM_OR] = "Images\\menu\\gatebar\\inactive\\or.jpg";
-		gateBarImages[ITEM_NOT] = "Images\\menu\\gatebar\\inactive\\not.jpg";
-		gateBarImages[ITEM_NAND] = "Images\\menu\\gatebar\\inactive\\nand.jpg";
-		gateBarImages[ITEM_NOR] = "Images\\menu\\gatebar\\inactive\\nor.jpg";
-		gateBarImages[ITEM_XOR] = "Images\\menu\\gatebar\\inactive\\xor.jpg";
-		gateBarImages[ITEM_XNOR] = "Images\\menu\\gatebar\\inactive\\xnor.jpg";
-		gateBarImages[ITEM_AND3] = "Images\\menu\\gatebar\\inactive\\and3.jpg";
-		gateBarImages[ITEM_NOR3] = "Images\\menu\\gatebar\\inactive\\nor3.jpg";
-		gateBarImages[ITEM_XOR3] = "Images\\menu\\gatebar\\inactive\\xor3.jpg";
-		gateBarImages[ITEM_BUFFER] = "Images\\menu\\gatebar\\inactive\\buffer.jpg";
-		gateBarImages[ITEM_SWITCH] = "Images\\menu\\gatebar\\inactive\\switch.jpg";
-		gateBarImages[ITEM_LED] = "Images\\menu\\gatebar\\inactive\\led.jpg";
-		gateBarImages[ITEM_CONNECTION] = "Images\\menu\\gatebar\\inactive\\connection.jpg";
+		states[ITEM_EDIT] = "inactive";
+		states[ITEM_DELETE] = "inactive";
+		states[ITEM_COPY] = "inactive";
+		states[ITEM_CUT] = "inactive";
+		states[ITEM_PASTE] = "inactive";
+		states[ITEM_UNDO] = "inactive";
+		states[ITEM_REDO] = "inactive";
+		states[ITEM_PLAY] = "inactive";
+		states[ITEM_PAUSE] = "active";
+		states[ITEM_TRUTHTABLE] = "active";
+		states[ITEM_SAVE] = "inactive";
+		states[ITEM_LOAD] = "inactive";
+		states[ITEM_EXIT] = "inactive";
 	}
-	
+
+	if (hoverdItem != -1 && states[hoverdItem] != "inactive") {
+		states[hoverdItem] = "highlighted";
+	}
 
 	pWind->SetBrush(UI.DarkColor);
 	pWind->SetPen(UI.DarkColor);
@@ -128,11 +105,50 @@ void Output::CreateToolBar() const {
 
 	// Draw menu item one image at a time
 	for (int i = 0; i < TOOLS_COUNT; i++) {
-		pWind->DrawImage(toolBarImages[i], i * UI.ToolItemWidth, 0, UI.ToolItemWidth, UI.ToolBarHeight);
+		dir = "Images\\menu\\toolbar\\" + states[i] + toolBarImages[i];
+		pWind->DrawImage(dir, i * UI.ToolItemWidth, 0, UI.ToolItemWidth, UI.ToolBarHeight);
+	}
+}
+
+/* Draws the the gate bar */
+void Output::CreateGateBar(int hoverdItem) const {
+	// Prepare list of image directories for each tool item
+	string gateBarImages[GATES_COUNT], states[GATES_COUNT], dir;
+
+	gateBarImages[ITEM_AND] =			"\\and.jpg";
+	gateBarImages[ITEM_OR] =			"\\or.jpg";
+	gateBarImages[ITEM_NOT] =			"\\not.jpg";
+	gateBarImages[ITEM_NAND] =			"\\nand.jpg";
+	gateBarImages[ITEM_NOR] =			"\\nor.jpg";
+	gateBarImages[ITEM_XOR] =			"\\xor.jpg";
+	gateBarImages[ITEM_XNOR] =			"\\xnor.jpg";
+	gateBarImages[ITEM_AND3] =			"\\and3.jpg";
+	gateBarImages[ITEM_NOR3] =			"\\nor3.jpg";
+	gateBarImages[ITEM_XOR3] =			"\\xor3.jpg";
+	gateBarImages[ITEM_BUFFER] =		"\\buffer.jpg";
+	gateBarImages[ITEM_SWITCH] =		"\\switch.jpg";
+	gateBarImages[ITEM_LED] =			"\\led.jpg";
+	gateBarImages[ITEM_CONNECTION] =	"\\connection.jpg";
+
+	if (UI.AppMode == Mode::DESIGN) {
+		for (int i = 0; i < GATES_COUNT; i++) {
+			states[i] = "active";
+		}
+	}
+	else {
+		for (int i = 0; i < GATES_COUNT; i++) {
+			states[i] = "inactive";
+		}
 	}
 
+	if (hoverdItem != -1 && states[hoverdItem] != "inactive") {
+		states[hoverdItem] = "highlighted";
+	}
+
+	// Draw menu item one image at a time
 	for (int i = 0; i < GATES_COUNT; i++) {
-		pWind->DrawImage(gateBarImages[i], i * UI.GateItemWidth, UI.ToolBarHeight, UI.GateItemWidth, UI.GateBarHeight);
+		dir = "Images\\menu\\gatebar\\" + states[i] + gateBarImages[i];
+		pWind->DrawImage(dir, i * UI.GateItemWidth, UI.ToolBarHeight, UI.GateItemWidth, UI.GateBarHeight);
 	}
 
 	// Draw a separator line between tool bar and gate bar
@@ -189,8 +205,8 @@ void Output::ClearDrawingArea() const {
 /* Clears the status bar */
 void Output::ClearStatusBar() const {
 	// Set the message offset from the status bar
-	int msgX = 10;
-	int msgY = UI.Height - UI.StatusBarHeight / 2 - UI.StatusFontSize / 2;
+	int msgX = UI.TextMargin;
+	int msgY = UI.Height - UI.StatusBarHeight / 2 - UI.FontSize / 2;
 
 	// Overwrite using bachground color to erase the message
 	pWind->SetPen(UI.DarkColor);
@@ -204,167 +220,32 @@ void Output::PrintMsg(const string& msg) const {
 	ClearStatusBar();
 
 	// Set the Message offset from the status bar
-	int msgX = 10;
-	int msgY = UI.Height - UI.StatusBarHeight / 2 - UI.StatusFontSize / 2;
+	int msgX = UI.TextMargin;
+	int msgY = UI.Height - UI.StatusBarHeight / 2 - UI.FontSize / 2;
 
 	// Print the message
 	pWind->SetPen(UI.MsgColor);
-	pWind->SetFont(UI.StatusFontSize, BOLD, BY_NAME, "Arial");
+	pWind->SetFont(UI.FontSize, BOLD, BY_NAME, "Arial");
 	pWind->DrawString(msgX, msgY, msg);
 }
 
-/* Checks if the given y-coordinate is within the drawing area */
-bool Output::IsDrawingArea(int y) {
-	if (y <= UI.ToolBarHeight + UI.GateBarHeight || y >= UI.Height - UI.StatusBarHeight) return false;
-	return true;
-}
-
-/* Marks the given area of pins */
-void Output::MarkPins(const GraphicsInfo& gfxInfo, PinType mark, Component* comp) {
-	int x1 = gfxInfo.x1, y1 = gfxInfo.y1;
-	int x2 = gfxInfo.x2, y2 = gfxInfo.y2;
-	getPinIndices(x1, y1);
-	getPinIndices(x2, y2);
-
-	for (int x = x1; x < x2; x++) {
-		for (int y = y1; y < y2; y++) {
-			mPinGrid[x][y].Type = mark;
-			mPinGrid[x][y].Comp = comp;
-		}
-	}
-}
-
-/* Marks the pins of the connection as used */
-void Output::MarkConnectionPins(const vector<GraphicsInfo>& path, Component* comp) {
-	for (int i = 1; i < (int)path.size(); i++) {
-		// Horizontal line
-		if (path[i].y1 == path[i].y2) {
-			int x1 = path[i].x1 / UI.PinOffset;
-			int x2 = path[i].x2 / UI.PinOffset;
-			int y = (path[i].y1 - UI.ToolBarHeight - UI.GateBarHeight) / UI.PinOffset;
-
-			if (x1 > x2) swap(x1, x2);
-
-			for (int x = x1; x <= x2; x++) {
-				if (mPinGrid[x][y].Type == EMPTY) {
-					mPinGrid[x][y].Type = PinType::HOR_CONNECTION;
-				}
-				else {
-					mPinGrid[x][y].Type = PinType::INTERSECTING_CONNECTIONS;
-					mPinGrid[x][y].PreviousComp = mPinGrid[x][y].Comp;
-				}
-				
-				mPinGrid[x][y].Comp = comp;
-			}
-		}
-		// Vertical line
-		else {
-			int y1 = (path[i].y1 - UI.ToolBarHeight - UI.GateBarHeight) / UI.PinOffset;
-			int y2 = (path[i].y2 - UI.ToolBarHeight - UI.GateBarHeight) / UI.PinOffset;
-			int x = path[i].x1 / UI.PinOffset;
-
-			if (y1 > y2) swap(y1, y2);
-
-			for (int y = y1; y <= y2; y++) {
-				if (mPinGrid[x][y].Type == EMPTY) {
-					mPinGrid[x][y].Type = PinType::VER_CONNECTION;
-				}
-				else {
-					mPinGrid[x][y].Type = PinType::INTERSECTING_CONNECTIONS;
-					mPinGrid[x][y].PreviousComp = mPinGrid[x][y].Comp;
-				}
-
-				mPinGrid[x][y].Comp = comp;
-			}
-		}
-	}
-}
-
-/* Clears the pins of the connection */
-void Output::ClearConnectionPins(const vector<GraphicsInfo>& path) {
-	for (int i = 1; i < (int)path.size(); i++) {
-		// Horizontal line
-		if (path[i].y1 == path[i].y2) {
-			int x1 = path[i].x1 / UI.PinOffset;
-			int x2 = path[i].x2 / UI.PinOffset;
-			int y = (path[i].y1 - UI.ToolBarHeight - UI.GateBarHeight) / UI.PinOffset;
-
-			if (x1 > x2) swap(x1, x2);
-
-			for (int x = x1; x <= x2; x++) {
-				if (mPinGrid[x][y].Type == INTERSECTING_CONNECTIONS) {
-					mPinGrid[x][y].Type = PinType::VER_CONNECTION;
-					mPinGrid[x][y].Comp = mPinGrid[x][y].PreviousComp;
-					mPinGrid[x][y].PreviousComp = NULL;
-				}
-				else {
-					mPinGrid[x][y].Type = PinType::EMPTY;
-					mPinGrid[x][y].Comp = NULL;
-				}
-			}
-		}
-		// Vertical line
-		else {
-			int y1 = (path[i].y1 - UI.ToolBarHeight - UI.GateBarHeight) / UI.PinOffset;
-			int y2 = (path[i].y2 - UI.ToolBarHeight - UI.GateBarHeight) / UI.PinOffset;
-			int x = path[i].x1 / UI.PinOffset;
-
-			if (y1 > y2) swap(y1, y2);
-
-			for (int y = y1; y <= y2; y++) {
-				if (mPinGrid[x][y].Type == INTERSECTING_CONNECTIONS) {
-					mPinGrid[x][y].Type = PinType::HOR_CONNECTION;
-					mPinGrid[x][y].Comp = mPinGrid[x][y].PreviousComp;
-					mPinGrid[x][y].PreviousComp = NULL;
-				}
-				else {
-					mPinGrid[x][y].Type = PinType::EMPTY;
-					mPinGrid[x][y].Comp = NULL;
-				}
-			}
-		}
-	}
-}
-
-/* Checks if the given area of pins is empty */
-bool Output::IsEmptyArea(const GraphicsInfo& gfxInfo) const {
-	int x1 = gfxInfo.x1, y1 = gfxInfo.y1;
-	int x2 = gfxInfo.x2, y2 = gfxInfo.y2;
-	getPinIndices(x1, y1);
-	getPinIndices(x2, y2);
-
-	for (int x = x1; x < x2; x++) {
-		for (int y = y1; y < y2; y++) {
-			if (mPinGrid[x][y].Type != PinType::EMPTY) return false;	// Occupied area
-		}
-	}
-
-	return true;
-}
-
 /* Draws label*/
-void Output::DrawLabel(const GraphicsInfo& gfxInfo, const string& label) const {
+void Output::DrawLabel(int x, int y, const string& label) const {
+	int w, h;
+	pWind->SetBrush(UI.DarkColor);
 	pWind->SetPen(UI.MsgColor);
-	pWind->SetFont(20, BOLD, BY_NAME, "Arial");
-	pWind->DrawString(gfxInfo.x1, gfxInfo.y1, label);
+	pWind->SetFont(UI.FontSize, BOLD, BY_NAME, "Arial");
+	pWind->GetStringSize(w, h, label);
+
+	pWind->DrawRectangle(x, y, x + w + UI.TextMargin, y + h + UI.TextMargin);
+	pWind->DrawString(x + UI.TextMargin / 2, y + UI.TextMargin / 2, label);
 }
 
 /* Draws AND gate */
 void Output::DrawAND(const GraphicsInfo& gfxInfo, bool selected) const {
 	string dir = (selected ? "Images\\components\\highlighted\\and.jpg" : "Images\\components\\active\\and.jpg");
-
 	pWind->DrawImage(dir, gfxInfo.x1, gfxInfo.y1, UI.LogicGateWidth, UI.LogicGateHeight);
 	//pWind->DrawPNG(dir, gfxInfo.x1, gfxInfo.y1);
-
-	//
-	// JUST FOR TESTING
-	//
-	/*pWind->SetPen(UI.SelectionColor, 3);
-
-	pWind->DrawLine(gfxInfo.x1, gfxInfo.y1, gfxInfo.x2, gfxInfo.y1);
-	pWind->DrawLine(gfxInfo.x1, gfxInfo.y1, gfxInfo.x1, gfxInfo.y2);
-	pWind->DrawLine(gfxInfo.x1, gfxInfo.y2, gfxInfo.x2, gfxInfo.y2);
-	pWind->DrawLine(gfxInfo.x2, gfxInfo.y1, gfxInfo.x2, gfxInfo.y2);*/
 }
 
 /* Draws OR gate */
@@ -465,6 +346,151 @@ void Output::DrawConnection(const vector<GraphicsInfo>& path, bool selected, boo
 	for (int i = 0; i < (int)path.size(); i++) {
 		pWind->DrawLine(path[i].x1, path[i].y1, path[i].x2, path[i].y2);
 	}
+}
+
+/* Checks if the given coordinates is within the drawing area */
+bool Output::IsDrawingArea(int x, int y) {
+	if (x < 0 || x >= UI.Width) return false;
+	if (y <= UI.ToolBarHeight + UI.GateBarHeight || y >= UI.Height - UI.StatusBarHeight) return false;
+	return true;
+}
+
+/* Checks if the given area of pins is empty */
+bool Output::IsEmptyArea(const GraphicsInfo& gfxInfo) const {
+	int x1 = gfxInfo.x1, y1 = gfxInfo.y1;
+	int x2 = gfxInfo.x2, y2 = gfxInfo.y2;
+	getPinIndices(x1, y1);
+	getPinIndices(x2, y2);
+
+	if (x1 < 0 || x2 >= UI.HorPinsCount || y1 < 0 || y2 >= UI.VerPinsCount) {
+		return false;
+	}
+
+	for (int x = x1; x < x2; x++) {
+		for (int y = y1; y < y2; y++) {
+			if (mPinGrid[x][y].Type != PinType::EMPTY) return false;	// Occupied area
+		}
+	}
+
+	return true;
+}
+
+/* Marks the given area of pins */
+void Output::MarkPins(const GraphicsInfo& gfxInfo, PinType mark, Component* comp) {
+	int x1 = gfxInfo.x1, y1 = gfxInfo.y1;
+	int x2 = gfxInfo.x2, y2 = gfxInfo.y2;
+	getPinIndices(x1, y1);
+	getPinIndices(x2, y2);
+
+	for (int x = x1; x < x2; x++) {
+		for (int y = y1; y < y2; y++) {
+			mPinGrid[x][y].Type = mark;
+			mPinGrid[x][y].Comp = comp;
+		}
+	}
+}
+
+/* Marks the pins of the connection as used */
+void Output::MarkConnectionPins(const vector<GraphicsInfo>& path, Component* comp) {
+	for (int i = 1; i < (int)path.size(); i++) {
+		// Horizontal line
+		if (path[i].y1 == path[i].y2) {
+			int x1 = path[i].x1 / UI.PinOffset;
+			int x2 = path[i].x2 / UI.PinOffset;
+			int y = (path[i].y1 - UI.ToolBarHeight - UI.GateBarHeight) / UI.PinOffset;
+
+			if (x1 > x2) swap(x1, x2);
+
+			for (int x = x1; x <= x2; x++) {
+				if (mPinGrid[x][y].Type == EMPTY) {
+					mPinGrid[x][y].Type = PinType::HOR_CONNECTION;
+				}
+				else {
+					mPinGrid[x][y].Type = PinType::INTERSECTING_CONNECTIONS;
+					mPinGrid[x][y].PreviousComp = mPinGrid[x][y].Comp;
+				}
+
+				mPinGrid[x][y].Comp = comp;
+			}
+		}
+		// Vertical line
+		else {
+			int y1 = (path[i].y1 - UI.ToolBarHeight - UI.GateBarHeight) / UI.PinOffset;
+			int y2 = (path[i].y2 - UI.ToolBarHeight - UI.GateBarHeight) / UI.PinOffset;
+			int x = path[i].x1 / UI.PinOffset;
+
+			if (y1 > y2) swap(y1, y2);
+
+			for (int y = y1; y <= y2; y++) {
+				if (mPinGrid[x][y].Type == EMPTY) {
+					mPinGrid[x][y].Type = PinType::VER_CONNECTION;
+				}
+				else {
+					mPinGrid[x][y].Type = PinType::INTERSECTING_CONNECTIONS;
+					mPinGrid[x][y].PreviousComp = mPinGrid[x][y].Comp;
+				}
+
+				mPinGrid[x][y].Comp = comp;
+			}
+		}
+	}
+}
+
+/* Clears the pins of the connection */
+void Output::ClearConnectionPins(const vector<GraphicsInfo>& path) {
+	for (int i = 1; i < (int)path.size(); i++) {
+		// Horizontal line
+		if (path[i].y1 == path[i].y2) {
+			int x1 = path[i].x1 / UI.PinOffset;
+			int x2 = path[i].x2 / UI.PinOffset;
+			int y = (path[i].y1 - UI.ToolBarHeight - UI.GateBarHeight) / UI.PinOffset;
+
+			if (x1 > x2) swap(x1, x2);
+
+			for (int x = x1; x <= x2; x++) {
+				if (mPinGrid[x][y].Type == INTERSECTING_CONNECTIONS) {
+					mPinGrid[x][y].Type = PinType::VER_CONNECTION;
+					mPinGrid[x][y].Comp = mPinGrid[x][y].PreviousComp;
+					mPinGrid[x][y].PreviousComp = NULL;
+				}
+				else {
+					mPinGrid[x][y].Type = PinType::EMPTY;
+					mPinGrid[x][y].Comp = NULL;
+				}
+			}
+		}
+		// Vertical line
+		else {
+			int y1 = (path[i].y1 - UI.ToolBarHeight - UI.GateBarHeight) / UI.PinOffset;
+			int y2 = (path[i].y2 - UI.ToolBarHeight - UI.GateBarHeight) / UI.PinOffset;
+			int x = path[i].x1 / UI.PinOffset;
+
+			if (y1 > y2) swap(y1, y2);
+
+			for (int y = y1; y <= y2; y++) {
+				if (mPinGrid[x][y].Type == INTERSECTING_CONNECTIONS) {
+					mPinGrid[x][y].Type = PinType::HOR_CONNECTION;
+					mPinGrid[x][y].Comp = mPinGrid[x][y].PreviousComp;
+					mPinGrid[x][y].PreviousComp = NULL;
+				}
+				else {
+					mPinGrid[x][y].Type = PinType::EMPTY;
+					mPinGrid[x][y].Comp = NULL;
+				}
+			}
+		}
+	}
+}
+
+/* Returns the grid of pins */
+Component* Output::GetComponentAtPin(int x, int y) const {
+	getPinIndices(x, y);
+
+	if (x < 0 || x >= UI.HorPinsCount || y < 0 || y >= UI.VerPinsCount) {
+		return NULL;
+	}
+
+	return mPinGrid[x][y].Comp;
 }
 
 /* Returns the shortest available path for the connection, null if no path found */

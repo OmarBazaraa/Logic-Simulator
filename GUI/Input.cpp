@@ -80,8 +80,8 @@ ActionType Input::GetUserAction(Output* pOut) {
 			}
 			click = pWind->WaitMouseClick(x,y);
 		}
-		else if (pWind->GetButtonState(RIGHT_BUTTON, x, y) == BUTTON_UP) {
-			//return ActionType::HOVER;
+		else {
+			return ActionType::HOVER;
 		}
 	}
 

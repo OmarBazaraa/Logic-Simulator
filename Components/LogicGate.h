@@ -2,7 +2,7 @@
 #include "Gate.h"
 
 /*
-	Base class for all types of gates
+	Base class for all types of logic gates
 */
 class LogicGate : public Gate
 {
@@ -15,14 +15,14 @@ public:
 	/* Constructor */
 	LogicGate(Output* pOut, const GraphicsInfo& gfxInfo, int inputs, int fanout);
 
+	/* Returns the number of input pins of the gate */
+	int GetInputsCount() const;
+
 	/* Returns the input pin number n (0-indexed) of the component */
 	virtual Pin* GetInputPin(int n);
 
 	/* Returns the output pin of the component */
 	virtual Pin* GetOutputPin();
-
-	/* Get input pins count */
-	int GetInputsCount();
 
 	/* Sets the status of the input pin number n (0-indexed) */
 	virtual void SetInputPinStatus(int n, Status s);

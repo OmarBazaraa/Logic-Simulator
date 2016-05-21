@@ -1,20 +1,21 @@
 #include "ApplicationManager.h"
 #include "Actions\AddGate.h"
 #include "Actions\AddConnection.h"
-#include "Actions\Select.h"
-#include "Actions\Save.h"
-#include "Actions\TruthTable.h"
+#include "Actions\Edit.h"
+#include "Actions\Delete.h"
 #include "Actions\Copy.h"
 #include "Actions\Cut.h"
-#include "Actions\Delete.h"
 #include "Actions\Paste.h"
-#include "Actions\Edit.h"
 #include "Actions\UndoAction.h"
 #include "Actions\RedoAction.h"
+#include "Actions\Simulate.h"
+#include "Actions\TruthTable.h"
+#include "Actions\Save.h"
 #include "Actions\Load.h"
+#include "Actions\Select.h"
 #include "Actions\Move.h"
 #include "Actions\Hover.h"
-#include "Actions\Simulate.h"
+
 /* Constructor */
 ApplicationManager::ApplicationManager() {
 	mCompCount = 0;
@@ -162,6 +163,7 @@ void ApplicationManager::ExecuteAction(ActionType actType) {
 			pOut->PrintMsg("DESIGN MODE");
 			UI.AppMode = Mode::DESIGN;
 			pOut->CreateToolBar();
+			pOut->CreateGateBar();
 			//TODO:
 			break;
 		case CREATE_TRUTH_TABLE:
@@ -175,6 +177,13 @@ void ApplicationManager::ExecuteAction(ActionType actType) {
 			pAct = new Load(this);
 			pOut->PrintMsg("LOAD");
 			//TODO:
+			break;
+		case MOVE:
+			pOut->PrintMsg("MOVE");
+			pAct = new Move(this);
+			break;
+		case HOVER:
+			pAct = new Hover(this);
 			break;
 		case EXIT:
 			pOut->PrintMsg("EXIT");
@@ -190,13 +199,6 @@ void ApplicationManager::ExecuteAction(ActionType actType) {
 			break;
 		case SELECT:
 			pAct = new Select(this);
-			break;
-		case HOVER:
-			pAct = new Hover(this);
-			break;
-		case MOVE:
-			pOut->PrintMsg("MOVE");
-			pAct = new Move(this);
 			break;
 		case STATUS_BAR:
 			pOut->PrintMsg("STATUS BAR");
