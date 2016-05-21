@@ -236,9 +236,9 @@ void Move::DrawComponent(Component * pComp, GraphicsInfo& GfxInfo, bool Invalid)
 bool Move::SetNewGateBorders(GraphicsInfo & GfxInfo) {
 	int dx = 0, dy = 0;
 	if (GfxInfo.x1 < 0)
-		dx = 1 - GfxInfo.x1;
+		dx = 0 - GfxInfo.x1;
 	if (GfxInfo.y1 < UI.GateBarHeight + UI.ToolBarHeight)
-		dy = 1 + UI.GateBarHeight + UI.ToolBarHeight - GfxInfo.y1;
+		dy = UI.GateBarHeight + UI.ToolBarHeight - GfxInfo.y1;
 	if (GfxInfo.y2 > UI.Height - UI.StatusBarHeight)
 		dy = UI.Height - UI.StatusBarHeight - GfxInfo.y2;
 	if (GfxInfo.x2 > UI.Width)
