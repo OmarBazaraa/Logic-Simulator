@@ -26,11 +26,13 @@ bool AddConnection::ReadActionParameters() {
 			pOut->PrintMsg("Invalid position. Operation was cancelled");
 			return false;
 		}
-		mInitial.x1 = mGfxInfo.x1;
-		mInitial.y1 = mGfxInfo.y1;
+		
 	}
 
-		if (!DetectSourceComponent()) {
+	mInitial.x1 = mGfxInfo.x1;
+	mInitial.y1 = mGfxInfo.y1; 
+	
+	if (!DetectSourceComponent()) {
 			pOut->PrintMsg("Invalid source pin. Operation was cancelled");
 			return false;
 		}
@@ -45,9 +47,10 @@ bool AddConnection::ReadActionParameters() {
 				pOut->PrintMsg("Invalid position. Operation was cancelled");
 				return false;
 			}
-			mInitial.x2 = mGfxInfo.x2;
-			mInitial.y2 = mGfxInfo.y2;
 		}
+
+		mInitial.x2 = mGfxInfo.x2;
+		mInitial.y2 = mGfxInfo.y2;
 
 		if (!DetectDestinationComponent()) {
 			pOut->PrintMsg("Invalid destination pin. Operation was cancelled");
