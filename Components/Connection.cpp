@@ -23,7 +23,7 @@ void Connection::SetPath(Output* pOut, const GraphicsInfo& gfxInfo, const vector
 /* Updates the path of the connection */
 bool Connection::UpdatePath(Output* pOut) {
 	// Clear previous path
-	pOut->ClearConnectionPins(mPath);
+	//pOut->ClearConnectionPins(mPath);
 
 	// Update path
 	mSrcPin->GetGate()->GetOutputPinCoordinates(mGfxInfo.x1, mGfxInfo.y1);

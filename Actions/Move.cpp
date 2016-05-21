@@ -20,10 +20,12 @@ bool Move::ReadActionParameters() {
 
 	for (int i = 0; i < n; i++)
 		if (list[i]->IsSelected() && list[i]->GetAddActionType() != ADD_CONNECTION) {
-			mPrvMovedComponents.push_back(dynamic_cast <Gate *>(list[i]));
-			mPrvMovedGfxinfo.push_back(list[i]->GetGraphicsInfo());
+			Gate* ptr = dynamic_cast <Gate *>(list[i]);
+			mPrvMovedComponents.push_back(ptr);
+			mPrvMovedGfxinfo.push_back(ptr->GetGraphicsInfo());
 		}
-		else if (list[i]->IsSelected() && list[i]->GetAddActionType() == ADD_CONNECTION)
+	for (int i = 0; i < n; i++)
+		if (list[i]->GetAddActionType() == ADD_CONNECTION)
 			mPrvMovedConnections.push_back(dynamic_cast <Connection *> (list[i]));
 
 	return true;
@@ -41,7 +43,6 @@ bool Move::Execute() {
 	Component* pComp = pOut->GetComponentAtPin(mX, mY);
 	Component** list = mAppManager->GetComponentList();
 
-
 	mAppManager->UpdateInterface();
 	image DrawingArea;
 	pOut->StoreImage(DrawingArea, 0, 0, UI.Width, UI.Height);
@@ -50,6 +51,9 @@ bool Move::Execute() {
 	int prvX = mX, prvY = mY;
 	while (pIn->GetButtonState(LEFT_BUTTON, mX, mY) == BUTTON_DOWN) {
 		dx = mX - oldX, dy = mY - oldY;
+
+		normalizeCoordinates(mX, mY);
+
 		if (prvX != mX || prvY != mY) {
 			pOut->DrawImage(DrawingArea, 0, 0, UI.Width, UI.Height);
 			for (int i = 0; i < n; i++) {
@@ -89,6 +93,13 @@ bool Move::Execute() {
 	if (StopMoveAction)
 		return false;		// To prevent adding this action to the stack
 
+
+	int count = mPrvMovedConnections.size();
+	for (int i = 0; i < count; i++) {
+		vector <GraphicsInfo> Path = mPrvMovedConnections[i]->GetPath();
+		pOut->ClearConnectionPins(Path);
+	}
+
 	// start moving the gates to the new position and checking if it's in the same place
 	for (int i = 0; i < n; i++) {
 		if (list[i]->IsSelected() && list[i]->GetAddActionType() != ActionType::ADD_CONNECTION) {
@@ -108,7 +119,7 @@ bool Move::Execute() {
 
 	// start moving the connection to the new position and checking for the validity of the pathes
 	for (int i = 0; i < n; i++) {
-		if (list[i]->IsSelected() && list[i]->GetAddActionType() == ActionType::ADD_CONNECTION) {
+		if (list[i]->GetAddActionType() == ADD_CONNECTION) {
 			Connection* ptr = dynamic_cast <Connection *> (list[i]);
 			if (!ptr->UpdatePath(pOut))
 				UndoMoveAction = true;
@@ -132,6 +143,7 @@ bool Move::Execute() {
 
 bool Move::ValidCoordinates(int dx, int dy,Component* Comp) {
 	GraphicsInfo NewGfx = CalculateDimensions(Comp, dx, dy);
+
 	if (!SetNewGateBorders(NewGfx) && ValidArea(NewGfx))
 		return true;
 
@@ -164,7 +176,7 @@ bool Move::ValidArea(GraphicsInfo & GfxInfo) {
 	for (int x = GfxInfo.x1; x < GfxInfo.x2; x++) {
 		for (int y = GfxInfo.y1; y < GfxInfo.y2; y++) {
 			Component* pComp = pOut->GetComponentAtPin(x, y);
-			if (pComp != NULL && !pComp->IsSelected())
+			if (pComp != NULL && !pComp->IsSelected() && pComp->GetAddActionType() != ADD_CONNECTION)
 				return false;
 		}
 	}
@@ -174,50 +186,52 @@ bool Move::ValidArea(GraphicsInfo & GfxInfo) {
 void Move::DrawComponent(Component * pComp, GraphicsInfo& GfxInfo, bool Invalid) {
 	ActionType actType = pComp->GetAddActionType();
 	Output* pOut = mAppManager->GetOutput();
+	string dir;
 	switch (actType)
 	{
 	case ADD_GATE_AND:
-		pOut->DrawAND(GfxInfo, Invalid);
+		dir = (Invalid ? "Images\\components\\inactive\\and.png" : "Images\\components\\active\\and.jpg");
 		break;
 	case ADD_GATE_OR:
-		pOut->DrawOR(GfxInfo, Invalid);
+		dir = (Invalid ? "Images\\components\\inactive\\or.png" : "Images\\components\\active\\or.jpg");
 		break;
 	case ADD_GATE_NOT:
-		pOut->DrawNOT(GfxInfo, Invalid);
+		dir = (Invalid ? "Images\\components\\inactive\\not.png" : "Images\\components\\active\\not.jpg");
 		break;
 	case ADD_GATE_NAND:
-		pOut->DrawNAND(GfxInfo, Invalid);
+		dir = (Invalid ? "Images\\components\\inactive\\nand.png" : "Images\\components\\active\\nand.jpg");
 		break;
 	case ADD_GATE_NOR:
-		pOut->DrawNOR(GfxInfo, Invalid);
+		dir = (Invalid ? "Images\\components\\inactive\\nor.png" : "Images\\components\\active\\nor.jpg");
 		break;
 	case ADD_GATE_XOR:
-		pOut->DrawXOR(GfxInfo, Invalid);
+		dir = (Invalid ? "Images\\components\\inactive\\xor.png" : "Images\\components\\active\\xor.jpg");
 		break;
 	case ADD_GATE_XNOR:
-		pOut->DrawXNOR(GfxInfo, Invalid);
+		dir = (Invalid ? "Images\\components\\inactive\\xnor.png" : "Images\\components\\active\\xnor.jpg");
 		break;
 	case ADD_GATE_AND3:
-		pOut->DrawAND3(GfxInfo, Invalid);
+		dir = (Invalid ? "Images\\components\\inactive\\and3.png" : "Images\\components\\active\\and3.jpg");
 		break;
 	case ADD_GATE_NOR3:
-		pOut->DrawNOR3(GfxInfo, Invalid);
+		dir = (Invalid ? "Images\\components\\inactive\\nor3.png" : "Images\\components\\active\\nor3.jpg");
 		break;
 	case ADD_GATE_XOR3:
-		pOut->DrawXOR3(GfxInfo, Invalid);
+		dir = (Invalid ? "Images\\components\\inactive\\xor3.png" : "Images\\components\\active\\xor3.jpg");
 		break;
 	case ADD_GATE_BUFFER:
-		pOut->DrawBuffer(GfxInfo, Invalid);
+		dir = (Invalid ? "Images\\components\\inactive\\buffer.png" : "Images\\components\\active\\buffer.jpg");
 		break;
 	case ADD_SWITCH:
-		pOut->DrawSwitch(GfxInfo, Invalid);
+		dir = (Invalid ? "Images\\components\\inactive\\switch_off.png" : "Images\\components\\active\\switch_off.jpg");
 		break;
 	case ADD_LED:
-		pOut->DrawLED(GfxInfo, Invalid);
+		dir = (Invalid ? "Images\\components\\inactive\\led_off.png" : "Images\\components\\active\\led_off.jpg");
 		break;
 	default:
 		break;
 	}
+	Invalid ? pOut->DrawPNG(dir, GfxInfo.x1, GfxInfo.y1) : pOut->DrawImage(dir, GfxInfo.x1, GfxInfo.y1, GfxInfo.x2 - GfxInfo.x1, GfxInfo.y2 - GfxInfo.y1);
 }
 
 bool Move::SetNewGateBorders(GraphicsInfo & GfxInfo) {
@@ -243,6 +257,9 @@ void Move::Undo() {
 	int n = mPrvMovedComponents.size();
 	Output* pOut = mAppManager->GetOutput();
 
+	for (int i = 0; i < mPrvMovedConnections.size(); i++)
+		pOut->ClearConnectionPins(mPrvMovedConnections[i]->GetPath());
+
 	for (int i = 0; i < n; i++)
 		mPrvMovedComponents[i]->SetGraphicsInfo(pOut, mPrvMovedGfxinfo[i]);
 
@@ -257,6 +274,9 @@ void Move::Undo() {
 void Move::Redo() {
 	int n = mNewMovedComponents.size();
 	Output* pOut = mAppManager->GetOutput();
+
+	for (int i = 0; i < mNewMovedConnections.size(); i++)
+		pOut->ClearConnectionPins(mNewMovedConnections[i]->GetPath());
 
 	for (int i = 0; i < n; i++)
 		mNewMovedComponents[i]->SetGraphicsInfo(pOut, mNewMovedGfxinfo[i]);
