@@ -42,6 +42,9 @@ public:
 	/* Returns the stack of un-done actions */
 	stack<Action*>* GetRedoStack();
 
+	/* Frees Memory */
+	void FreeMemory();
+
 	/* Returns a pointer to Input object */
 	Input* GetInput();
 

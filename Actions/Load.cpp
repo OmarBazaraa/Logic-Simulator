@@ -1,5 +1,5 @@
 #include "Load.h"
-
+#include<stack>
 
 
 Load::Load(ApplicationManager* pAppMan) : Action(pAppMan) {
@@ -8,6 +8,10 @@ Load::Load(ApplicationManager* pAppMan) : Action(pAppMan) {
 
 
 bool Load::Execute() {
+	
+	mAppManager->FreeMemory();
+	mAppManager->GetOutput()->ClearDrawingArea();
+
 	int n, cX, cY, cX2, cY2;
 	string t, l;
 	Action *pAct = 0;
