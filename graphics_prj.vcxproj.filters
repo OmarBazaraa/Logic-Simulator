@@ -228,6 +228,9 @@
     <ClCompile Include="CMUgraphicsLib\PNG.cpp">
       <Filter>CMUgraphics Library</Filter>
     </ClCompile>
+    <ClCompile Include="GUI\Dialog.cpp">
+      <Filter>GUI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Actions\Action.h">
@@ -418,6 +421,9 @@
     </ClInclude>
     <ClInclude Include="CMUgraphicsLib\PNG.h">
       <Filter>CMUgraphics Library</Filter>
+    </ClInclude>
+    <ClInclude Include="GUI\Dialog.h">
+      <Filter>GUI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

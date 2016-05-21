@@ -1,5 +1,4 @@
 #include "Load.h"
-#include<stack>
 
 
 Load::Load(ApplicationManager* pAppMan) : Action(pAppMan) {
@@ -11,7 +10,7 @@ bool Load::Execute() {
 	
 	mAppManager->FreeMemory();
 	mAppManager->GetOutput()->ClearDrawingArea();
-
+	Dialog *d = new Dialog("Do you want to load?");
 	int n, cX, cY, cX2, cY2;
 	string t, l;
 	Action *pAct = 0;
@@ -59,6 +58,7 @@ bool Load::Execute() {
 		delete pAct;
 		pAct = 0;
 	}
+	delete d;
 	return false;
 }
 
