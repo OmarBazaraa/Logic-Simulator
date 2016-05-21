@@ -24,7 +24,6 @@ public:
 	/* Constructor */
 	Component(const GraphicsInfo& gfxInfo);
 
-	
 	/* Returns the ID of the component */
 	//int GetID() const;
 	
