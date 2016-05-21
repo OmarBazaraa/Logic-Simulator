@@ -1,3 +1,9 @@
-swh ID 2   led ID 3   
-   0          1       
-   1          0       
+Switch      Switch      Switch      LED         LED         LED         
+   0          0          0          0          0          0       
+   0          0          1          0          0          1       
+   0          1          0          0          1          0       
+   0          1          1          0          1          1       
+   1          0          0          1          0          0       
+   1          0          1          1          0          1       
+   1          1          0          1          1          0       
+   1          1          1          1          1          1       

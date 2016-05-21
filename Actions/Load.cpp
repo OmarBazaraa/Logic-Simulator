@@ -8,12 +8,12 @@ Load::Load(ApplicationManager* pAppMan) : Action(pAppMan) {
 
 
 bool Load::Execute() {
-	int n, id, cX, cY;
+	int n, cX, cY, cX2, cY2;
 	string t, l;
+	Action *pAct = 0;
 	read >> n;
 	for (int i = 0; i < n; i++) {
-		Action *pAct = 0;
-		read >> t >> id >> l >> cX >> cY;
+		read >> t >> l >> cX >> cY;
 		if (t == "AND")
 			pAct = new AddGate(mAppManager, ADD_GATE_AND, cX, cY, l);
 		else if (t == "OR")
@@ -43,8 +43,19 @@ bool Load::Execute() {
 		if (pAct)
 			pAct->Execute();
 		delete pAct;
+		pAct = 0;
 	}
-	return true;
+	read >> t >> cX;
+	while (cX != -1) {
+		read >> cY >> cX2 >> cY2;
+		pAct = new AddConnection(mAppManager, cX, cY, cX2, cY2);
+		read >> cX;
+		if (pAct)
+			pAct->Execute();
+		delete pAct;
+		pAct = 0;
+	}
+	return false;
 }
 
 Load::~Load()

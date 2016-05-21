@@ -7,6 +7,7 @@
 class Connection : public Component
 {
 private:
+	GraphicsInfo mInitial;           
 	int mDstPinIndex;
 	Pin* mSrcPin;					// The source pin of this connection (an output pin of a certain Component)
 	Pin* mDstPin;					// The destination pin of this connection (an input pin of a certain Component)
@@ -14,7 +15,7 @@ private:
 
 public:
 	/* Constructor */
-	Connection(Output* pOut, const GraphicsInfo& gfxInfo, const vector<GraphicsInfo>& path);
+	Connection(Output* pOut, const GraphicsInfo& gfxInfo, const vector<GraphicsInfo>& path, GraphicsInfo rInitial);
 
 	/* Sets the new path of the connection, needed in edit action */
 	void SetPath(Output* pOut, const GraphicsInfo& gfxInfo, const vector<GraphicsInfo>& path);

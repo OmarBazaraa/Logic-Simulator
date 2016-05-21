@@ -1,9 +1,9 @@
 #include "Component.h"
 
-int Component::sCount = 1;
+//int Component::sCount = 1;
 
 /* Constructor */
-Component::Component() : mID(sCount++) {
+Component::Component() {
 	mSelected = false;
 	mDeleted = false;
 }
@@ -14,9 +14,9 @@ Component::Component(const GraphicsInfo& gfxInfo) : Component() {
 }
 
 /* Returns the ID of the component */
-int Component::GetID() const {
+/*int Component::GetID() const {
 	return mID;
-}
+}*/
 
 /* Sets the selection of the component */
 void Component::SetSelected(bool s) {

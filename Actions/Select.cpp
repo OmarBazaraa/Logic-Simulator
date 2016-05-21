@@ -75,7 +75,7 @@ bool Select::Execute() {
 
 	// Reflect some information about selected components to the screen
 	if (selectedCount == 1)
-		pOut->PrintMsg("Component ID: " + to_string(pComp->GetID()) + ", Label: " + pComp->GetLabel());
+		pOut->PrintMsg("Component Label: " + pComp->GetLabel());
 	else if (selectedCount > 1)
 		pOut->PrintMsg("Selected Components: " + to_string(selectedCount));
 	else

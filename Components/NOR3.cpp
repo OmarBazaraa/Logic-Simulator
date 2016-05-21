@@ -25,7 +25,7 @@ void NOR3::Draw(Output* pOut) {
 
 /* Saves the states of the component*/
 void NOR3::Save(ofstream& file) {
-	file << "NOR3 " << mID << " " << mLabel << " " << (mGfxInfo.x1 + mGfxInfo.x2) / 2 << " " << (mGfxInfo.y1 + mGfxInfo.y2) / 2 << endl;
+	file << "NOR3 "<< mLabel << " " << (mGfxInfo.x1 + mGfxInfo.x2) / 2 << " " << (mGfxInfo.y1 + mGfxInfo.y2) / 2 << endl;
 }
 
 /* Returns the Add-ActionType of the component */

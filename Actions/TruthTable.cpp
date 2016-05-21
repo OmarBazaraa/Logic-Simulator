@@ -91,16 +91,33 @@ void TruthTable::DrawHeaders() {
 	int n = switchesCount;
 	int k = 0;
 
-	for (int i = 110; i <= columns * 100 + 10; i += 100) {
+	for (int i = 100; i <= columns * 100; i += 100) {
 		if (i / 100 <= n)
-			msg = "swh ID " + to_string(switches[i / 100 - 1]->GetID());
+			msg = switches[i / 100 - 1]->GetLabel();
 		else
-			msg = "led ID " + to_string(leds[k++]->GetID());
+			msg = leds[k++]->GetLabel();
+		Normalizetxt(msg);
 		if (canDraw)
 			pWind->DrawString(i, 20, msg);
 		write << msg << "   ";
 	}
 	write << endl;
+}
+
+/* Normalize message position */
+void TruthTable::Normalizetxt(string& msg) {
+	string temp="         ";
+	int l = msg.length();
+	for (int i = 0; i < l; i++)
+		temp[i] = msg[i];
+	/*msg += "             ";
+	int n = (1+l)/2;
+	temp[5] = msg[n];
+	for (int i = 1; (n-i)>-1&&i < 6; i++) {
+		temp[5 + i] = msg[n + i];
+		temp[5 - i] = msg[n - i];
+	}*/
+	msg = temp;
 }
 
 /*Create Compinations*/

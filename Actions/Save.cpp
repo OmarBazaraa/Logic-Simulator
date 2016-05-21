@@ -12,11 +12,14 @@ bool Save::ReadActionParameters() {
 
 /* Executes action */
 bool Save::Execute() {
-	int ComponentCount = mAppManager->GetComponentsCount();
+	int ComponentCount = mAppManager->GetComponentsCount(), n = 0;
 	write.open("Data.txt");
 	write.clear();
 	Component**ComponentList = mAppManager->GetComponentList();
-	write << ComponentCount << endl;
+	for (int i = 0; i < ComponentCount; i++)
+		if (!(ComponentList[i]->IsDeleted() || dynamic_cast<Connection*>(ComponentList[i])))
+			n++;
+	write << n << endl;
 	for (int i = 0; i < ComponentCount; i++)
 		if (!(ComponentList[i]->IsDeleted() || dynamic_cast<Connection*>(ComponentList[i])))
 			ComponentList[i]->Save(write);

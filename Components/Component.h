@@ -8,10 +8,10 @@
 class Component
 {
 private:
-	static int sCount;		// Static variable to count the number of components
+	//static int sCount;		// Static variable to count the number of components
 
 protected:
-	const int mID;			// The ID of the component
+	//const int mID;			// The ID of the component
 	bool mSelected;			// Whether this component is selected or not
 	bool mDeleted;			// Whether this component is deleted or not, needed for UNDO & REDO actions
 	string mLabel;			// The component's label (title)
@@ -24,9 +24,10 @@ public:
 	/* Constructor */
 	Component(const GraphicsInfo& gfxInfo);
 
+	
 	/* Returns the ID of the component */
-	int GetID() const;
-
+	//int GetID() const;
+	
 	/* Sets the selection of the component */
 	void SetSelected(bool s);
 

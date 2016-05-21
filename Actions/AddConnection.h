@@ -9,6 +9,7 @@ class AddConnection : public Action
 private:
 	int mDstPinIndex;				// The index of the destination pin
 	GraphicsInfo mGfxInfo;			// The parameters (coordinates) required to draw the connection
+	GraphicsInfo mInitial;           // Initial graphics info without normalization
 	vector<GraphicsInfo>* mPath;	// The path of the connection
 	string mLabel;					// The label of the component
 	Pin* mSrcPin;					// Pointer to the source pin
@@ -17,7 +18,7 @@ private:
 
 public:
 	/* Constructor */
-	AddConnection(ApplicationManager* pAppMan);
+	AddConnection(ApplicationManager* pAppMan, int x1 = -1, int y1 = -1, int x2 = -1, int y2 = -1);
 
 	/* Reads parameters required for action to execute */
 	virtual bool ReadActionParameters();

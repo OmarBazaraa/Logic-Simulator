@@ -1,45 +1,59 @@
 #include "AddConnection.h"
 
 /* Constructor */
-AddConnection::AddConnection(ApplicationManager* pAppMan) : Action(pAppMan) {
+AddConnection::AddConnection(ApplicationManager* pAppMan,int x1,int y1,int x2,int y2) : Action(pAppMan) {
 	mPath = NULL;
 	mSrcPin = NULL;
 	mDstPin = NULL;
 	mConnection = NULL;
+	mGfxInfo.x1 = x1;
+	mGfxInfo.x2 = x2;
+	mGfxInfo.y1 = y1;
+	mGfxInfo.y2 = y2;
 }
 
 /* Reads parameters required for action to execute */
 bool AddConnection::ReadActionParameters() {
 	Input* pIn = mAppManager->GetInput();
 	Output* pOut = mAppManager->GetOutput();
+	
+	if (mGfxInfo.x1 < 0) {
+		pOut->PrintMsg("Connection: select the source pin");
+		pIn->GetPointClicked(mGfxInfo.x1, mGfxInfo.y1);
+		pOut->ClearStatusBar();
 
-	pOut->PrintMsg("Connection: select the source pin");
-	pIn->GetPointClicked(mGfxInfo.x1, mGfxInfo.y1);
-	pOut->ClearStatusBar();
-
-	if (!pOut->IsDrawingArea(mGfxInfo.y1)) {
-		pOut->PrintMsg("Invalid position. Operation was cancelled");
-		return false;
+		if (!pOut->IsDrawingArea(mGfxInfo.y1)) {
+			pOut->PrintMsg("Invalid position. Operation was cancelled");
+			return false;
+		}
+		mInitial.x1 = mGfxInfo.x1;
+		mInitial.y1 = mGfxInfo.y1;
 	}
 
-	if (!DetectSourceComponent()) {
-		pOut->PrintMsg("Invalid source pin. Operation was cancelled");
-		return false;
-	}
+		if (!DetectSourceComponent()) {
+			pOut->PrintMsg("Invalid source pin. Operation was cancelled");
+			return false;
+		}
+	
+	
+		if (mGfxInfo.x2 < 0) {
+			pOut->PrintMsg("Connection: select the destination pin");
+			pIn->GetPointClicked(mGfxInfo.x2, mGfxInfo.y2);
+			pOut->ClearStatusBar();
 
-	pOut->PrintMsg("Connection: select the destination pin");
-	pIn->GetPointClicked(mGfxInfo.x2, mGfxInfo.y2);
-	pOut->ClearStatusBar();
+			if (!pOut->IsDrawingArea(mGfxInfo.y2)) {
+				pOut->PrintMsg("Invalid position. Operation was cancelled");
+				return false;
+			}
+			mInitial.x2 = mGfxInfo.x2;
+			mInitial.y2 = mGfxInfo.y2;
+		}
 
-	if (!pOut->IsDrawingArea(mGfxInfo.y2)) {
-		pOut->PrintMsg("Invalid position. Operation was cancelled");
-		return false;
-	}
-
-	if (!DetectDestinationComponent()) {
-		pOut->PrintMsg("Invalid destination pin. Operation was cancelled");
-		return false;
-	}
+		if (!DetectDestinationComponent()) {
+			pOut->PrintMsg("Invalid destination pin. Operation was cancelled");
+			return false;
+		}
+	
 
 	mPath = pOut->GetConnectionPath(mGfxInfo);
 
@@ -57,7 +71,7 @@ bool AddConnection::Execute() {
 		return false;
 	}
 	
-	mConnection = new Connection(mAppManager->GetOutput(), mGfxInfo, *mPath);
+	mConnection = new Connection(mAppManager->GetOutput(), mGfxInfo, *mPath, mInitial);
 	mConnection->SetSourcePin(mSrcPin);
 	mConnection->SetDestinationPin(mDstPin, mDstPinIndex);
 	mConnection->SetLabel(mLabel);

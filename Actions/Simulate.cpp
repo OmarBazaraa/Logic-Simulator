@@ -73,7 +73,7 @@ int Simulate::TestGate(Component*c) {
 						((Gate*)c)->SetInputPinStatus(i, (Status)returnValue);
 					else {
 						visited.erase(c);
-						break;
+						return -1;
 					}
 				}
 				else {

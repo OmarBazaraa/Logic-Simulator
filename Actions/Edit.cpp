@@ -37,7 +37,7 @@ bool Edit::ReadActionParameters() {
 
 	// Edit label
 	mPrvLabel = mComp->GetLabel();
-	mNewLabel = pIn->GetSrting(pOut, "Please enter a new label:", mPrvLabel);
+	mNewLabel = pIn->GetSrting(pOut, "Please enter a new label:", "");
 	pOut->ClearStatusBar();
 
 	if (!mNewLabel.empty() && mNewLabel != mPrvLabel) {

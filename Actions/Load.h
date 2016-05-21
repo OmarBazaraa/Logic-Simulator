@@ -2,6 +2,7 @@
 #include<fstream>
 #include "Action.h"
 #include"..\Actions\AddGate.h"
+#include"..\Actions\AddConnection.h"
 #include "..\ApplicationManager.h"
 #include "..\Utilities\Utility.h"
 #include "..\Components\Component.h"

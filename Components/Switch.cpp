@@ -88,7 +88,7 @@ void  Switch::Refresh(Pin* p) {
 
 /* Saves the states of the component*/
 void Switch::Save(ofstream& file) {
-	file << "SWITCH " << mID << " " << mLabel << " " << (mGfxInfo.x1 + mGfxInfo.x2) / 2 << " " << (mGfxInfo.y1 + mGfxInfo.y2) / 2 << endl;
+	file << "SWITCH " << mLabel << " " << (mGfxInfo.x1 + mGfxInfo.x2) / 2 << " " << (mGfxInfo.y1 + mGfxInfo.y2) / 2 << endl;
 }
 
 /* Returns the Add-ActionType of the component */

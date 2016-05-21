@@ -58,6 +58,9 @@ public:
 	/*Draw headers*/
 	void DrawHeaders();
 
+	/* Normalize message position */
+	void Normalizetxt(string&);
+
 	/* Reads parameters required for action to execute */
 	virtual bool ReadActionParameters() { return true; }
 
