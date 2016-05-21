@@ -20,8 +20,8 @@ public:
 	/* Sets the new path of the connection, needed in edit action */
 	void SetPath(Output* pOut, const GraphicsInfo& gfxInfo, const vector<GraphicsInfo>& path);
 
-	/* Updates the path of the connection */
-	void UpdatePath(Output* pOut);
+	/* Updates the path of the connection returns false if there is no available path*/
+	bool UpdatePath(Output* pOut);
 
 	/* Returns the path of the connection */
 	vector<GraphicsInfo> GetPath() const;
