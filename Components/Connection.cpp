@@ -20,7 +20,7 @@ void Connection::SetPath(Output* pOut, const GraphicsInfo& gfxInfo, const vector
 }
 
 /* Updates the path of the connection */
-void Connection::UpdatePath(Output* pOut) {
+bool Connection::UpdatePath(Output* pOut) {
 	// Clear previous path
 	pOut->ClearConnectionPins(mPath);
 
@@ -28,8 +28,13 @@ void Connection::UpdatePath(Output* pOut) {
 	mSrcPin->GetGate()->GetOutputPinCoordinates(mGfxInfo.x1, mGfxInfo.y1);
 	mDstPin->GetGate()->GetInputPinCoordinates(mGfxInfo.x2, mGfxInfo.y2, mDstPinIndex);
 
-	mPath = *(pOut->GetConnectionPath(mGfxInfo));
-	pOut->MarkConnectionPins(mPath, this);
+	vector <GraphicsInfo>* Path = pOut->GetConnectionPath(mGfxInfo);
+	if (Path != NULL) {
+		mPath = *Path;
+		pOut->MarkConnectionPins(mPath, this);
+		return true;
+	}
+	return false;
 }
 
 /* Returns the path of the connection */
