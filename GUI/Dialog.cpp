@@ -9,7 +9,7 @@ Dialog::Dialog(string s) {
 	CreateInput();
 
 	pWind->SetPen(BLACK);
-	pWind->SetFont(5, BOLD, BY_NAME, "Arial"); 
+	pWind->SetFont(20, BOLD, BY_NAME, "Arial"); 
 	for (int i = 0; i < 400; i += 20)
 		for (int j = 0; j < 200; j += 20)
 			pWind->DrawString(i, j, to_string(i) + to_string(j));
@@ -41,8 +41,8 @@ void Dialog::ClearDrawingArea() const {
 	pWind->SetPen(WHITE);
 	pWind->DrawRectangle(500, 500, 400, 300);
 }
-
-/* Prints a message on the status bar */
+/*
+/* Prints a message on the status bar *
 void Dialog::PrintMsg(const string& msg) const {
 
 	// Set the Message offset from the status bar
@@ -51,10 +51,10 @@ void Dialog::PrintMsg(const string& msg) const {
 
 	// Print the message
 	pWind->SetPen(UI.MsgColor);
-	pWind->SetFont(UI.StatusFontSize, BOLD, BY_NAME, "Arial");
+	pWind->SetFont(20, BOLD, BY_NAME, "Arial");
 	pWind->DrawString(msgX, msgY, msg);
 }
-
+*/
 /* Checks if the given y-coordinate is within the drawing area */
 bool Dialog::IsDrawingArea(int y) {
 	if (y <= UI.ToolBarHeight + UI.GateBarHeight || y >= UI.Height - UI.StatusBarHeight) return false;
