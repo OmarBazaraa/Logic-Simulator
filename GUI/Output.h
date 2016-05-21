@@ -1,5 +1,4 @@
 #pragma once
-
 #include "..\Utilities\Defs.h"
 #include "..\Utilities\Utility.h"
 #include "..\GUI\UserInterface.h"
@@ -29,14 +28,14 @@ public:
 	/* Creates a new Window object */
 	window* CreateWind(int w, int h, int x, int y) const;
 
-	/* Returns the grid of pins */
-	Component* GetComponentAtPin(int x, int y) const;
-
 	/* Chnages the title of the Window */
 	void ChangeTitle(const string& title) const;
 
-	/* Draws the tool bar and the gate bar */
-	void CreateToolBar() const;
+	/* Draws the tool bar */
+	void CreateToolBar(int hoverdItem = -1) const;
+
+	/* Draws the the gate bar */
+	void CreateGateBar(int hoverdItem = -1) const;
 
 	/* Draws the status bar */
 	void CreateStatusBar() const;
@@ -50,23 +49,8 @@ public:
 	/* Prints a message on the status bar */
 	void PrintMsg(const string& msg) const;
 
-	/* Checks if the given y-coordinate is within the drawing area */
-	bool IsDrawingArea(int y);
-
-	/* Marks the given area of pins */
-	void MarkPins(const GraphicsInfo& gfxInfo, PinType mark, Component* comp);
-
-	/* Marks the pins of the connection as used */
-	void MarkConnectionPins(const vector<GraphicsInfo>& path, Component* comp);
-
-	/* Clears the pins of the connection */
-	void ClearConnectionPins(const vector<GraphicsInfo>& path);
-
-	/* Checks if the given area of pins is empty */
-	bool IsEmptyArea(const GraphicsInfo& gfxInfo) const;
-
-	/* Draws label*/
-	void DrawLabel(const GraphicsInfo& gfxInfo, const string& label) const;
+	/* Draws label */
+	void DrawLabel(int x, int y, const string& label) const;
 
 	/* Draws components */
 	void DrawAND(const GraphicsInfo& gfxInfo, bool selected = false) const;
@@ -85,6 +69,24 @@ public:
 
 	/* Draws connection */
 	void DrawConnection(const vector<GraphicsInfo>& path, bool selected = false, bool on = false);
+
+	/* Checks if the given y-coordinate is within the drawing area */
+	bool IsDrawingArea(int x, int y);
+
+	/* Checks if the given area of pins is empty */
+	bool IsEmptyArea(const GraphicsInfo& gfxInfo) const;
+
+	/* Marks the given area of pins */
+	void MarkPins(const GraphicsInfo& gfxInfo, PinType mark, Component* comp);
+
+	/* Marks the pins of the connection as used */
+	void MarkConnectionPins(const vector<GraphicsInfo>& path, Component* comp);
+
+	/* Clears the pins of the connection */
+	void ClearConnectionPins(const vector<GraphicsInfo>& path);
+
+	/* Returns the grid of pins */
+	Component* GetComponentAtPin(int x, int y) const;
 
 	/* Returns the shortest available path for the connection, null if no path found */
 	vector<GraphicsInfo>* GetConnectionPath(const GraphicsInfo& gfxInfo);

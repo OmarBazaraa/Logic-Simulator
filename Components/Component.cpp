@@ -35,7 +35,7 @@ bool Component::IsDeleted() const {
 
 /* Sets the label of the component */
 void Component::SetLabel(const string& label) {
-	if (label != "") {
+	if (!label.empty()) {
 		mLabel = label;
 	}
 }

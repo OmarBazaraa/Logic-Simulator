@@ -1,6 +1,5 @@
 #pragma once
 #include "Gate.h"
-#include <fstream>
 
 class LED : public Gate
 {

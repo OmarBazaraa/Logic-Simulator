@@ -2,6 +2,7 @@
 #include "Gate.h"
 #include"..\Actions\Simulate.h"
 #include"..\Components\LED.h"
+
 class Switch : public Gate
 {
 private:

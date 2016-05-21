@@ -1,5 +1,4 @@
 #pragma once
-
 #include "..\Utilities\Defs.h"
 #include "..\GUI\UserInterface.h"
 #include "..\CMUgraphicsLib\CMUgraphics.h"

@@ -7,8 +7,8 @@ Pin::Pin(int fanout) {
 	mStatus = Status::LOW;	// Default status is LOW
 	mConnectionsCount = 0;	// Initially pin is not connected to anything
 	mFanout = fanout > MAX_CONNECTIONS ? MAX_CONNECTIONS : fanout;
-	for (int i = 0; i < MAX_CONNECTIONS; i++)mConnections[i] = 0;
 	mGate = NULL;
+	for (int i = 0; i < MAX_CONNECTIONS; i++) mConnections[i] = NULL;
 }
 
 /* Sets the pin state */
@@ -67,6 +67,11 @@ bool Pin::RemoveConnection(Connection* pConnection) {
 	return true;
 }
 
+/* Returns the number of connected connections to the pin */
+int Pin::GetConnectionsCount() const {
+	return mConnectionsCount;
+}
+
 /* Checks if this pin is full or not */
 bool Pin::IsFull() const {
 	return (mConnectionsCount == mFanout);
@@ -77,11 +82,6 @@ Connection* Pin::GetConnection(int index) {
 	if (index < mConnectionsCount)
 		return mConnections[index];
 	else return 0;
-}
-
-/* Returns the number of connected pins */
-int Pin::getConnectionsCount() {
-	return mConnectionsCount;
 }
 
 /* Deletes the pin which removes all connected connections from the pin */

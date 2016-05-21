@@ -86,7 +86,7 @@ bool TruthTable::Execute() {
 /*Draw headers*/
 void TruthTable::DrawHeaders() {
 	pWind->SetPen(UI.MsgColor);
-	pWind->SetFont(UI.StatusFontSize, BOLD, BY_NAME, "Arial");
+	pWind->SetFont(UI.FontSize, BOLD, BY_NAME, "Arial");
 	string msg = "header";
 	int n = switchesCount;
 	int k = 0;

@@ -19,7 +19,8 @@ struct UserInterface
 	static const int GateBarHeight = 75;						// Gate bar height
 	static const int GateItemWidth = 96;						// Width of each item in the gate bar menu
 	static const int StatusBarHeight = 35;						// Status bar height
-	static const int StatusFontSize = 20;						// Status bar font size
+	static const int FontSize = 20;								// Font size
+	static const int TextMargin = 10;							// The margin distance between text
 	static const int PinMargin = 8;								// The margin distance around the pin
 	static const int PinOffset = PinMargin * 2;					// The distance between two successive pins
 	static const int HorPinsCount = Width / PinOffset;

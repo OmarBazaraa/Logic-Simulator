@@ -14,7 +14,7 @@ bool Cut::ReadActionParameters() {
 	pIn->GetPointClicked(mX, mY);
 	pOut->ClearStatusBar();
 
-	if (!pOut->IsDrawingArea(mY)) {
+	if (!pOut->IsDrawingArea(mX, mY)) {
 		pOut->PrintMsg("Invalid position. Operation was cancelled");
 		return false;
 	}

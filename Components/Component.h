@@ -1,17 +1,17 @@
 #pragma once
 #include "..\Utilities\Defs.h"
 #include "..\GUI\Output.h"
-#include<fstream>
+#include <fstream>
 /*
 	Base abstract class for all components: Gate, Switch, Connection and LED.
 */
 class Component
 {
 private:
-	//static int sCount;		// Static variable to count the number of components
+	//static int sCount;	// Static variable to count the number of components
 
 protected:
-	//const int mID;			// The ID of the component
+	//const int mID;		// The ID of the component
 	bool mSelected;			// Whether this component is selected or not
 	bool mDeleted;			// Whether this component is deleted or not, needed for UNDO & REDO actions
 	string mLabel;			// The component's label (title)

@@ -3,7 +3,7 @@
 #include "..\Pins\Pin.h"
 
 /*
-	Base class for all types of gates
+	Base class for all types of gates, switches and LEDs
 */
 class Gate : public Component
 {
