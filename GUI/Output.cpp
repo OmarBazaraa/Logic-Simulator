@@ -16,6 +16,7 @@ Output::Output() {
 
 	// Create and initialize the drawing window
 	pWind = CreateWind(UI.Width, UI.Height, UI.StartX, UI.StartY);
+	pWind->SetWaitClose(false);
 	ChangeTitle("Logic Simulator");
 	CreateToolBar();
 	CreateGateBar();
@@ -131,14 +132,10 @@ void Output::CreateGateBar(int hoverdItem) const {
 	gateBarImages[ITEM_CONNECTION] =	"\\connection.jpg";
 
 	if (UI.AppMode == Mode::DESIGN) {
-		for (int i = 0; i < GATES_COUNT; i++) {
-			states[i] = "active";
-		}
+		for (int i = 0; i < GATES_COUNT; i++) states[i] = "active";
 	}
 	else {
-		for (int i = 0; i < GATES_COUNT; i++) {
-			states[i] = "inactive";
-		}
+		for (int i = 0; i < GATES_COUNT; i++) states[i] = "inactive";
 	}
 
 	if (hoverdItem != -1 && states[hoverdItem] != "inactive") {
@@ -153,7 +150,7 @@ void Output::CreateGateBar(int hoverdItem) const {
 
 	// Draw a separator line between tool bar and gate bar
 	pWind->SetPen(WHITE, 1);
-	pWind->DrawLine(10, UI.ToolBarHeight, UI.Width - 10, UI.ToolBarHeight);
+	pWind->DrawLine(UI.TextMargin, UI.ToolBarHeight, UI.Width - UI.TextMargin, UI.ToolBarHeight);
 }
 
 /* Draws the status bar */
@@ -229,7 +226,7 @@ void Output::PrintMsg(const string& msg) const {
 	pWind->DrawString(msgX, msgY, msg);
 }
 
-/* Draws label*/
+/* Draws label */
 void Output::DrawLabel(int x, int y, const string& label) const {
 	int w, h;
 	pWind->SetBrush(UI.DarkColor);
@@ -239,6 +236,12 @@ void Output::DrawLabel(int x, int y, const string& label) const {
 
 	pWind->DrawRectangle(x, y, x + w + UI.TextMargin, y + h + UI.TextMargin);
 	pWind->DrawString(x + UI.TextMargin / 2, y + UI.TextMargin / 2, label);
+}
+
+/* Draws the selection rectangle from the given coordinates */
+void Output::DrawSelectionRectangle(int x1, int y1, int x2, int y2) {
+	pWind->SetPen(UI.SelectionColor, 2);
+	pWind->DrawRectangle(x1, y1, x2, y2, FRAME);
 }
 
 /* Draws AND gate */
@@ -532,16 +535,8 @@ void Output::StoreImage(image & imgThis, const unsigned usX, const unsigned shor
 	pWind->StoreImage(imgThis, usX, usY, usWidth, usHeight);
 }
 
-buttonstate Output::GetButtonState(const button btMouse, int & iX, int & iY) {
-	return pWind->GetButtonState(btMouse, iX, iY);
-}
-
 void Output::DrawImage(const image & imgThis, const int iX, const int iY, const int iWidth, const int iHeight) {
 	pWind->DrawImage(&imgThis, iX, iY, iWidth, iHeight);
-}
-
-color Output::SetBrush(const color & colBrush) {
-	return pWind->SetBrush(colBrush);
 }
 
 color Output::SetPen(const color c, int width) {
@@ -552,24 +547,8 @@ void Output::DrawLine(const int iX1, const int iY1, const int iX2, const int iY2
 	pWind->DrawLine(iX1, iY1, iX2, iY2, dsStyle);
 }
 
-clicktype Output::WaitMouseClick(int & iX, int & iY) {
-	return pWind->WaitMouseClick(iX, iY);
-}
-
-void Output::DrawRectangle(const int iX1, const int iY1, const int iX2, const int iY2, const drawstyle dsStyle, const int iWidth, const int iHeight) {
-	pWind->DrawRectangle(iX1, iY1, iX2, iY2, dsStyle, iWidth, iHeight);
-}
-
 void Output::FlushMouseQueue() {
 	pWind->FlushMouseQueue();
-}
-
-void Output::StoreWindowImage() {
-	pWind->StoreImage(WindowImage, 0, 0, UI.Width, UI.Height);
-}
-
-image Output::GetWindowImage() {
-	return WindowImage;
 }
 
 /* Generate the connection path */

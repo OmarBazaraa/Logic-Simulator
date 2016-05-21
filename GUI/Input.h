@@ -19,11 +19,14 @@ public:
 	/* Constructor */
 	Input(window* pW);
 
-	/* Returns the user's mouse click coordinate */
-	void GetPointClicked(int& x, int& y) const;
-
 	/* Returns the last point clicked by the user */
 	void GetLastPointClicked(int& x, int& y) const;
+
+	/* Returns the user's mouse click coordinate */
+	void GetPointClicked(int& x, int& y);
+
+	/* Returns information on the current state of the mouse buttons and it's position */
+	buttonstate GetButtonState(const button btMouse, int& x, int& y);
 
 	/* Returns the string entered by the user and reflect it on the status bar */
 	string GetSrting(Output* pOut, string msg, string str) const;

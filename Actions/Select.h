@@ -6,7 +6,8 @@
 class Select : public Action
 {
 private:
-	int mX, mY;		// Point selected
+	int mStartX, mEndX;
+	int mStartY, mEndY;
 
 public:
 	/* Constructor */

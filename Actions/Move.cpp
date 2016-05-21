@@ -37,6 +37,7 @@ bool Move::Execute() {
 	int n = mAppManager->GetComponentsCount();
 	int oldX = mX, oldY = mY, dx = 0, dy = 0;
 	Output* pOut = mAppManager->GetOutput();
+	Input* pIn = mAppManager->GetInput();
 	Component* pComp = pOut->GetComponentAtPin(mX, mY);
 	Component** list = mAppManager->GetComponentList();
 
@@ -47,7 +48,7 @@ bool Move::Execute() {
 
 	// Reading the mouse input from the user
 	int prvX = mX, prvY = mY;
-	while (pOut->GetButtonState(LEFT_BUTTON, mX, mY) == BUTTON_DOWN) {
+	while (pIn->GetButtonState(LEFT_BUTTON, mX, mY) == BUTTON_DOWN) {
 		dx = mX - oldX, dy = mY - oldY;
 		if (prvX != mX || prvY != mY) {
 			pOut->DrawImage(DrawingArea, 0, 0, UI.Width, UI.Height);
