@@ -540,6 +540,10 @@ void Output::DrawImage(const image & imgThis, const int iX, const int iY, const 
 	pWind->DrawImage(&imgThis, iX, iY, iWidth, iHeight);
 }
 
+void Output::DrawPNG(string dir, int x, int y) {
+	pWind->DrawPNG(dir, x, y);
+}
+
 color Output::SetBrush(const color & colBrush) {
 	return pWind->SetBrush(colBrush);
 }
