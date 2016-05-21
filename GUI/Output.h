@@ -99,6 +99,9 @@ public:
 	/* Draws a given Image to the window */
 	void DrawImage(const image &imgThis, const int iX, const int iY, const int iWidth, const int iHeight);
 
+	/* Draws a given Image to the window */
+	void DrawPNG(string dir, int x, int y);
+
 	/* Sets the Pen with a certain color */
 	color SetPen(const color c,int width);
 

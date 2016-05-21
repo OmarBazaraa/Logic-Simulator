@@ -315,7 +315,7 @@ void Output::DrawBuffer(const GraphicsInfo& gfxInfo, bool selected) const {
 void Output::DrawSwitch(const GraphicsInfo& gfxInfo, bool selected, bool on) const {
 	string dir;
 
-	if (on)
+	if (UI.AppMode == Mode::SIMULATION && on)
 		dir = "Images\\components\\active\\switch_on.jpg";
 	else
 		dir = (selected ? "Images\\components\\highlighted\\switch_off.jpg" : "Images\\components\\active\\switch_off.jpg");
@@ -327,7 +327,7 @@ void Output::DrawSwitch(const GraphicsInfo& gfxInfo, bool selected, bool on) con
 void Output::DrawLED(const GraphicsInfo& gfxInfo, bool selected, bool on) const {
 	string dir;
 
-	if (on)
+	if (UI.AppMode == Mode::SIMULATION && on)
 		dir = "Images\\components\\active\\led_on.jpg";
 	else
 		dir = (selected ? "Images\\components\\highlighted\\led_off.jpg" : "Images\\components\\active\\led_off.jpg");
@@ -533,6 +533,10 @@ vector<GraphicsInfo>* Output::GetConnectionPath(const GraphicsInfo& gfxInfo) {
 
 void Output::StoreImage(image & imgThis, const unsigned usX, const unsigned short usY, const unsigned short usWidth, const unsigned short usHeight) {
 	pWind->StoreImage(imgThis, usX, usY, usWidth, usHeight);
+}
+
+void Output::DrawPNG(string dir, int x, int y) {
+	pWind->DrawPNG(dir, x, y);
 }
 
 void Output::DrawImage(const image & imgThis, const int iX, const int iY, const int iWidth, const int iHeight) {
