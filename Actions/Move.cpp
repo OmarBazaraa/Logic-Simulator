@@ -50,9 +50,9 @@ bool Move::Execute() {
 	// Reading the mouse input from the user
 	int prvX = mX, prvY = mY;
 	while (pIn->GetButtonState(LEFT_BUTTON, mX, mY) == BUTTON_DOWN) {
-		dx = mX - oldX, dy = mY - oldY;
-
 		normalizeCoordinates(mX, mY);
+		normalizeCoordinates(oldX, oldY);
+		dx = mX - oldX, dy = mY - oldY;
 
 		if (prvX != mX || prvY != mY) {
 			pOut->DrawImage(DrawingArea, 0, 0, UI.Width, UI.Height);
@@ -76,6 +76,7 @@ bool Move::Execute() {
 			prvX = mX;
 			prvY = mY;
 		}
+		pOut->UpdateBuffer();
 	}
 	
 	pOut->DrawImage(DrawingArea, 0, 0, UI.Width, UI.Height);
@@ -190,48 +191,48 @@ void Move::DrawComponent(Component * pComp, GraphicsInfo& GfxInfo, bool Invalid)
 	switch (actType)
 	{
 	case ADD_GATE_AND:
-		dir = (Invalid ? "Images\\components\\inactive\\and.png" : "Images\\components\\active\\and.jpg");
+		dir = (Invalid ? "Images\\components\\inactive\\and.png" : "Images\\components\\faded\\and.png");
 		break;
 	case ADD_GATE_OR:
-		dir = (Invalid ? "Images\\components\\inactive\\or.png" : "Images\\components\\active\\or.jpg");
+		dir = (Invalid ? "Images\\components\\inactive\\or.png" : "Images\\components\\faded\\or.png");
 		break;
 	case ADD_GATE_NOT:
-		dir = (Invalid ? "Images\\components\\inactive\\not.png" : "Images\\components\\active\\not.jpg");
+		dir = (Invalid ? "Images\\components\\inactive\\not.png" : "Images\\components\\faded\\not.png");
 		break;
 	case ADD_GATE_NAND:
-		dir = (Invalid ? "Images\\components\\inactive\\nand.png" : "Images\\components\\active\\nand.jpg");
+		dir = (Invalid ? "Images\\components\\inactive\\nand.png" : "Images\\components\\faded\\nand.png");
 		break;
 	case ADD_GATE_NOR:
-		dir = (Invalid ? "Images\\components\\inactive\\nor.png" : "Images\\components\\active\\nor.jpg");
+		dir = (Invalid ? "Images\\components\\inactive\\nor.png" : "Images\\components\\faded\\nor.png");
 		break;
 	case ADD_GATE_XOR:
-		dir = (Invalid ? "Images\\components\\inactive\\xor.png" : "Images\\components\\active\\xor.jpg");
+		dir = (Invalid ? "Images\\components\\inactive\\xor.png" : "Images\\components\\faded\\xor.png");
 		break;
 	case ADD_GATE_XNOR:
-		dir = (Invalid ? "Images\\components\\inactive\\xnor.png" : "Images\\components\\active\\xnor.jpg");
+		dir = (Invalid ? "Images\\components\\inactive\\xnor.png" : "Images\\components\\faded\\xnor.png");
 		break;
 	case ADD_GATE_AND3:
-		dir = (Invalid ? "Images\\components\\inactive\\and3.png" : "Images\\components\\active\\and3.jpg");
+		dir = (Invalid ? "Images\\components\\inactive\\and3.png" : "Images\\components\\faded\\and3.png");
 		break;
 	case ADD_GATE_NOR3:
-		dir = (Invalid ? "Images\\components\\inactive\\nor3.png" : "Images\\components\\active\\nor3.jpg");
+		dir = (Invalid ? "Images\\components\\inactive\\nor3.png" : "Images\\components\\faded\\nor3.png");
 		break;
 	case ADD_GATE_XOR3:
-		dir = (Invalid ? "Images\\components\\inactive\\xor3.png" : "Images\\components\\active\\xor3.jpg");
+		dir = (Invalid ? "Images\\components\\inactive\\xor3.png" : "Images\\components\\faded\\xor3.png");
 		break;
 	case ADD_GATE_BUFFER:
-		dir = (Invalid ? "Images\\components\\inactive\\buffer.png" : "Images\\components\\active\\buffer.jpg");
+		dir = (Invalid ? "Images\\components\\inactive\\buffer.png" : "Images\\components\\faded\\buffer.png");
 		break;
 	case ADD_SWITCH:
-		dir = (Invalid ? "Images\\components\\inactive\\switch_off.png" : "Images\\components\\active\\switch_off.jpg");
+		dir = (Invalid ? "Images\\components\\inactive\\switch_off.png" : "Images\\components\\faded\\switch_off.png");
 		break;
 	case ADD_LED:
-		dir = (Invalid ? "Images\\components\\inactive\\led_off.png" : "Images\\components\\active\\led_off.jpg");
+		dir = (Invalid ? "Images\\components\\inactive\\led_off.png" : "Images\\components\\faded\\led_off.png");
 		break;
 	default:
 		break;
 	}
-	Invalid ? pOut->DrawPNG(dir, GfxInfo.x1, GfxInfo.y1) : pOut->DrawImage(dir, GfxInfo.x1, GfxInfo.y1, GfxInfo.x2 - GfxInfo.x1, GfxInfo.y2 - GfxInfo.y1);
+	pOut->DrawPNG(dir, GfxInfo.x1, GfxInfo.y1);
 }
 
 bool Move::SetNewGateBorders(GraphicsInfo & GfxInfo) {

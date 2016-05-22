@@ -107,10 +107,12 @@ bool Hover::Execute() {
 				pOut->DrawImage(wind, minX, minY, maxX, maxY);
 			}
 		}
+		pOut->UpdateBuffer();
 	}
 
 	// Redraw the initial window
 	pOut->DrawImage(wind, minX, minY, maxX, maxY);
+	pOut->UpdateBuffer();
 
 	return false;	// To prevent adding this action to the stack
 }
