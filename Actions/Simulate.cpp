@@ -15,16 +15,21 @@ bool Simulate::Execute() {
 	Component** list = mAppManager->GetComponentList();
 	int count = mAppManager->GetComponentsCount();
 
+	for (int i = 0; i < count; i++)
+		circuit.insert(list[i]);
 	for (int i = 0; i < count; i++) {
 		if (dynamic_cast<LED*>(list[i]) && !list[i]->IsDeleted())
-			TestGate(list[i]);
-		
+			TestGate(list[i]);		
 		visited.clear();
 	}	
 
 	ActionType act = DESIGN_MODE;
-	if (stopSimulation) {
+	if (stopSimulation||circuit.size()) {
+		Dialog *d = new Dialog("Circuit Not Valid");
+		d->GetUserClick();
+		delete d;
 		mAppManager->ExecuteAction(act);
+
 		mAppManager->GetOutput()->PrintMsg("Error !! : Components are not connected properly.");
 	}
 	
@@ -36,8 +41,10 @@ int Simulate::TestGate(Component* pComp) {
 	//validation
 
 	int n = visited.size();
-	if (pComp != NULL)
+	if (pComp != NULL) {
+		circuit.erase(pComp);
 		visited.insert(pComp);
+	}
 	else
 		return -1;
 
@@ -55,8 +62,10 @@ int Simulate::TestGate(Component* pComp) {
 			return pComp->GetOutputPinStatus();
 		}
 		else if (dynamic_cast<LED*>(pComp)) {
-			if (((LED*)pComp)->GetInputPin(0)->IsFull())
+			if (((LED*)pComp)->GetInputPin(0)->IsFull()) {
+				circuit.erase(((LED*)pComp)->GetInputPin(0)->GetConnection(0));
 				returnValue = TestGate(((LED*)pComp)->GetInputPin(0)->GetConnection(0)->GetSourcePin()->GetGate());
+			}
 			else { 
 				returnValue = -1;
 				stopSimulation = true;
@@ -69,6 +78,7 @@ int Simulate::TestGate(Component* pComp) {
 
 			for (int i = 0; i<((LogicGate*)pComp)->GetInputsCount(); i++) {
 				if (((LogicGate*)pComp)->GetInputPin(i)->IsFull()) {
+					circuit.erase(((LED*)pComp)->GetInputPin(0)->GetConnection(0));
 					returnValue = TestGate(((LogicGate*)pComp)->GetInputPin(i)->GetConnection(0)->GetSourcePin()->GetGate());
 					if (returnValue > -1)
 						((Gate*)pComp)->SetInputPinStatus(i, returnValue ? Status::HIGH : Status::LOW);
