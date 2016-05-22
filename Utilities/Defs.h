@@ -176,6 +176,11 @@ struct GraphicsInfo {
 		this->x2 = x2;
 		this->y2 = y2;
 	}
+
+	/* Equality operator for ease of access */
+	bool operator==(const GraphicsInfo& rhs) const {
+		return (x1 == rhs.x1 && y1 == rhs.y1 && x2 == rhs.x2 && y2 == rhs.y2);
+	}
 };
 
 /* Structure holding the loaded information needed for creating new components */

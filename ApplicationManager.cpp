@@ -184,6 +184,7 @@ void ApplicationManager::ExecuteAction(ActionType &actType) {
 
 /* Redraws all the drawing window */
 void ApplicationManager::UpdateInterface() {
+	pOut->ClearDrawingArea();
 	for (int i = 0; i < mCompCount; i++) mCompList[i]->Draw(pOut);
 }
 

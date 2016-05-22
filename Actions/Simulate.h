@@ -41,4 +41,3 @@ public:
 	/* Destructor */
 	virtual ~Simulate();
 };
-

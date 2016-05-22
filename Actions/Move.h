@@ -21,12 +21,10 @@ class Move : public Action
 {
 private:
 	int mX, mY;
-	vector <Gate *> mPrvMovedComponents;			// list of the to be moved gates
-	vector <Connection *> mPrvMovedConnections;		// list of the to be moved connections
-	vector <GraphicsInfo> mPrvMovedGfxinfo;			// list of the old graphics info of the moved components
-	vector <Gate *> mNewMovedComponents;			// list of the moved gates
-	vector <Connection *> mNewMovedConnections;		// list of the moved connections
-	vector <GraphicsInfo> mNewMovedGfxinfo;			// list of the new graphics info of the moved components
+	vector<Gate*> mMovedGates;					// list of gates to be moved
+	vector<Connection*> mConnections;			// list of all connections to be updated
+	vector<GraphicsInfo> mPrvGatesCoordinates;	// list of previous coordinates of the moved gates
+	vector<GraphicsInfo> mNewGatesCoordinates;	// list of new coordinates of the moved gates
 
 public:
 	/* Constructor */
@@ -46,6 +44,7 @@ public:
 
 	/* Destructor */
 	virtual ~Move();
+
 private:
 	/* Checks for the validity of the coordinates when adding the relative distance */
 	bool ValidCoordinates(int dx, int dy, Component * Comp);

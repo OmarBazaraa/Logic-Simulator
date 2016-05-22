@@ -21,11 +21,12 @@ Output::Output() {
 	CreateToolBar();
 	CreateGateBar();
 	CreateStatusBar();
-	ClearDrawingArea();
+	
 
 	// Initialize the pin grid
 	mPinGrid = new PinInfo*[UI.HorPinsCount];
 	for (int x = 0; x < UI.HorPinsCount; x++) mPinGrid[x] = new PinInfo[UI.VerPinsCount];
+	ClearDrawingArea();
 	pWind->UpdateBuffer();
 }
 
@@ -174,7 +175,7 @@ void Output::ClearDrawingArea() const {
 	pWind->DrawRectangle(0, UI.ToolBarHeight + UI.GateBarHeight, UI.Width, UI.Height - UI.StatusBarHeight);
 
 	// ---- JUST FOR TESTING ----
-	
+	/*
 	pWind->SetPen(WHITE, 1);
 	
 	int startX = 0;
@@ -182,15 +183,15 @@ void Output::ClearDrawingArea() const {
 	int startY = UI.ToolBarHeight + UI.GateBarHeight;
 	int endY = startY + UI.VerPinsCount * UI.PinOffset;
 
-	// Vertical lines
-	for (int x = startX; x <= endX; x += UI.PinOffset) {
-		pWind->DrawLine(x, startY, x, endY);
-	}
+	//// Vertical lines
+	//for (int x = startX; x <= endX; x += UI.PinOffset) {
+	//	pWind->DrawLine(x, startY, x, endY);
+	//}
 
-	// Horizontal lines
-	for (int y = startY; y <= endY; y += UI.PinOffset) {
-		pWind->DrawLine(startX, y, endX, y);
-	}
+	//// Horizontal lines
+	//for (int y = startY; y <= endY; y += UI.PinOffset) {
+	//	pWind->DrawLine(startX, y, endX, y);
+	//}
 	
 	startX += UI.PinMargin;
 	endX -= UI.PinMargin;
@@ -200,10 +201,24 @@ void Output::ClearDrawingArea() const {
 	// Pins
 	for (int x = startX; x <= endX; x += UI.PinOffset) {
 		for (int y = startY; y <= endY; y += UI.PinOffset) {
-			pWind->DrawPixel(x, y);
+			int iX = x, iY = y;
+			getPinIndices(iX, iY);
+
+			if (mPinGrid[iX][iY].Type == PinType::INTERSECTING_CONNECTIONS) {
+				pWind->SetBrush(RED);
+				pWind->DrawRectangle(x - 5, y - 5, x + 5, y + 5);
+			}
+			else if (mPinGrid[iX][iY].Type == PinType::HOR_CONNECTION || mPinGrid[iX][iY].Type == PinType::VER_CONNECTION) {
+				pWind->SetBrush(GREEN);
+				pWind->DrawRectangle(x - 5, y - 5, x + 5, y + 5);
+			}				
+			else {
+				pWind->DrawPixel(x, y);
+			}
+				
 		}
 	}
-	
+	*/
 }
 
 /* Clears the status bar */

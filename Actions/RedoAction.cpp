@@ -11,7 +11,7 @@ bool RedoAction::ReadActionParameters() {
 }
 
 /* Executes action */
-bool RedoAction::Execute() {
+bool RedoAction::Execute() { 
 	mAppManager->Redo();
 	mAppManager->GetOutput()->ClearStatusBar();
 
