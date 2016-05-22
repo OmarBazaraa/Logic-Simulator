@@ -5,6 +5,7 @@
 #include "..\Utilities\Utility.h"
 #include "..\Components\Component.h"
 #include "..\CMUgraphicsLib\CMUgraphics.h"
+#include "..\GUI\Dialog.h"
 #include "..\Components\LED.h"
 #include "..\Components\Switch.h"
 #include "..\Components\LogicGate.h"
@@ -16,7 +17,7 @@ using namespace std;
 class Simulate : public Action
 {
 private:
-	set<Component*> visited;
+	set<Component*> visited,circuit;
 	bool stopSimulation;
 
 public:

@@ -12,6 +12,7 @@ class Dialog
 {
 private:
 	window* pWind;					// Pointer to the graphical Window object
+	string msg;
 
 public:
 	/* Constructor that initializes the user interface */
@@ -27,7 +28,7 @@ public:
 	void DrawDialog() const;
 
 	/* Checks if the given y-coordinate is button */
-	bool IsButton(int y);
+	bool IsButton(int x, int y);
 
 	/* Get user clicked button */
 	DialogBoxButton GetUserClick();

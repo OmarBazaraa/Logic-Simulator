@@ -62,10 +62,10 @@ bool TruthTable::Execute() {
 	}
 	rows = pow(2, switchesCount);
 	columns = ledsCount + switchesCount;
-	if (ledsCount == 0) { 
+	/*if (ledsCount == 0) { 
 		mAppManager->GetOutput()->PrintMsg("Cannot draw truth table!!");
 		return false; 
-	}
+	}*/
 	if (switchesCount < 6 && columns < 12) {
 		// Create and initialize the drawing window
 		pWind = CreateWind(columns*100+230, rows*20+80, UI.StartX, UI.StartY);
@@ -156,34 +156,32 @@ void TruthTable::Test(string k) {
 }
 
 /* Tests the output on a led */
-int TruthTable::TestGate(Component*c) {
+int TruthTable::TestGate(Component*pComp) {
 
 	int returnValue;
-	if (c) {
 
-		if (dynamic_cast<Switch*>(c)) {
-			return c->GetOutputPinStatus();
+	if (pComp != NULL) {
+		if (dynamic_cast<Switch*>(pComp)) {
+			return pComp->GetOutputPinStatus();
 		}
-
-		else if (dynamic_cast<LED*>(c)) {
-			returnValue = TestGate(((LogicGate*)c)->GetInputPin(0)->GetConnection(0)->GetSourcePin()->GetGate());
-			((Gate*)c)->SetInputPinStatus(0, (Status)returnValue);
+		else if (dynamic_cast<LED*>(pComp)) {
+			returnValue = TestGate(((LED*)pComp)->GetInputPin(0)->GetConnection(0)->GetSourcePin()->GetGate());
+			((LED*)pComp)->SetInputPinStatus(0, returnValue ? Status::HIGH : Status::LOW);
 			return returnValue;
 		}
+		else if (dynamic_cast<LogicGate*>(pComp)) {
 
-		else if (dynamic_cast<LogicGate*>(c)) {
-
-			for (int i = 0; i<((LogicGate*)c)->GetInputsCount(); i++) {
-				returnValue = TestGate(((LogicGate*)c)->GetInputPin(i)->GetConnection(0)->GetSourcePin()->GetGate());
-				((Gate*)c)->SetInputPinStatus(i, (Status)returnValue);
+			for (int i = 0; i<((LogicGate*)pComp)->GetInputsCount(); i++) {
+				returnValue = TestGate(((LogicGate*)pComp)->GetInputPin(i)->GetConnection(0)->GetSourcePin()->GetGate());
+				((Gate*)pComp)->SetInputPinStatus(i, returnValue ? Status::HIGH : Status::LOW);
 			}
 
-			((LogicGate*)c)->Operate();
-			return ((LogicGate*)c)->GetOutputPinStatus();
+			((LogicGate*)pComp)->Operate();
+			return ((LogicGate*)pComp)->GetOutputPinStatus();
 
 		}
 	}
-	else 0;
+	else return 0;
 }
 
 int TruthTable::ToInt(string k) {
