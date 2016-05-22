@@ -39,6 +39,9 @@ public:
 	/* Draws the status bar */
 	void CreateStatusBar() const;
 
+	/* Updates the window with double buffering */
+	void UpdateBuffer();
+
 	/* Clears the drawing area */
 	void ClearDrawingArea() const;
 

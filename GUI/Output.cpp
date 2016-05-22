@@ -17,6 +17,7 @@ Output::Output() {
 	pWind = CreateWind(UI.Width, UI.Height, UI.StartX, UI.StartY);
 	pWind->SetWaitClose(false);
 	ChangeTitle("Logic Simulator");
+	pWind->SetBuffering(true);
 	CreateToolBar();
 	CreateGateBar();
 	CreateStatusBar();
@@ -25,6 +26,7 @@ Output::Output() {
 	// Initialize the pin grid
 	mPinGrid = new PinInfo*[UI.HorPinsCount];
 	for (int x = 0; x < UI.HorPinsCount; x++) mPinGrid[x] = new PinInfo[UI.VerPinsCount];
+	pWind->UpdateBuffer();
 }
 
 /* Creates an Input object and assigns it to the same Window */
@@ -161,6 +163,10 @@ void Output::CreateStatusBar() const {
 	pWind->DrawRectangle(0, UI.Height - UI.StatusBarHeight, UI.Width, UI.Height);
 }
 
+void Output::UpdateBuffer() {
+	pWind->UpdateBuffer();
+}
+
 /* Clears the drawing area */
 void Output::ClearDrawingArea() const {
 	pWind->SetBrush(UI.BackgroundColor);
@@ -168,7 +174,7 @@ void Output::ClearDrawingArea() const {
 	pWind->DrawRectangle(0, UI.ToolBarHeight + UI.GateBarHeight, UI.Width, UI.Height - UI.StatusBarHeight);
 
 	// ---- JUST FOR TESTING ----
-	/*
+	
 	pWind->SetPen(WHITE, 1);
 	
 	int startX = 0;
@@ -197,7 +203,7 @@ void Output::ClearDrawingArea() const {
 			pWind->DrawPixel(x, y);
 		}
 	}
-	*/
+	
 }
 
 /* Clears the status bar */
@@ -225,6 +231,7 @@ void Output::PrintMsg(const string& msg) const {
 	pWind->SetPen(UI.MsgColor);
 	pWind->SetFont(UI.FontSize, BOLD, BY_NAME, "Arial");
 	pWind->DrawString(msgX, msgY, msg);
+	pWind->UpdateBuffer();
 }
 
 /* Draws label */

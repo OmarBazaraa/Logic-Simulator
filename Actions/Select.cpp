@@ -38,8 +38,9 @@ bool Select::ReadActionParameters() {
 				prvX = x;
 				prvY = y;
 
-				Pause(10);	// Pause to smooth up flickering
+				//Pause(10);	// Pause to smooth up flickering
 			}
+			pOut->UpdateBuffer();
 		}
 
 		mEndX = x, mEndY = y;
