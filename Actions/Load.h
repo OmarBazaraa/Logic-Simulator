@@ -7,6 +7,7 @@
 #include "..\Utilities\Utility.h"
 #include "..\Components\Component.h"
 #include "..\Components\Connection.h"
+#include"..\GUI\Dialog.h"
 #include <string>
 class Load : public Action
 {

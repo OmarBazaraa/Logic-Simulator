@@ -1,5 +1,4 @@
 #include "Load.h"
-#include<stack>
 
 
 Load::Load(ApplicationManager* pAppMan) : Action(pAppMan) {
@@ -9,6 +8,12 @@ Load::Load(ApplicationManager* pAppMan) : Action(pAppMan) {
 
 bool Load::Execute() {
 	
+	Dialog *d = new Dialog("Loading old file will cause currrect file deletion!!");
+	if (d->GetUserClick() != YES) {
+		delete d;
+		return false;
+	}
+
 	mAppManager->FreeMemory();
 	mAppManager->GetOutput()->ClearDrawingArea();
 
@@ -59,6 +64,7 @@ bool Load::Execute() {
 		delete pAct;
 		pAct = 0;
 	}
+	delete d;
 	return false;
 }
 

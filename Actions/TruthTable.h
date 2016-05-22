@@ -43,6 +43,12 @@ public:
 	/*Draws truth table*/
 	void DrawTruthTable() const;
 
+	/* Draws exit button */
+	void DrawExit() const;
+
+	/* Exits Truth Table */
+	void Exits();
+
 	/*Create Compinations*/
 	void CreateCompinations(string k);
 
