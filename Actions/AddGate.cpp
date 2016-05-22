@@ -1,7 +1,7 @@
 #include "AddGate.h"
 
 /* Constructor */
-AddGate::AddGate(ApplicationManager* pAppMan, ActionType actType, int x, int y, string label) : Action(pAppMan) {
+AddGate::AddGate(ApplicationManager* pAppMan, ActionType actType, int x, int y, const string& label) : Action(pAppMan) {
 	mActType = actType;
 	mGate = NULL;
 	mX = x;
@@ -16,7 +16,7 @@ bool AddGate::ReadActionParameters() {
 
 	if (mX < 0 && mY < 0) {
 		pOut->PrintMsg(GetActionMsg());
-		pIn->GetPointClicked(mX, mY);
+		pIn->WaitMouseClick(mX, mY);
 		pOut->ClearStatusBar();
 
 		if (!pOut->IsDrawingArea(mX, mY)) {
@@ -24,6 +24,30 @@ bool AddGate::ReadActionParameters() {
 			return false;
 		}
 	}
+	
+	/*image wind;
+	pOut->StoreImage(wind, 0, 0, UI.Width, UI.Height);
+
+	int prvX = 0, prvY = 0;
+
+	while (pIn->GetButtonState(LEFT_BUTTON, mX, mY) == BUTTON_UP) {
+		CalculateDimensions();
+
+		if (mX != prvX || mY != prvY) {
+			pOut->DrawImage(wind, 0, 0, UI.Width, UI.Height);
+
+			if (pOut->IsEmptyArea(mGfxInfo)) {
+				pOut->DrawSelectionRectangle(mGfxInfo.x1, mGfxInfo.y1, mGfxInfo.x2, mGfxInfo.y2);
+			}
+			else {
+				pOut->DrawSelectionRectangle(mGfxInfo.x1, mGfxInfo.y1, mGfxInfo.x2, mGfxInfo.y2);
+				pOut->PrintMsg("Invalid position");
+			}
+
+			prvX = mX;
+			prvY = mY;
+		}
+	}*/
 
 	CalculateDimensions();
 
@@ -31,6 +55,11 @@ bool AddGate::ReadActionParameters() {
 		pOut->PrintMsg("Invalid position. Operation was cancelled");
 		return false;
 	}
+
+	/*if (mLabel.empty()) {
+		mLabel = pIn->GetSrting(pOut, "Please enter a name for the component: ");
+		pOut->ClearStatusBar();
+	}*/
 
 	return true;
 }

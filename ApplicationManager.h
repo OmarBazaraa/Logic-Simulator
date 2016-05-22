@@ -42,9 +42,6 @@ public:
 	/* Returns the stack of un-done actions */
 	stack<Action*>* GetRedoStack();
 
-	/* Frees Memory */
-	void FreeMemory();
-
 	/* Returns a pointer to Input object */
 	Input* GetInput();
 
@@ -62,6 +59,15 @@ public:
 
 	/* Adds a new component to the list of components */
 	void AddComponent(Component* pComp);
+
+	/* Deselects all the components */
+	void DeselectComponents();
+
+	/* Counts and returns the number of selected components */
+	int CountSelectedComponents();
+
+	/* Frees Memory */
+	void FreeMemory();
 
 	/* Destructor */
 	~ApplicationManager();

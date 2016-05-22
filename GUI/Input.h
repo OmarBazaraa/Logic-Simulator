@@ -22,14 +22,17 @@ public:
 	/* Returns the last point clicked by the user */
 	void GetLastPointClicked(int& x, int& y) const;
 
-	/* Returns the user's mouse click coordinate */
-	void GetPointClicked(int& x, int& y);
+	/* Waits and returns the user's mouse click coordinate */
+	void WaitMouseClick(int& x, int& y);
 
 	/* Returns information on the current state of the mouse buttons and it's position */
 	buttonstate GetButtonState(const button btMouse, int& x, int& y);
 
+	// Returns the user's key press
+	keytype Input::GetKeyPress(char& c);
+
 	/* Returns the string entered by the user and reflect it on the status bar */
-	string GetSrting(Output* pOut, string msg, string str) const;
+	string GetSrting(Output* pOut, string msg, string str = "") const;
 
 	/* Reads the user's selection and determine the desired action */
 	ActionType GetUserAction(Output* pOut);

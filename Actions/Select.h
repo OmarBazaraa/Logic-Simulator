@@ -2,12 +2,14 @@
 #include "..\Actions\Action.h"
 #include "..\ApplicationManager.h"
 #include "..\Components\Component.h"
+#include <set>
 
 class Select : public Action
 {
 private:
 	int mStartX, mEndX;
 	int mStartY, mEndY;
+	set<Component*> mSelectedComps;
 
 public:
 	/* Constructor */

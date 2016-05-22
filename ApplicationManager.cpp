@@ -58,42 +58,6 @@ stack<Action*>* ApplicationManager::GetRedoStack() {
 	return &mRedoStack;
 }
 
-/* Frees Memory */
-void ApplicationManager::FreeMemory() {
-	
-	for (int i = 0; i < mCompCount; i++) {
-
-		if (dynamic_cast<Connection*>(mCompList[i]))
-			pOut->ClearConnectionPins((dynamic_cast<Connection*>(mCompList[i]))->GetPath());
-		else
-			pOut->MarkPins(mCompList[i]->GetGraphicsInfo(), EMPTY, 0);
-
-		delete mCompList[i];
-	}
-
-	delete[] mCompList;
-	
-	mCompCount = 0;
-	mCopiedComp = NULL;
-	mCompList = new Component*[MAX_COMPONENTS];
-	for (int i = 0; i < MAX_COMPONENTS; i++) mCompList[i] = NULL;
-
-	Action* act;
-
-	while (!mUndoStack.empty()) {
-		act = mUndoStack.top();
-		delete act;
-		mUndoStack.pop();
-	}
-
-	while (!mRedoStack.empty()) {
-		act = mRedoStack.top();
-		delete act;
-		mRedoStack.pop();
-	}
-
-}
-
 /* Returns a pointer to Input object */
 Input* ApplicationManager::GetInput() {
 	return pIn;
@@ -227,6 +191,62 @@ void ApplicationManager::AddComponent(Component* pComp) {
 	if (mCompCount < MAX_COMPONENTS) {
 		mCompList[mCompCount++] = pComp;
 	}
+}
+
+/* Deselects all the components */
+void ApplicationManager::DeselectComponents() {
+	for (int i = 0; i < mCompCount; i++) {
+		mCompList[i]->SetSelected(false);
+	}
+}
+
+/* Counts and returns the number of selected components */
+int ApplicationManager::CountSelectedComponents() {
+	int n = 0;
+
+	for (int i = 0; i < mCompCount; i++) {
+		if (!mCompList[i]->IsDeleted() && mCompList[i]->IsSelected()) {
+			n++;
+		}
+	}
+
+	return n;
+}
+
+/* Frees Memory */
+void ApplicationManager::FreeMemory() {
+
+	for (int i = 0; i < mCompCount; i++) {
+
+		if (dynamic_cast<Connection*>(mCompList[i]))
+			pOut->ClearConnectionPins((dynamic_cast<Connection*>(mCompList[i]))->GetPath());
+		else
+			pOut->MarkPins(mCompList[i]->GetGraphicsInfo(), EMPTY, 0);
+
+		delete mCompList[i];
+	}
+
+	delete[] mCompList;
+
+	mCompCount = 0;
+	mCopiedComp = NULL;
+	mCompList = new Component*[MAX_COMPONENTS];
+	for (int i = 0; i < MAX_COMPONENTS; i++) mCompList[i] = NULL;
+
+	Action* act;
+
+	while (!mUndoStack.empty()) {
+		act = mUndoStack.top();
+		delete act;
+		mUndoStack.pop();
+	}
+
+	while (!mRedoStack.empty()) {
+		act = mRedoStack.top();
+		delete act;
+		mRedoStack.pop();
+	}
+
 }
 
 /* Destructor */

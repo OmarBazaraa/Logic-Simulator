@@ -1,5 +1,4 @@
 #include "Output.h"
-//#include "../CMUgraphicsLib/PNG.h"
 
 /* Constructor that initializes the user interface */
 Output::Output() {
@@ -93,7 +92,7 @@ void Output::CreateToolBar(int hoverdItem) const {
 		states[ITEM_TRUTHTABLE] = "active";
 		states[ITEM_SAVE] = "inactive";
 		states[ITEM_LOAD] = "inactive";
-		states[ITEM_EXIT] = "inactive";
+		states[ITEM_EXIT] = "active";
 	}
 
 	if (hoverdItem != -1 && states[hoverdItem] != "inactive") {
@@ -166,37 +165,37 @@ void Output::ClearDrawingArea() const {
 	pWind->SetPen(UI.BackgroundColor);
 	pWind->DrawRectangle(0, UI.ToolBarHeight + UI.GateBarHeight, UI.Width, UI.Height - UI.StatusBarHeight);
 
-	//
-	// JUST FOR TESTING
-	//
-	//pWind->SetPen(WHITE, 1);
-	//
-	//int startX = 0;
-	//int endX = UI.HorPinsCount * UI.PinOffset;
-	//int startY = UI.ToolBarHeight + UI.GateBarHeight;
-	//int endY = startY + UI.VerPinsCount * UI.PinOffset;
+	// ---- JUST FOR TESTING ----
+	/*
+	pWind->SetPen(WHITE, 1);
+	
+	int startX = 0;
+	int endX = UI.HorPinsCount * UI.PinOffset;
+	int startY = UI.ToolBarHeight + UI.GateBarHeight;
+	int endY = startY + UI.VerPinsCount * UI.PinOffset;
 
-	//// Vertical lines
-	//for (int x = startX; x <= endX; x += UI.PinOffset) {
-	//	pWind->DrawLine(x, startY, x, endY);
-	//}
+	// Vertical lines
+	for (int x = startX; x <= endX; x += UI.PinOffset) {
+		pWind->DrawLine(x, startY, x, endY);
+	}
 
-	//// Horizontal lines
-	//for (int y = startY; y <= endY; y += UI.PinOffset) {
-	//	pWind->DrawLine(startX, y, endX, y);
-	//}
+	// Horizontal lines
+	for (int y = startY; y <= endY; y += UI.PinOffset) {
+		pWind->DrawLine(startX, y, endX, y);
+	}
+	
+	startX += UI.PinMargin;
+	endX -= UI.PinMargin;
+	startY += UI.PinMargin;
+	endY -= UI.PinMargin;
 
-	//startX += UI.PinMargin;
-	//endX -= UI.PinMargin;
-	//startY += UI.PinMargin;
-	//endY -= UI.PinMargin;
-
-	//// Pins
-	//for (int x = startX; x <= endX; x += UI.PinOffset) {
-	//	for (int y = startY; y <= endY; y += UI.PinOffset) {
-	//		pWind->DrawPixel(x, y);
-	//	}
-	//}
+	// Pins
+	for (int x = startX; x <= endX; x += UI.PinOffset) {
+		for (int y = startY; y <= endY; y += UI.PinOffset) {
+			pWind->DrawPixel(x, y);
+		}
+	}
+	*/
 }
 
 /* Clears the status bar */
@@ -248,7 +247,6 @@ void Output::DrawSelectionRectangle(int x1, int y1, int x2, int y2) {
 void Output::DrawAND(const GraphicsInfo& gfxInfo, bool selected) const {
 	string dir = (selected ? "Images\\components\\highlighted\\and.jpg" : "Images\\components\\active\\and.jpg");
 	pWind->DrawImage(dir, gfxInfo.x1, gfxInfo.y1, UI.LogicGateWidth, UI.LogicGateHeight);
-	//pWind->DrawPNG(dir, gfxInfo.x1, gfxInfo.y1);
 }
 
 /* Draws OR gate */

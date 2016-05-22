@@ -19,7 +19,7 @@ bool AddConnection::ReadActionParameters() {
 	
 	if (mGfxInfo.x1 < 0) {
 		pOut->PrintMsg("Connection: select the source pin");
-		pIn->GetPointClicked(mGfxInfo.x1, mGfxInfo.y1);
+		pIn->WaitMouseClick(mGfxInfo.x1, mGfxInfo.y1);
 		pOut->ClearStatusBar();
 
 		if (!pOut->IsDrawingArea(mGfxInfo.x1, mGfxInfo.y1)) {
@@ -40,7 +40,7 @@ bool AddConnection::ReadActionParameters() {
 	
 		if (mGfxInfo.x2 < 0) {
 			pOut->PrintMsg("Connection: select the destination pin");
-			pIn->GetPointClicked(mGfxInfo.x2, mGfxInfo.y2);
+			pIn->WaitMouseClick(mGfxInfo.x2, mGfxInfo.y2);
 			pOut->ClearStatusBar();
 
 			if (!pOut->IsDrawingArea(mGfxInfo.x2, mGfxInfo.y2)) {

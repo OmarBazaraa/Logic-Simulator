@@ -12,19 +12,22 @@ void Input::GetLastPointClicked(int& x, int& y) const {
 	y = mLastY;
 }
 
-/* Returns the user's mouse click coordinate */
-void Input::GetPointClicked(int& x, int& y) {
+/* Waits and returns the user's mouse click coordinate */
+void Input::WaitMouseClick(int& x, int& y) {
 	pWind->WaitMouseClick(x, y);
 	mLastX = x;
 	mLastY = y;
 }
 
+// Returns the user's key press
+keytype Input::GetKeyPress(char& key) {
+	//pWind->FlushKeyQueue();
+	return pWind->GetKeyPress(key);
+}
+
 /* Returns information on the current state of the mouse buttons and it's position */
 buttonstate Input::GetButtonState(const button btMouse, int& x, int& y) {
-	buttonstate state = pWind->GetButtonState(btMouse, x, y);
-	mLastX = x;
-	mLastY = y;
-	return state;
+	return pWind->GetButtonState(btMouse, x, y);;
 }
 
 /* Returns the string entered by the user and reflect it on the status bar */
@@ -36,6 +39,8 @@ string Input::GetSrting(Output* pOut, string msg, string str) const {
 
 	char c;
 	string s = str;
+
+	pWind->FlushKeyQueue();
 
 	do {
 		pOut->PrintMsg(msg + " " + s);
@@ -71,6 +76,9 @@ ActionType Input::GetUserAction(Output* pOut) {
 		return ActionType::HOVER;
 	}
 
+	mLastX = x;
+	mLastY = y;
+
 	// User clicks on the drawing area
 	if (y >= UI.ToolBarHeight + UI.GateBarHeight && y < UI.Height - UI.StatusBarHeight) {
 		if (UI.AppMode == Mode::DESIGN) {
@@ -88,12 +96,12 @@ ActionType Input::GetUserAction(Output* pOut) {
 			return ActionType::SELECT;
 		}
 		else {
-			GetPointClicked(x, y);
+			WaitMouseClick(x, y);
 			return ActionType::SELECT;
 		}
 	}
 
-	GetPointClicked(x, y);
+	WaitMouseClick(x, y);
 
 	// User clicks on the tool bar
 	if (y >= 0 && y < UI.ToolBarHeight) {

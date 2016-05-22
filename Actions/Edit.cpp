@@ -20,7 +20,7 @@ bool Edit::ReadActionParameters() {
 	bool ret = false;
 
 	pOut->PrintMsg("Please select a component to edit");
-	pIn->GetPointClicked(mX, mY);
+	pIn->WaitMouseClick(mX, mY);
 	pOut->ClearStatusBar();
 
 	if (!pOut->IsDrawingArea(mX, mY)) {
@@ -61,7 +61,7 @@ bool Edit::ReadActionParameters() {
 	mPrvDstPin->RemoveConnection(connection);
 
 	pOut->PrintMsg("Select the new source pin");
-	pIn->GetPointClicked(mNewGfxInfo.x1, mNewGfxInfo.y1);
+	pIn->WaitMouseClick(mNewGfxInfo.x1, mNewGfxInfo.y1);
 	pOut->ClearStatusBar();
 
 	if (!pOut->IsDrawingArea(mNewGfxInfo.x1, mNewGfxInfo.y1)) {
@@ -79,7 +79,7 @@ bool Edit::ReadActionParameters() {
 	}
 
 	pOut->PrintMsg("Select the new destination pin");
-	pIn->GetPointClicked(mNewGfxInfo.x2, mNewGfxInfo.y2);
+	pIn->WaitMouseClick(mNewGfxInfo.x2, mNewGfxInfo.y2);
 	pOut->ClearStatusBar();
 
 	if (!pOut->IsDrawingArea(mNewGfxInfo.x2, mNewGfxInfo.y2)) {

@@ -11,7 +11,7 @@ bool Copy::ReadActionParameters() {
 	Output* pOut = mAppManager->GetOutput();
 
 	pOut->PrintMsg("Please select a component to copy");
-	pIn->GetPointClicked(mX, mY);
+	pIn->WaitMouseClick(mX, mY);
 	pOut->ClearStatusBar();
 
 	if (!pOut->IsDrawingArea(mX, mY)) {

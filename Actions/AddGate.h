@@ -22,12 +22,12 @@ private:
 	int mX, mY;				// Center point of the gate
 	GraphicsInfo mGfxInfo;	// The parameters (coordinates) required to draw the gate
 	string mLabel;			// The label of the component
-	ActionType mActType;	// The type of the action
 	Gate* mGate;			// Pointer to the added gate
+	ActionType mActType;	// The type of the action
 
 public:
 	/* Constructor */
-	AddGate(ApplicationManager* pAppMan, ActionType actType, int x = -1, int y = -1, string label = "");
+	AddGate(ApplicationManager* pAppMan, ActionType actType, int x = -1, int y = -1, const string& label = "");
 
 	/* Reads parameters required for action to execute */
 	virtual bool ReadActionParameters();

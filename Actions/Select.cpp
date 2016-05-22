@@ -1,4 +1,5 @@
 #include "Select.h"
+#include "..\CMUgraphicsLib\auxil.h"	// where Pause is found
 
 /* Constructor */
 Select::Select(ApplicationManager* pAppMan) : Action(pAppMan) {
@@ -36,6 +37,8 @@ bool Select::ReadActionParameters() {
 				pOut->DrawSelectionRectangle(mStartX, mStartY, x, y);
 				prvX = x;
 				prvY = y;
+
+				Pause(10);	// Pause to smooth up flickering
 			}
 		}
 
@@ -46,6 +49,17 @@ bool Select::ReadActionParameters() {
 		pOut->DrawImage(wind, minX, minY, maxX, maxY - minY);
 	}
 
+	// Added the selected components to the set
+	for (int x = mStartX; x <= mEndX; x += UI.PinOffset) {
+		for (int y = mStartY; y <= mEndY; y += UI.PinOffset) {
+			Component* pComp = pOut->GetComponentAtPin(x, y);
+
+			if (pComp != NULL) {
+				mSelectedComps.insert(pComp);
+			}
+		}
+	}
+
 	return true;
 }
 
@@ -54,29 +68,26 @@ bool Select::Execute() {
 	ReadActionParameters();
 
 	Output* pOut = mAppManager->GetOutput();
-	Component** list = mAppManager->GetComponentList();
+	Input* pIn = mAppManager->GetInput();
 
-	int n = mAppManager->GetComponentsCount();
-	int selectedCount = 0;
+	//char key = 0;
+	//pIn->GetKeyPress(key);
+	//if (key != 'z') {
+	//	// Clear previous selection
+	//	mAppManager->DeselectComponents();
+	//}
 
 	// Clear previous selection
-	for (int i = 0; i < n; i++) list[i]->SetSelected(false);
+	mAppManager->DeselectComponents();
 
 	// Highlight selected components
-	for (int x = mStartX; x <= mEndX; x += UI.PinOffset) {
-		for (int y = mStartY; y <= mEndY; y += UI.PinOffset) {
-			Component* pComp = pOut->GetComponentAtPin(x, y);
-
-			if (pComp != NULL) {
-				pComp->Select();
-			}
-		}
+	for (auto it = mSelectedComps.begin(); it != mSelectedComps.end(); it++) {
+		(*it)->Select();
 	}
 
-	// Count selected components
-	for (int i = 0; i < n; i++) if (list[i]->IsSelected()) selectedCount++;
-
 	// Reflect some information about selected components to the screen
+	int selectedCount = mAppManager->CountSelectedComponents();
+	
 	if (selectedCount > 0)
 		pOut->PrintMsg(to_string(selectedCount) + " Selected Component(s)");
 	else

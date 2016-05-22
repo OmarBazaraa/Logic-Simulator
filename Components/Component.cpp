@@ -53,7 +53,7 @@ GraphicsInfo Component::GetGraphicsInfo() const {
 /* Selects the component */
 void Component::Select() {
 	if (UI.AppMode == Mode::DESIGN) {
-		mSelected = true;
+		mSelected = !mSelected;
 	}
 }
 
