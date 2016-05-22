@@ -16,7 +16,8 @@ bool Simulate::Execute() {
 	int count = mAppManager->GetComponentsCount();
 
 	for (int i = 0; i < count; i++)
-		circuit.insert(list[i]);
+		if (!list[i]->IsDeleted())
+			circuit.insert(list[i]);
 	for (int i = 0; i < count; i++) {
 		if (dynamic_cast<LED*>(list[i]) && !list[i]->IsDeleted())
 			TestGate(list[i]);		
@@ -78,7 +79,7 @@ int Simulate::TestGate(Component* pComp) {
 
 			for (int i = 0; i<((LogicGate*)pComp)->GetInputsCount(); i++) {
 				if (((LogicGate*)pComp)->GetInputPin(i)->IsFull()) {
-					circuit.erase(((LED*)pComp)->GetInputPin(0)->GetConnection(0));
+					circuit.erase(((LED*)pComp)->GetInputPin(i)->GetConnection(0));
 					returnValue = TestGate(((LogicGate*)pComp)->GetInputPin(i)->GetConnection(0)->GetSourcePin()->GetGate());
 					if (returnValue > -1)
 						((Gate*)pComp)->SetInputPinStatus(i, returnValue ? Status::HIGH : Status::LOW);
