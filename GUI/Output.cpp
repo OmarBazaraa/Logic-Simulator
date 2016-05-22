@@ -150,6 +150,8 @@ void Output::CreateGateBar(int hoverdItem) const {
 	// Draw a separator line between tool bar and gate bar
 	pWind->SetPen(WHITE, 1);
 	pWind->DrawLine(UI.TextMargin, UI.ToolBarHeight, UI.Width - UI.TextMargin, UI.ToolBarHeight);
+
+	pWind->UpdateBuffer();
 }
 
 /* Draws the status bar */

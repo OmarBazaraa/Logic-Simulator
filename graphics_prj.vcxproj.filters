@@ -169,9 +169,6 @@
     <ClCompile Include="Components\LED.cpp">
       <Filter>Components</Filter>
     </ClCompile>
-    <ClCompile Include="Actions\Save.cpp">
-      <Filter>Actions</Filter>
-    </ClCompile>
     <ClCompile Include="Actions\AddGate.cpp">
       <Filter>Actions</Filter>
     </ClCompile>
@@ -210,9 +207,6 @@
     <ClCompile Include="Actions\RedoAction.cpp">
       <Filter>Actions</Filter>
     </ClCompile>
-    <ClCompile Include="Actions\Load.cpp">
-      <Filter>Actions</Filter>
-    </ClCompile>
     <ClCompile Include="Actions\Move.cpp">
       <Filter>Actions</Filter>
     </ClCompile>
@@ -230,6 +224,12 @@
     </ClCompile>
     <ClCompile Include="GUI\Dialog.cpp">
       <Filter>GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="Actions\SaveAction.cpp">
+      <Filter>Actions</Filter>
+    </ClCompile>
+    <ClCompile Include="Actions\LoadAction.cpp">
+      <Filter>Actions</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -371,9 +371,6 @@
     <ClInclude Include="Actions\Select.h">
       <Filter>Actions</Filter>
     </ClInclude>
-    <ClInclude Include="Actions\Save.h">
-      <Filter>Actions</Filter>
-    </ClInclude>
     <ClInclude Include="Actions\TruthTable.h">
       <Filter>Actions</Filter>
     </ClInclude>
@@ -404,9 +401,6 @@
     <ClInclude Include="Actions\RedoAction.h">
       <Filter>Actions</Filter>
     </ClInclude>
-    <ClInclude Include="Actions\Load.h">
-      <Filter>Actions</Filter>
-    </ClInclude>
     <ClInclude Include="Actions\Move.h">
       <Filter>Actions</Filter>
     </ClInclude>
@@ -425,13 +419,16 @@
     <ClInclude Include="GUI\Dialog.h">
       <Filter>GUI</Filter>
     </ClInclude>
+    <ClInclude Include="Actions\SaveAction.h">
+      <Filter>Actions</Filter>
+    </ClInclude>
+    <ClInclude Include="Actions\LoadAction.h">
+      <Filter>Actions</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Actions">
       <UniqueIdentifier>{61ecbe41-f437-4e4b-9178-88ac0a5bf06d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="GUI">
-      <UniqueIdentifier>{e9b7c77c-4258-4c7f-a59e-a041dec06954}</UniqueIdentifier>
     </Filter>
     <Filter Include="Components">
       <UniqueIdentifier>{b97e2492-a07f-4801-bd62-8525b0447a72}</UniqueIdentifier>
@@ -450,6 +447,9 @@
     </Filter>
     <Filter Include="Components\LogicGates">
       <UniqueIdentifier>{c222ee81-e301-4a90-925a-a173e46a1ee9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GUI">
+      <UniqueIdentifier>{e9b7c77c-4258-4c7f-a59e-a041dec06954}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

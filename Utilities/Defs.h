@@ -1,4 +1,6 @@
 #pragma once
+#include <string>
+using namespace std;
 
 /*
 	This header file contains some defenitions to be used all over the application
@@ -177,11 +179,13 @@ struct GraphicsInfo {
 };
 
 /* Structure holding the loaded information needed for creating new components */
-//struct Data {
-//	GraphicsInfo GfxInfo;
-//	string Label;
-//};
+struct Data {
+	string Label;
+	GraphicsInfo GfxInfo;
+};
 
 enum DialogBoxButton {
-	YES,NO,CANCEL
+	YES,
+	NO,
+	CANCEL
 };

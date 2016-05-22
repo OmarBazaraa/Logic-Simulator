@@ -1,19 +1,17 @@
 #pragma once
 #include "..\Actions\Action.h"
-#include "..\Components\Component.h"
 #include "..\ApplicationManager.h"
-#include "..\Utilities\Utility.h"
-#include "..\Components\Connection.h"
+#include "..\GUI\Dialog.h"
 #include <fstream>
 
-class Save : public Action
+class LoadAction : public Action
 {
 private:
-	ofstream write;
+	ifstream mRead;
 
 public:
 	/* Constructor */
-	Save(ApplicationManager* pAppMan);
+	LoadAction(ApplicationManager* pAppMan);
 
 	/* Reads parameters required for action to execute */
 	virtual bool ReadActionParameters();
@@ -28,6 +26,6 @@ public:
 	virtual void Redo();
 
 	/* Destructor */
-	virtual ~Save();
+	virtual ~LoadAction();
 };
 

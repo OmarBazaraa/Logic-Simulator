@@ -1,15 +1,18 @@
 #include "AddConnection.h"
 
 /* Constructor */
-AddConnection::AddConnection(ApplicationManager* pAppMan, int x1, int y1, int x2, int y2) : Action(pAppMan) {
+AddConnection::AddConnection(ApplicationManager* pAppMan, Data* pLoadedData) : Action(pAppMan) {
 	mPath = NULL;
 	mSrcPin = NULL;
 	mDstPin = NULL;
 	mConnection = NULL;
-	mGfxInfo.x1 = x1;
-	mGfxInfo.x2 = x2;
-	mGfxInfo.y1 = y1;
-	mGfxInfo.y2 = y2;
+	mIsLoaded = false;
+
+	if (pLoadedData != NULL) {
+		mIsLoaded = true;
+		mLabel = pLoadedData->Label;
+		mGfxInfo = pLoadedData->GfxInfo;
+	}
 }
 
 /* Reads parameters required for action to execute */
@@ -17,7 +20,7 @@ bool AddConnection::ReadActionParameters() {
 	Input* pIn = mAppManager->GetInput();
 	Output* pOut = mAppManager->GetOutput();
 	
-	if (mGfxInfo.x1 < 0) {
+	if (!mIsLoaded) {
 		pOut->PrintMsg("Connection: select the source pin");
 		pIn->WaitMouseClick(mGfxInfo.x1, mGfxInfo.y1);
 		pOut->ClearStatusBar();
@@ -28,7 +31,7 @@ bool AddConnection::ReadActionParameters() {
 		return false;
 	}
 	
-	if (mGfxInfo.x2 < 0) {
+	if (!mIsLoaded) {
 		pOut->PrintMsg("Connection: select the destination pin");
 		pIn->WaitMouseClick(mGfxInfo.x2, mGfxInfo.y2);
 		pOut->ClearStatusBar();

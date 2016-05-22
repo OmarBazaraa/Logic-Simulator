@@ -1,12 +1,17 @@
 #include "AddGate.h"
 
 /* Constructor */
-AddGate::AddGate(ApplicationManager* pAppMan, ActionType actType, int x, int y, const string& label) : Action(pAppMan) {
+AddGate::AddGate(ApplicationManager* pAppMan, ActionType actType, Data* pLoadedData) : Action(pAppMan) {
 	mActType = actType;
 	mGate = NULL;
-	mX = x;
-	mY = y;
-	mLabel = label;
+	mIsLoaded = false;
+
+	if (pLoadedData != NULL) {
+		mIsLoaded = true;
+		mLabel = pLoadedData->Label;
+		mX = pLoadedData->GfxInfo.x1;
+		mY = pLoadedData->GfxInfo.y1;
+	}
 }
 
 /* Reads parameters required for action to execute */
@@ -14,7 +19,7 @@ bool AddGate::ReadActionParameters() {
 	Input* pIn = mAppManager->GetInput();
 	Output* pOut = mAppManager->GetOutput();
 
-	if (mX < 0 && mY < 0) {
+	if (!mIsLoaded) {
 		pOut->PrintMsg(GetActionMsg());
 		pIn->WaitMouseClick(mX, mY);
 		pOut->ClearStatusBar();

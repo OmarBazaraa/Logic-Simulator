@@ -10,11 +10,12 @@
 #include "Actions\RedoAction.h"
 #include "Actions\Simulate.h"
 #include "Actions\TruthTable.h"
-#include "Actions\Save.h"
-#include "Actions\Load.h"
+#include "Actions\SaveAction.h"
+#include "Actions\LoadAction.h"
 #include "Actions\Select.h"
 #include "Actions\Move.h"
 #include "Actions\Hover.h"
+using namespace std;
 
 /* Constructor */
 ApplicationManager::ApplicationManager() {
@@ -26,6 +27,7 @@ ApplicationManager::ApplicationManager() {
 	// Creates the Input/Output objects and initialize the GUI
 	pOut = new Output();
 	pIn = pOut->CreateInput();
+	mIsSavedFileUpToDate = true;
 }
 
 /* Returns the number of components */
@@ -82,15 +84,19 @@ void ApplicationManager::ExecuteAction(ActionType &actType) {
 		case ADD_SWITCH:
 		case ADD_LED:
 			pAct = new AddGate(this, actType);
+			mIsSavedFileUpToDate = true;
 			break;
 		case ADD_CONNECTION:
 			pAct = new AddConnection(this);
+			mIsSavedFileUpToDate = false;
 			break;
 		case EDIT:
 			pAct = new Edit(this);
+			mIsSavedFileUpToDate = false;
 			break;
 		case DEL:
 			pAct = new Delete(this);
+			mIsSavedFileUpToDate = false;
 			break;
 		case COPY:
 			pAct = new Copy(this);
@@ -100,6 +106,7 @@ void ApplicationManager::ExecuteAction(ActionType &actType) {
 			break;
 		case PASTE:
 			pAct = new Paste(this);
+			mIsSavedFileUpToDate = false;
 			break;
 		case UNDO:
 			pAct = new UndoAction(this);
@@ -124,11 +131,11 @@ void ApplicationManager::ExecuteAction(ActionType &actType) {
 			pAct = new TruthTable(this);
 			break;
 		case SAVE:
-			pAct = new Save(this);
+			pAct = new SaveAction(this);
 			pOut->PrintMsg("Saved");
 			break;
 		case LOAD:
-			pAct = new Load(this);
+			pAct = new LoadAction(this);
 			pOut->PrintMsg("LOAD");
 			//TODO:
 			break;
@@ -157,7 +164,7 @@ void ApplicationManager::ExecuteAction(ActionType &actType) {
 		case EXIT:
 			Dialog *d = new Dialog("Would you like to save before exit?");
 			if (d->GetUserClick() == YES)
-				pAct = new Save(this);
+				pAct = new SaveAction(this);
 			else if (d->GetUserClick() == NO);
 			else actType = DESIGN_MODE;
 			delete d;
@@ -233,9 +240,66 @@ void ApplicationManager::Redo() {
 	mUndoStack.push(lastAction);
 }
 
+/* Saves the circuit */
+void ApplicationManager::Save(ofstream& file) {
+	for (int i = 0; i < mCompCount; i++) {
+		if (!mCompList[i]->IsDeleted()) {
+			mCompList[i]->Save(file);
+		}
+	}
+}
+
+/* Loads the circuit */
+void ApplicationManager::Load(ifstream& file) {
+	Data compData;
+	string compType;
+	Action* pAct;
+
+	while (file >> compType, compType != "-1") {
+		if (compType == "CONNECTION") {
+			file >> compData.Label;
+			file >> compData.GfxInfo.x1 >> compData.GfxInfo.y1 >> compData.GfxInfo.x2 >> compData.GfxInfo.y2;
+			pAct = new AddConnection(this, &compData);
+		}
+		else {
+			file >> compData.Label;
+			file >> compData.GfxInfo.x1 >> compData.GfxInfo.y1;
+
+			if (compType == "AND")
+				pAct = new AddGate(this, ADD_GATE_AND, &compData);
+			else if (compType == "OR")
+				pAct = new AddGate(this, ADD_GATE_OR, &compData);
+			else if (compType == "NOT")
+				pAct = new AddGate(this, ADD_GATE_NOT, &compData);
+			else if (compType == "NAND")
+				pAct = new AddGate(this, ADD_GATE_NAND, &compData);
+			else if (compType == "NOR")
+				pAct = new AddGate(this, ADD_GATE_NOR, &compData);
+			else if (compType == "XOR")
+				pAct = new AddGate(this, ADD_GATE_XOR, &compData);
+			else if (compType == "XNOR")
+				pAct = new AddGate(this, ADD_GATE_XNOR, &compData);
+			else if (compType == "AND3")
+				pAct = new AddGate(this, ADD_GATE_AND3, &compData);
+			else if (compType == "NOR3")
+				pAct = new AddGate(this, ADD_GATE_NOR3, &compData);
+			else if (compType == "XOR3")
+				pAct = new AddGate(this, ADD_GATE_XOR3, &compData);
+			else if (compType == "BUFFER")
+				pAct = new AddGate(this, ADD_GATE_BUFFER, &compData);
+			else if (compType == "SWITCH")
+				pAct = new AddGate(this, ADD_SWITCH, &compData);
+			else if (compType == "LED")
+				pAct = new AddGate(this, ADD_LED, &compData);
+		}
+
+		pAct->Execute();
+		delete pAct;
+	}
+}
+
 /* Frees Memory */
 void ApplicationManager::FreeMemory() {
-
 	for (int i = 0; i < mCompCount; i++) {
 
 		if (dynamic_cast<Connection*>(mCompList[i]))

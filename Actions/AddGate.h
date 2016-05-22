@@ -19,6 +19,7 @@
 class AddGate : public Action
 {
 private:
+	bool mIsLoaded;			// Indicates if the action is loaded from the file
 	int mX, mY;				// Center point of the gate
 	GraphicsInfo mGfxInfo;	// The parameters (coordinates) required to draw the gate
 	string mLabel;			// The label of the component
@@ -27,7 +28,7 @@ private:
 
 public:
 	/* Constructor */
-	AddGate(ApplicationManager* pAppMan, ActionType actType, int x = -1, int y = -1, const string& label = "");
+	AddGate(ApplicationManager* pAppMan, ActionType actType, Data* pLoadedData = NULL);
 
 	/* Reads parameters required for action to execute */
 	virtual bool ReadActionParameters();

@@ -7,6 +7,7 @@
 class AddConnection : public Action
 {
 private:
+	bool mIsLoaded;					// Indicates if the action is loaded from the file
 	int mDstPinIndex;				// The index of the destination pin
 	GraphicsInfo mGfxInfo;			// The parameters (coordinates) required to draw the connection
 	vector<GraphicsInfo>* mPath;	// The path of the connection
@@ -17,7 +18,7 @@ private:
 
 public:
 	/* Constructor */
-	AddConnection(ApplicationManager* pAppMan, int x1 = -1, int y1 = -1, int x2 = -1, int y2 = -1);
+	AddConnection(ApplicationManager* pAppMan, Data* pLoadedData = NULL);
 
 	/* Reads parameters required for action to execute */
 	virtual bool ReadActionParameters();

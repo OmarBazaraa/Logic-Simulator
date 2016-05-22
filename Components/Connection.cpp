@@ -124,7 +124,8 @@ void Connection::Restore(Output* pOut) {
 
 /* Saves the states of the component*/
 void Connection::Save(ofstream& file) {
-	file << mGfxInfo.x1 - UI.PinOffset << " " << mGfxInfo.y1 << " " << mGfxInfo.x2 + UI.PinOffset << " " << mGfxInfo.y2 << endl;
+	file << "CONNECTION " << mLabel << ' ';
+	file << mGfxInfo.x1 - UI.PinOffset << ' ' << mGfxInfo.y1 << ' ' << mGfxInfo.x2 + UI.PinOffset << ' ' << mGfxInfo.y2 << endl;
 }
 
 /* Returns the Add-ActionType of the component */
