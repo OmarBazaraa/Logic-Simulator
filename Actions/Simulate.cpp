@@ -20,9 +20,9 @@ bool Simulate::Execute() {
 		visited.clear();
 		
 	}	
-	
+	ActionType act = DESIGN_MODE;
 	if (stopSimulation) {
-		mAppManager->ExecuteAction(DESIGN_MODE);
+		mAppManager->ExecuteAction(act);
 		mAppManager->GetOutput()->PrintMsg("Error !! : Components are not connected properly.");
 	}
 	

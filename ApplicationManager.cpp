@@ -110,7 +110,7 @@ ActionType ApplicationManager::GetUserAction() {
 }
 
 /* Creates an action and executes it */
-void ApplicationManager::ExecuteAction(ActionType actType) {
+void ApplicationManager::ExecuteAction(ActionType &actType) {
 	Action* pAct = NULL;
 
 	switch (actType) {
@@ -185,10 +185,6 @@ void ApplicationManager::ExecuteAction(ActionType actType) {
 		case HOVER:
 			pAct = new Hover(this);
 			break;
-		case EXIT:
-			pOut->PrintMsg("EXIT");
-			//TODO: create ExitAction here
-			break;
 		case TOOL_BAR:
 			pOut->PrintMsg("TOOL BAR");
 			//TODO:
@@ -203,6 +199,14 @@ void ApplicationManager::ExecuteAction(ActionType actType) {
 		case STATUS_BAR:
 			pOut->PrintMsg("STATUS BAR");
 			//TODO:
+			break;
+		case EXIT:
+			Dialog *d = new Dialog("Would you like to save before exit?");
+			if (d->GetUserClick() == YES)
+				pAct = new Save(this);
+			else if (d->GetUserClick() == NO);
+			else actType = DESIGN_MODE;
+			delete d;
 			break;
 	}
 

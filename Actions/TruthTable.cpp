@@ -6,11 +6,7 @@ TruthTable::TruthTable(ApplicationManager* pAppMan) : Action(pAppMan) {
 	switchesCount = 0;
 	ledsCount = 0;
 	write.open("TruthTable.txt");
-	write.clear();
-	// Create and initialize the drawing window
-	pWind = CreateWind(UI.Width, UI.Height, UI.StartX, UI.StartY);
-	ChangeTitle("Truth Table");
-	ClearDrawingArea();
+	write.clear();	
 	canDraw = 1;
 }
 
@@ -28,8 +24,8 @@ void TruthTable::ChangeTitle(const string& title) const {
 
 /* Clears the drawing area */
 void TruthTable::ClearDrawingArea() const {
-	pWind->SetPen(BACKGROUND_BLUE);
-	pWind->SetBrush(BACKGROUND_BLUE);
+	pWind->SetPen(UI.DarkColor);
+	pWind->SetBrush(UI.DarkColor);
 	pWind->DrawRectangle(0, 0, UI.Width, UI.Height);
 
 }
@@ -37,7 +33,7 @@ void TruthTable::ClearDrawingArea() const {
 /*Draws truth table*/
 void TruthTable::DrawTruthTable() const {
 	// Vertical lines
-	pWind->SetPen(WHITE);
+	pWind->SetPen(BLACK);
 	for (int x = 0; x <= (columns + 1) * 100; x += 100) {
 		pWind->DrawLine(x, 20, x, (2 + rows) * 20);
 	}
@@ -66,8 +62,17 @@ bool TruthTable::Execute() {
 	}
 	rows = pow(2, switchesCount);
 	columns = ledsCount + switchesCount;
+	if (ledsCount == 0) { 
+		mAppManager->GetOutput()->PrintMsg("Cannot draw truth table!!");
+		return false; 
+	}
 	if (switchesCount < 6 && columns < 12) {
+		// Create and initialize the drawing window
+		pWind = CreateWind(columns*100+230, rows*20+80, UI.StartX, UI.StartY);
+		ChangeTitle("Truth Table");
+		ClearDrawingArea(); 
 		DrawTruthTable();
+		DrawExit();
 	}
 	else
 		canDraw = 0;
@@ -79,6 +84,8 @@ bool TruthTable::Execute() {
 	for (int i = 0; i < ledsCount; i++) {
 		TestGate(leds[i]);
 	}
+	Exits();
+	delete pWind;
 	return false;
 }
 
@@ -98,7 +105,7 @@ void TruthTable::DrawHeaders() {
 			msg = leds[k++]->GetLabel();
 		Normalizetxt(msg);
 		if (canDraw)
-			pWind->DrawString(i, 20, msg);
+			pWind->DrawString(i+5, 20, msg);
 		write << msg << "   ";
 	}
 	write << endl;
@@ -106,9 +113,9 @@ void TruthTable::DrawHeaders() {
 
 /* Normalize message position */
 void TruthTable::Normalizetxt(string& msg) {
-	string temp="         ";
+	string temp="        ";
 	int l = msg.length();
-	for (int i = 0; i < l; i++)
+	for (int i = 0; i<8&&i < l; i++)
 		temp[i] = msg[i];
 	/*msg += "             ";
 	int n = (1+l)/2;
@@ -184,6 +191,21 @@ int TruthTable::ToInt(string k) {
 	for (int i = 0; i < k.length(); i++)
 		x += (k[i] - '0')*(int)pow(2, k.length() - 1 - i);
 	return x;
+}
+
+/* Draws exit button */
+void TruthTable::DrawExit() const {
+	pWind->SetPen(WHITE);
+	pWind->SetFont(40, BOLD, BY_NAME, "Arial");
+	pWind->DrawString(columns * 100 + 180, 30, "X");
+
+}
+
+/* Exits Truth Table */
+void TruthTable::Exits() {
+	int x=0, y=0;
+	while (y > 60 || y < 30 || x<columns * 100 + 180 || x>columns * 100 + 200)
+		pWind->WaitMouseClick(x, y);
 }
 
 TruthTable::~TruthTable()

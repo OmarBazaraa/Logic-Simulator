@@ -175,3 +175,7 @@ struct GraphicsInfo {
 		this->y2 = y2;
 	}
 };
+
+enum DialogBoxButton {
+	YES,NO,CANCEL
+};

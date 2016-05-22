@@ -8,9 +8,15 @@ Load::Load(ApplicationManager* pAppMan) : Action(pAppMan) {
 
 bool Load::Execute() {
 	
+	Dialog *d = new Dialog("Loading old file will cause currrect file deletion!!");
+	if (d->GetUserClick() != YES) {
+		delete d;
+		return false;
+	}
+
 	mAppManager->FreeMemory();
 	mAppManager->GetOutput()->ClearDrawingArea();
-	Dialog *d = new Dialog("Do you want to load?");
+
 	int n, cX, cY, cX2, cY2;
 	string t, l;
 	Action *pAct = 0;
