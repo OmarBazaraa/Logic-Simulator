@@ -18,11 +18,6 @@ bool AddGate::ReadActionParameters() {
 		pOut->PrintMsg(GetActionMsg());
 		pIn->WaitMouseClick(mX, mY);
 		pOut->ClearStatusBar();
-
-		if (!pOut->IsDrawingArea(mX, mY)) {
-			pOut->PrintMsg("Invalid position. Operation was cancelled");
-			return false;
-		}
 	}
 	
 	/*image wind;

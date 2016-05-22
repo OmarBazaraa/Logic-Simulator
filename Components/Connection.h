@@ -15,7 +15,7 @@ private:
 
 public:
 	/* Constructor */
-	Connection(Output* pOut, const GraphicsInfo& gfxInfo, const vector<GraphicsInfo>& path, GraphicsInfo rInitial);
+	Connection(Output* pOut, const GraphicsInfo& gfxInfo, const vector<GraphicsInfo>& path);
 
 	/* Sets the new path of the connection, needed in edit action */
 	void SetPath(Output* pOut, const GraphicsInfo& gfxInfo, const vector<GraphicsInfo>& path);

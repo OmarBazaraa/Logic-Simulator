@@ -15,6 +15,13 @@ int LogicGate::GetInputsCount() const {
 	return mInputsCount;
 }
 
+/* Returns the selected input pin index */
+int LogicGate::GetInputPinIndex(int x, int y) {
+	int h = (mGfxInfo.y2 - mGfxInfo.y1);
+	int n = (y - mGfxInfo.y1) * mInputsCount / h;
+	return n;
+}
+
 /* Returns the input pin number n (0-indexed) of the component */
 Pin* LogicGate::GetInputPin(int n) {
 	return &mInputPins[n];
@@ -38,13 +45,6 @@ int LogicGate::GetInputPinStatus(int n) const {
 /* Returns the status of the output pin */
 int LogicGate::GetOutputPinStatus() const {
 	return mOutputPin.GetStatus();
-}
-
-/* Returns the selected input pin index */
-int LogicGate::GetInputPinIndex(int x, int y) {
-	int h = (mGfxInfo.y2 - mGfxInfo.y1);
-	int n = (y - mGfxInfo.y1) * mInputsCount / h;
-	return n;
 }
 
 /* Deletes the component */

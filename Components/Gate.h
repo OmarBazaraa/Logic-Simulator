@@ -14,12 +14,6 @@ public:
 	/* Sets the bound coordinates of the component */
 	void SetGraphicsInfo(Output* pOut, const GraphicsInfo& gfxInfo);
 
-	/* Returns the input pin number n (0-indexed) of the component */
-	virtual Pin* GetInputPin(int n) = 0;
-
-	/* Returns the output pin of the component */
-	virtual Pin* GetOutputPin() = 0;
-
 	/* Returns the selected input pin index */
 	virtual int GetInputPinIndex(int x, int y);
 
@@ -28,6 +22,12 @@ public:
 
 	/* Returns the output pin coordiantes of the gate */
 	virtual void GetOutputPinCoordinates(int& x, int& y);
+
+	/* Returns the input pin number n (0-indexed) of the component, NULL if switch */
+	virtual Pin* GetInputPin(int n) = 0;
+
+	/* Returns the output pin of the component, NULL if LED */
+	virtual Pin* GetOutputPin() = 0;
 
 	/* Destructor */
 	virtual ~Gate();

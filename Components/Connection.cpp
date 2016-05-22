@@ -1,12 +1,11 @@
 #include "Connection.h"
 
 /* Constructor */
-Connection::Connection(Output* pOut, const GraphicsInfo& gfxInfo, const vector<GraphicsInfo>& path, GraphicsInfo rInitial) {
+Connection::Connection(Output* pOut, const GraphicsInfo& gfxInfo, const vector<GraphicsInfo>& path) {
 	mLabel = "Connection";
 	SetPath(pOut, gfxInfo, path);
 	mSrcPin = NULL;
 	mDstPin = NULL;
-	mInitial = rInitial;
 }
 
 /* Sets the new path of the connection, needed in edit action */
@@ -125,7 +124,7 @@ void Connection::Restore(Output* pOut) {
 
 /* Saves the states of the component*/
 void Connection::Save(ofstream& file) {
-	file << mInitial.x1 << " " << mInitial.y1 << " " << mInitial.x2 << " " << mInitial.y2 << endl;
+	file << mGfxInfo.x1 - UI.PinOffset << " " << mGfxInfo.y1 << " " << mGfxInfo.x2 + UI.PinOffset << " " << mGfxInfo.y2 << endl;
 }
 
 /* Returns the Add-ActionType of the component */

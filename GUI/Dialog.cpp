@@ -5,6 +5,7 @@
 Dialog::Dialog(string s) {
 	// Create and initialize the drawing window
 	pWind = CreateWind(400, 150, 485, 400);
+	pWind->SetWaitClose(false);
 	DrawDialog();
 	pWind->SetPen(WHITE);
 	pWind->SetFont(20, BOLD, BY_NAME, "Arial");

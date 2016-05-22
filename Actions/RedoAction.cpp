@@ -12,19 +12,7 @@ bool RedoAction::ReadActionParameters() {
 
 /* Executes action */
 bool RedoAction::Execute() {
-	stack<Action*>* redoStack = mAppManager->GetRedoStack();
-	stack<Action*>* undoStack = mAppManager->GetUndoStack();
-	
-	if (redoStack->empty()) {
-		return false;
-	}
-
-	Action* lastAction = redoStack->top();
-	lastAction->Redo();
-
-	redoStack->pop();
-	undoStack->push(lastAction);
-
+	mAppManager->Redo();
 	mAppManager->GetOutput()->ClearStatusBar();
 
 	return false;	// To prevent adding this action to the stack again

@@ -18,6 +18,9 @@ public:
 	/* Returns the number of input pins of the gate */
 	int GetInputsCount() const;
 
+	/* Returns the selected input pin index */
+	virtual int GetInputPinIndex(int x, int y);
+
 	/* Returns the input pin number n (0-indexed) of the component */
 	virtual Pin* GetInputPin(int n);
 
@@ -32,9 +35,6 @@ public:
 
 	/* Returns the status of the output pin */
 	virtual int GetOutputPinStatus() const;
-
-	/* Returns the selected input pin index */
-	virtual int GetInputPinIndex(int x, int y);
 
 	/* Deletes the component */
 	virtual void Delete(Output* pOut);

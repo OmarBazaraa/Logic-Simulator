@@ -6,6 +6,12 @@ LED::LED(Output* pOut, const GraphicsInfo& gfxInfo) : Gate(pOut, gfxInfo) {
 	mInputPin.SetGate(this);
 }
 
+/* Returns the input pin coordiantes of the gate according to its index */
+void LED::GetInputPinCoordinates(int& x, int& y, int n) {
+	x = mGfxInfo.x1 - UI.PinMargin;
+	y = mGfxInfo.y2 - UI.PinMargin;
+}
+
 /* Returns the input pin number n (0-indexed) of the component */
 Pin* LED::GetInputPin(int n) {
 	return &mInputPin;
@@ -29,12 +35,6 @@ int LED::GetInputPinStatus(int n) const {
 /* Returns the status of the output pin */
 int LED::GetOutputPinStatus() const {
 	return -1;
-}
-
-/* Returns the input pin coordiantes of the gate according to its index */
-void LED::GetInputPinCoordinates(int& x, int& y, int n) {
-	x = mGfxInfo.x1 - UI.PinMargin;
-	y = mGfxInfo.y2 - UI.PinMargin;
 }
 
 /* Calculates the output of the LED */

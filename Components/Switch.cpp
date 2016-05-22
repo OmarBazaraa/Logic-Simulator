@@ -18,7 +18,7 @@ Pin* Switch::GetOutputPin() {
 
 /* Sets the status of the input pin number n (0-indexed) */
 void Switch::SetInputPinStatus(int n, Status s) {
-	
+
 }
 
 /* Returns the status of the input pin number n (0-indexed) */

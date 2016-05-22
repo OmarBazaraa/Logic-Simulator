@@ -36,12 +36,6 @@ public:
 	/* Returns the last copied/cut component */
 	Component* GetCopiedComp() const;
 
-	/* Returns the stack of done actions */
-	stack<Action*>* GetUndoStack();
-
-	/* Returns the stack of un-done actions */
-	stack<Action*>* GetRedoStack();
-
 	/* Returns a pointer to Input object */
 	Input* GetInput();
 
@@ -65,6 +59,12 @@ public:
 
 	/* Counts and returns the number of selected components */
 	int CountSelectedComponents();
+
+	/* Undoes the last action */
+	void Undo();
+
+	/* Redoes the last action */
+	void Redo();
 
 	/* Frees Memory */
 	void FreeMemory();

@@ -10,6 +10,9 @@ public:
 	/* Constructor */
 	LED(Output* pOut, const GraphicsInfo& gfxInfo);
 
+	/* Returns the input pin coordiantes of the gate */
+	virtual void GetInputPinCoordinates(int& x, int& y, int n);
+
 	/* Returns the input pin number n (0-indexed) of the component */
 	virtual Pin* GetInputPin(int n);
 
@@ -24,9 +27,6 @@ public:
 
 	/* Returns the status of the output pin */
 	virtual int GetOutputPinStatus() const;
-
-	/* Returns the input pin coordiantes of the gate */
-	virtual void GetInputPinCoordinates(int& x, int& y, int n);
 
 	/* Calculates the output of the LED */
 	virtual void Operate();

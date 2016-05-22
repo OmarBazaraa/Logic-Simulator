@@ -28,12 +28,12 @@ ApplicationManager::ApplicationManager() {
 	pIn = pOut->CreateInput();
 }
 
-/* Get the number of components */
+/* Returns the number of components */
 int ApplicationManager::GetComponentsCount() const {
 	return mCompCount;
 }
 
-/* Get the list of components */
+/* Returns the list of components */
 Component** ApplicationManager::GetComponentList() const {
 	return mCompList;
 }
@@ -46,16 +46,6 @@ void ApplicationManager::SetCopiedComp(Component* pComp) {
 /* Returns the last copied/cut component */
 Component* ApplicationManager::GetCopiedComp() const {
 	return mCopiedComp;
-}
-
-/* Returns the stack of done actions */
-stack<Action*>* ApplicationManager::GetUndoStack() {
-	return &mUndoStack;
-}
-
-/* Returns the stack of un-done actions */
-stack<Action*>* ApplicationManager::GetRedoStack() {
-	return &mRedoStack;
 }
 
 /* Returns a pointer to Input object */
@@ -215,6 +205,32 @@ int ApplicationManager::CountSelectedComponents() {
 	}
 
 	return n;
+}
+
+/* Undoes the last action */
+void ApplicationManager::Undo() {
+	if (mUndoStack.empty()) {
+		return;
+	}
+
+	Action* lastAction = mUndoStack.top();
+	lastAction->Undo();
+
+	mUndoStack.pop();
+	mRedoStack.push(lastAction);
+}
+
+/* Redoes the last action */
+void ApplicationManager::Redo() {
+	if (mRedoStack.empty()) {
+		return;
+	}
+
+	Action* lastAction = mRedoStack.top();
+	lastAction->Redo();
+
+	mRedoStack.pop();
+	mUndoStack.push(lastAction);
 }
 
 /* Frees Memory */

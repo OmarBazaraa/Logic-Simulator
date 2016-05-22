@@ -176,6 +176,12 @@ struct GraphicsInfo {
 	}
 };
 
+/* Structure holding the loaded information needed for creating new components */
+//struct Data {
+//	GraphicsInfo GfxInfo;
+//	string Label;
+//};
+
 enum DialogBoxButton {
 	YES,NO,CANCEL
 };

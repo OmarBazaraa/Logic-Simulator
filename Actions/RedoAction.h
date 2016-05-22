@@ -1,7 +1,6 @@
 #pragma once
 #include "..\Actions\Action.h"
 #include "..\ApplicationManager.h"
-#include "..\Components\Component.h"
 
 class RedoAction : public Action
 {

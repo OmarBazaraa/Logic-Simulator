@@ -15,21 +15,24 @@ bool Hover::ReadActionParameters() {
 bool Hover::Execute() {
 	Output* pOut = mAppManager->GetOutput();
 	Input* pIn = mAppManager->GetInput();
-	Component* pComp = NULL;
-	image wind;
 
+	Component* pComp = NULL;
+	
 	int x, y;
+	int prvX = -1;
+	int prvY = -1;
+
 	int minX = 0;
 	int maxX = UI.Width;
 	int minY = UI.ToolBarHeight + UI.GateBarHeight;
 	int maxY = UI.Height - minY;
-	int prvX = -1;
-	int prvY = -1;
+	
 	int lastHovedArea = -1;		// 0 for tool bar, 1 for gate bar, 2 for drawing area , 3 for status bar
 	int hoveredItemOrder = -1;
 	int lastHoveredItemOrder = -1;
 
 	// Store the previous window
+	image wind;
 	pOut->StoreImage(wind, minX, minY, maxX, maxY);
 
 	// Loop until the user click the mouse left button

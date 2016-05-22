@@ -1,7 +1,7 @@
 #include "AddConnection.h"
 
 /* Constructor */
-AddConnection::AddConnection(ApplicationManager* pAppMan,int x1,int y1,int x2,int y2) : Action(pAppMan) {
+AddConnection::AddConnection(ApplicationManager* pAppMan, int x1, int y1, int x2, int y2) : Action(pAppMan) {
 	mPath = NULL;
 	mSrcPin = NULL;
 	mDstPin = NULL;
@@ -21,43 +21,24 @@ bool AddConnection::ReadActionParameters() {
 		pOut->PrintMsg("Connection: select the source pin");
 		pIn->WaitMouseClick(mGfxInfo.x1, mGfxInfo.y1);
 		pOut->ClearStatusBar();
-
-		if (!pOut->IsDrawingArea(mGfxInfo.x1, mGfxInfo.y1)) {
-			pOut->PrintMsg("Invalid position. Operation was cancelled");
-			return false;
-		}
-		
 	}
 
-	mInitial.x1 = mGfxInfo.x1;
-	mInitial.y1 = mGfxInfo.y1; 
-	
 	if (!DetectSourceComponent()) {
-			pOut->PrintMsg("Invalid source pin. Operation was cancelled");
-			return false;
-		}
+		pOut->PrintMsg("Invalid source pin. Operation was cancelled");
+		return false;
+	}
 	
+	if (mGfxInfo.x2 < 0) {
+		pOut->PrintMsg("Connection: select the destination pin");
+		pIn->WaitMouseClick(mGfxInfo.x2, mGfxInfo.y2);
+		pOut->ClearStatusBar();
+	}
+
+	if (!DetectDestinationComponent()) {
+		pOut->PrintMsg("Invalid destination pin. Operation was cancelled");
+		return false;
+	}
 	
-		if (mGfxInfo.x2 < 0) {
-			pOut->PrintMsg("Connection: select the destination pin");
-			pIn->WaitMouseClick(mGfxInfo.x2, mGfxInfo.y2);
-			pOut->ClearStatusBar();
-
-			if (!pOut->IsDrawingArea(mGfxInfo.x2, mGfxInfo.y2)) {
-				pOut->PrintMsg("Invalid position. Operation was cancelled");
-				return false;
-			}
-		}
-
-		mInitial.x2 = mGfxInfo.x2;
-		mInitial.y2 = mGfxInfo.y2;
-
-		if (!DetectDestinationComponent()) {
-			pOut->PrintMsg("Invalid destination pin. Operation was cancelled");
-			return false;
-		}
-	
-
 	mPath = pOut->GetConnectionPath(mGfxInfo);
 
 	if (mPath == NULL) {
@@ -74,7 +55,7 @@ bool AddConnection::Execute() {
 		return false;
 	}
 	
-	mConnection = new Connection(mAppManager->GetOutput(), mGfxInfo, *mPath, mInitial);
+	mConnection = new Connection(mAppManager->GetOutput(), mGfxInfo, *mPath);
 	mConnection->SetSourcePin(mSrcPin);
 	mConnection->SetDestinationPin(mDstPin, mDstPinIndex);
 	mConnection->SetLabel(mLabel);
@@ -98,7 +79,7 @@ void AddConnection::Redo() {
 
 /* Destructor */
 AddConnection::~AddConnection() {
-	//delete mPath;
+
 }
 
 /* Detects the source component of the connection */
