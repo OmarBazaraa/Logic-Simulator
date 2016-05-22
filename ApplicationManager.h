@@ -19,7 +19,6 @@ private:
 	stack<Action*> mRedoStack;	// Stack holding the un-done actions
 	Input* pIn;					// Pointer to the Input class
 	Output* pOut;				// Pointer to the Output class
-	bool mIsSavedFileUpToDate;
 
 public:
 	/* Constructor */
@@ -67,14 +66,14 @@ public:
 	/* Redoes the last action */
 	void Redo();
 
-	/* Saves the circuit */
+	/* Saves the current circuit */
 	void Save(ofstream& file);
 
-	/* Loads the circuit */
+	/* Loads the circuit from the file */
 	void Load(ifstream& file);
 
-	/* Frees Memory */
-	void FreeMemory();
+	/* Releases all the memory used by the components */
+	void ReleaseMemory();
 
 	/* Destructor */
 	~ApplicationManager();

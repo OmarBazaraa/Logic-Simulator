@@ -16,6 +16,7 @@ bool SaveAction::Execute() {
 	mWrite.clear();
 	mAppManager->Save(mWrite);
 	mWrite << "-1\n";
+	mAppManager->GetOutput()->PrintMsg("Saved");
 	return false;
 }
 
@@ -31,5 +32,5 @@ void SaveAction::Redo() {
 
 /* Destructor */
 SaveAction::~SaveAction() {
-
+	mWrite.close();
 }

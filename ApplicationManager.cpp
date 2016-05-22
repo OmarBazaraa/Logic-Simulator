@@ -27,7 +27,6 @@ ApplicationManager::ApplicationManager() {
 	// Creates the Input/Output objects and initialize the GUI
 	pOut = new Output();
 	pIn = pOut->CreateInput();
-	mIsSavedFileUpToDate = true;
 }
 
 /* Returns the number of components */
@@ -84,19 +83,15 @@ void ApplicationManager::ExecuteAction(ActionType &actType) {
 		case ADD_SWITCH:
 		case ADD_LED:
 			pAct = new AddGate(this, actType);
-			mIsSavedFileUpToDate = true;
 			break;
 		case ADD_CONNECTION:
 			pAct = new AddConnection(this);
-			mIsSavedFileUpToDate = false;
 			break;
 		case EDIT:
 			pAct = new Edit(this);
-			mIsSavedFileUpToDate = false;
 			break;
 		case DEL:
 			pAct = new Delete(this);
-			mIsSavedFileUpToDate = false;
 			break;
 		case COPY:
 			pAct = new Copy(this);
@@ -106,7 +101,6 @@ void ApplicationManager::ExecuteAction(ActionType &actType) {
 			break;
 		case PASTE:
 			pAct = new Paste(this);
-			mIsSavedFileUpToDate = false;
 			break;
 		case UNDO:
 			pAct = new UndoAction(this);
@@ -132,34 +126,27 @@ void ApplicationManager::ExecuteAction(ActionType &actType) {
 			break;
 		case SAVE:
 			pAct = new SaveAction(this);
-			pOut->PrintMsg("Saved");
 			break;
 		case LOAD:
 			pAct = new LoadAction(this);
-			pOut->PrintMsg("LOAD");
-			//TODO:
+			break;
+		case SELECT:
+			pAct = new Select(this);
 			break;
 		case MOVE:
-			pOut->PrintMsg("MOVE");
 			pAct = new Move(this);
 			break;
 		case HOVER:
 			pAct = new Hover(this);
 			break;
 		case TOOL_BAR:
-			pOut->PrintMsg("TOOL BAR");
-			//TODO:
+			//pOut->PrintMsg("TOOL BAR");
 			break;
 		case GATE_BAR:
-			pOut->PrintMsg("GATE BAR");
-			//TODO:
-			break;
-		case SELECT:
-			pAct = new Select(this);
+			//pOut->PrintMsg("GATE BAR");
 			break;
 		case STATUS_BAR:
-			pOut->PrintMsg("STATUS BAR");
-			//TODO:
+			//pOut->PrintMsg("STATUS BAR");
 			break;
 		case EXIT:
 			Dialog *d = new Dialog("Would you like to save before exit?");
@@ -184,8 +171,8 @@ void ApplicationManager::ExecuteAction(ActionType &actType) {
 
 /* Redraws all the drawing window */
 void ApplicationManager::UpdateInterface() {
-	pOut->ClearDrawingArea();
 	for (int i = 0; i < mCompCount; i++) mCompList[i]->Draw(pOut);
+	pOut->UpdateBuffer();
 }
 
 /* Adds a new component to the list of components */
@@ -241,7 +228,7 @@ void ApplicationManager::Redo() {
 	mUndoStack.push(lastAction);
 }
 
-/* Saves the circuit */
+/* Saves the current circuit */
 void ApplicationManager::Save(ofstream& file) {
 	for (int i = 0; i < mCompCount; i++) {
 		if (!mCompList[i]->IsDeleted()) {
@@ -250,7 +237,7 @@ void ApplicationManager::Save(ofstream& file) {
 	}
 }
 
-/* Loads the circuit */
+/* Loads the circuit from the file */
 void ApplicationManager::Load(ifstream& file) {
 	Data compData;
 	string compType;
@@ -299,48 +286,28 @@ void ApplicationManager::Load(ifstream& file) {
 	}
 }
 
-/* Frees Memory */
-void ApplicationManager::FreeMemory() {
+/* Releases all the memory used by the components */
+void ApplicationManager::ReleaseMemory() {
 	for (int i = 0; i < mCompCount; i++) {
-
-		if (dynamic_cast<Connection*>(mCompList[i]))
-			pOut->ClearConnectionPins((dynamic_cast<Connection*>(mCompList[i]))->GetPath());
-		else
-			pOut->MarkPins(mCompList[i]->GetGraphicsInfo(), EMPTY, 0);
-
+		mCompList[i]->Delete(pOut);
 		delete mCompList[i];
 	}
 
-	delete[] mCompList;
-
 	mCompCount = 0;
 	mCopiedComp = NULL;
-	mCompList = new Component*[MAX_COMPONENTS];
 	for (int i = 0; i < MAX_COMPONENTS; i++) mCompList[i] = NULL;
 
-	Action* act;
-
-	while (!mUndoStack.empty()) {
-		act = mUndoStack.top();
-		delete act;
-		mUndoStack.pop();
-	}
-
-	while (!mRedoStack.empty()) {
-		act = mRedoStack.top();
-		delete act;
-		mRedoStack.pop();
-	}
-
+	while (!mUndoStack.empty()) delete mUndoStack.top(), mUndoStack.pop();
+	while (!mRedoStack.empty()) delete mRedoStack.top(), mRedoStack.pop();
 }
 
 /* Destructor */
 ApplicationManager::~ApplicationManager() {
+	while (!mUndoStack.empty()) delete mUndoStack.top(), mUndoStack.pop();
+	while (!mRedoStack.empty()) delete mRedoStack.top(), mRedoStack.pop();
+
 	for (int i = 0; i < mCompCount; i++) delete mCompList[i];
 	delete[] mCompList;
 	delete pIn;
 	delete pOut;
-
-	while (!mUndoStack.empty()) delete mUndoStack.top(), mUndoStack.pop();
-	while (!mRedoStack.empty()) delete mRedoStack.top(), mRedoStack.pop();
 }

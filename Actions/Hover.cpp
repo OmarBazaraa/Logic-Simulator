@@ -1,5 +1,4 @@
 #include "Hover.h"
-#include "..\Components\Connection.h"
 
 /* Constructor */
 Hover::Hover(ApplicationManager* pAppMan) : Action(pAppMan) {
@@ -80,8 +79,9 @@ bool Hover::Execute() {
 			normalizeCoordinates(x, y);
 
 			if (x != prvX || y != prvY) {
-				pComp = pOut->GetComponentAtPin(x, y);
 				pOut->DrawImage(wind, minX, minY, maxX, maxY);
+
+				pComp = pOut->GetComponentAtPin(x, y);
 
 				if (pComp != NULL) {
 					// Show label
@@ -107,6 +107,7 @@ bool Hover::Execute() {
 				pOut->DrawImage(wind, minX, minY, maxX, maxY);
 			}
 		}
+
 		pOut->UpdateBuffer();
 	}
 
