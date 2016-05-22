@@ -6,15 +6,25 @@ Input::Input(window* pW) {
 	pWind = pW;
 }
 
-/* Get the user's mouse click coordinate */
-void Input::GetPointClicked(int& x, int& y) const {
-	pWind->WaitMouseClick(x, y);
-}
-
 /* Returns the last point clicked by the user */
 void Input::GetLastPointClicked(int& x, int& y) const {
 	x = mLastX;
 	y = mLastY;
+}
+
+/* Returns the user's mouse click coordinate */
+void Input::GetPointClicked(int& x, int& y) {
+	pWind->WaitMouseClick(x, y);
+	mLastX = x;
+	mLastY = y;
+}
+
+/* Returns information on the current state of the mouse buttons and it's position */
+buttonstate Input::GetButtonState(const button btMouse, int& x, int& y) {
+	buttonstate state = pWind->GetButtonState(btMouse, x, y);
+	mLastX = x;
+	mLastY = y;
+	return state;
 }
 
 /* Returns the string entered by the user and reflect it on the status bar */
@@ -53,40 +63,37 @@ string Input::GetSrting(Output* pOut, string msg, string str) const {
 
 /* Reads the user's selection and determine the desired action */
 ActionType Input::GetUserAction(Output* pOut) {
-	int x = 0, y = 0;
-	clicktype click = clicktype::NO_CLICK;
+	pWind->FlushMouseQueue();
 
-	/* Reads the Mouse Input */
-	while (click == NO_CLICK) {
-		if (pWind->GetButtonState(LEFT_BUTTON, x, y) == BUTTON_DOWN) {
-			mLastX = x;
-			mLastY = y;
+	int x, y;
 
-			// User clicks on the drawing area
-			if (y >= UI.ToolBarHeight + UI.GateBarHeight && y < UI.Height - UI.StatusBarHeight) {
-				// Move
-				if (pOut->GetComponentAtPin(x, y) != NULL) {
-					int startX = x, startY = y;
+	if (GetButtonState(LEFT_BUTTON, x, y) == BUTTON_UP) {
+		return ActionType::HOVER;
+	}
 
-					while (pWind->GetButtonState(LEFT_BUTTON, x, y) == BUTTON_DOWN) {
-						if (startX != x || startY != y) {
-							return ActionType::MOVE;
-						}
+	// User clicks on the drawing area
+	if (y >= UI.ToolBarHeight + UI.GateBarHeight && y < UI.Height - UI.StatusBarHeight) {
+		if (UI.AppMode == Mode::DESIGN) {
+			if (pOut->GetComponentAtPin(x, y) != NULL) {
+				int startX = x;
+				int startY = y;
+
+				while (GetButtonState(LEFT_BUTTON, x, y) == BUTTON_DOWN) {
+					if (startX != x || startY != y) {
+						return ActionType::MOVE;
 					}
 				}
-
-				// Select
-				return ActionType::SELECT;
 			}
-			click = pWind->WaitMouseClick(x,y);
+
+			return ActionType::SELECT;
 		}
 		else {
-			return ActionType::HOVER;
+			GetPointClicked(x, y);
+			return ActionType::SELECT;
 		}
 	}
 
-	mLastX = x;
-	mLastY = y;
+	GetPointClicked(x, y);
 
 	// User clicks on the tool bar
 	if (y >= 0 && y < UI.ToolBarHeight) {

@@ -210,7 +210,7 @@ void ApplicationManager::ExecuteAction(ActionType &actType) {
 			break;
 	}
 
-	if(pAct) {
+	if (pAct) {
 		if (pAct->Execute()) {
 			mUndoStack.push(pAct);
 			while (!mRedoStack.empty()) delete mRedoStack.top(), mRedoStack.pop();	// Clear the RedoStack

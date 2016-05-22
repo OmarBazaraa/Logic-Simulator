@@ -14,6 +14,7 @@ bool Hover::ReadActionParameters() {
 /* Executes action */
 bool Hover::Execute() {
 	Output* pOut = mAppManager->GetOutput();
+	Input* pIn = mAppManager->GetInput();
 	Component* pComp = NULL;
 	image wind;
 
@@ -32,7 +33,7 @@ bool Hover::Execute() {
 	pOut->StoreImage(wind, minX, minY, maxX, maxY);
 
 	// Loop until the user click the mouse left button
-	while (pOut->GetButtonState(LEFT_BUTTON, x, y) == BUTTON_UP) {
+	while (pIn->GetButtonState(LEFT_BUTTON, x, y) == BUTTON_UP) {
 		// User hovers on the tool bar
 		if (y >= 0 && y < UI.ToolBarHeight) {
 			if (lastHovedArea != 0) {
