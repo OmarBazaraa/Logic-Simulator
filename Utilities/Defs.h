@@ -196,5 +196,12 @@ struct Data {
 enum DialogBoxButton {
 	YES,
 	NO,
+	OK,
 	CANCEL
+};
+
+enum DialogBoxType {
+	Type_A,         // Three buttons exist YES, NO and CANCEL
+	Type_B,         // Two buttons exist OK, CANCEL
+	Type_C          // One button exists OK
 };

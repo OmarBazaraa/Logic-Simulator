@@ -26,7 +26,7 @@ bool Simulate::Execute() {
 
 	ActionType act = DESIGN_MODE;
 	if (stopSimulation||circuit.size()) {
-		Dialog *d = new Dialog("Circuit Not Valid");
+		Dialog *d = new Dialog("Circuit Not Valid",Type_C);
 		d->GetUserClick();
 		delete d;
 		mAppManager->ExecuteAction(act);

@@ -50,18 +50,15 @@ private:
 
 	/* Draws truth table window */
 	void DrawWindow();
-
-	/* Creates a new Window object */
-	window* CreateWind(int w, int h, int x, int y) const;
-
-	/* Changes the title of the Window */
-	void ChangeTitle(const string& title) const;
-
-	/*Clears the drawing area */
+	
+	/* Clears the drawing area */
 	void ClearDrawingArea() const;
 
-	/*Draws truth table*/
+	/* Draws truth table */
 	void DrawTruthTable() const;
+
+	/* Hovers */
+	void Hover(bool stopHovering);
 
 	/* Draws exit button */
 	void DrawExit() const;
@@ -69,20 +66,20 @@ private:
 	/* Draws headers */
 	void DrawHeaders();
 
-	/* Normalize message position */
+	/* Normalizes message to fit */
 	void Normalizetxt(string& msg);
 
-	/*Create Compinations*/
+	/* Creates all possible compinations of inputs on switches */
 	void CreateCompinations(string compination);
 
-	/*Test input*/
+	/*Tests input*/
 	void Test(string k);
 
-	/*changes string to int*/
+	/* changes string to int */
 	int ToInt(string k);
 
-	/*Tests the output on a led*/
-	int TestGate(Component*);
+	/* Tests the output on a gate */
+	int TestGate(Gate*);
 
 	/* Returns switches status to default */
 	void ReturnToDefault();
@@ -90,10 +87,7 @@ private:
 	/* Exits Truth Table */
 	void Exits();
 
-	/* detects if the value of those coordinates */
+	/* Checks if the value of coordinates is on exit button */
 	bool TruthTable::IsButton(int x, int y);
-
-	/* Hovers */
-	void Hover(bool stopHovering);
 };
 

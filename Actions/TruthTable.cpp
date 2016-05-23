@@ -66,21 +66,11 @@ void TruthTable::Populate() {
 
 /* Draws truth table window */
 void TruthTable::DrawWindow() {
-	pWind = CreateWind(mColumns * 100 + 230, mRows * 20 + 80, UI.StartX, UI.StartY);
-	ChangeTitle("Truth Table");
+	pWind = new window(mColumns * 100 + 230, mRows * 20 + 80, UI.StartX, UI.StartY);
+	pWind->ChangeTitle("");
 	ClearDrawingArea();
 	DrawTruthTable();
 	Hover(true);
-}
-
-/* Creates a new Window object */
-window* TruthTable::CreateWind(int w, int h, int x, int y) const {
-	return new window(w, h, x, y);
-}
-
-/* Chnages the title of the Window */
-void TruthTable::ChangeTitle(const string& title) const {
-	pWind->ChangeTitle(title);
 }
 
 /* Clears the drawing area */
@@ -119,7 +109,7 @@ void TruthTable::DrawExit() const {
 	pWind->DrawString(mColumns * 100 + 190, 0, "x");
 }
 
-/* Draw headers */
+/* Draws headers */
 void TruthTable::DrawHeaders() {
 	pWind->SetPen(UI.MsgColor);
 	pWind->SetFont(UI.FontSize, BOLD, BY_NAME, "Arial");
@@ -142,7 +132,7 @@ void TruthTable::DrawHeaders() {
 	mWrite << endl;
 }
 
-/* Normalize message position */
+/* Normalizes message to fit */
 void TruthTable::Normalizetxt(string& msg) {
 	string temp = "";
 	int l = msg.length();
@@ -153,14 +143,14 @@ void TruthTable::Normalizetxt(string& msg) {
 	msg = temp;
 }
 
-/*Create Compinations */
+/* Creates all possible compinations of inputs on switches */
 void TruthTable::CreateCompinations(string compination) {
 	if (compination.length() == mSwitchesCount) { Test(compination); return; }
 	CreateCompinations(compination + '0');
 	CreateCompinations(compination + '1');
 }
 
-/* Test input */
+/* Tests input */
 void TruthTable::Test(string compination) {
 	int pos = ToInt(compination) * 20 + 40;
 	string status;
@@ -182,6 +172,7 @@ void TruthTable::Test(string compination) {
 	mWrite << endl;
 }
 
+/* Changes string to int */
 int TruthTable::ToInt(string k) {
 	int x = 0;
 	for (int i = 0; i < k.length(); i++)
@@ -189,29 +180,29 @@ int TruthTable::ToInt(string k) {
 	return x;
 }
 
-/* Tests the output on a led */
-int TruthTable::TestGate(Component*pComp) {
+/* Tests the output on a gate */
+int TruthTable::TestGate(Gate*pGate) {
 
 	int returnValue;
 
-	if (pComp != NULL) {
-		if (dynamic_cast<Switch*>(pComp)) {
-			return pComp->GetOutputPinStatus();
+	if (pGate != NULL) {
+		if (dynamic_cast<Switch*>(pGate)) {
+			return pGate->GetOutputPinStatus();
 		}
-		else if (dynamic_cast<LED*>(pComp)) {
-			returnValue = TestGate(((LED*)pComp)->GetInputPin(0)->GetConnection(0)->GetSourcePin()->GetGate());
-			((LED*)pComp)->SetInputPinStatus(0, returnValue ? Status::HIGH : Status::LOW);
+		else if (dynamic_cast<LED*>(pGate)) {
+			returnValue = TestGate(((LED*)pGate)->GetInputPin(0)->GetConnection(0)->GetSourcePin()->GetGate());
+			((LED*)pGate)->SetInputPinStatus(0, returnValue ? Status::HIGH : Status::LOW);
 			return returnValue;
 		}
-		else if (dynamic_cast<LogicGate*>(pComp)) {
+		else if (dynamic_cast<LogicGate*>(pGate)) {
 
-			for (int i = 0; i<((LogicGate*)pComp)->GetInputsCount(); i++) {
-				returnValue = TestGate(((LogicGate*)pComp)->GetInputPin(i)->GetConnection(0)->GetSourcePin()->GetGate());
-				((Gate*)pComp)->SetInputPinStatus(i, returnValue ? Status::HIGH : Status::LOW);
+			for (int i = 0; i<((LogicGate*)pGate)->GetInputsCount(); i++) {
+				returnValue = TestGate(((LogicGate*)pGate)->GetInputPin(i)->GetConnection(0)->GetSourcePin()->GetGate());
+				((Gate*)pGate)->SetInputPinStatus(i, returnValue ? Status::HIGH : Status::LOW);
 			}
 
-			((LogicGate*)pComp)->Operate();
-			return ((LogicGate*)pComp)->GetOutputPinStatus();
+			((LogicGate*)pGate)->Operate();
+			return ((LogicGate*)pGate)->GetOutputPinStatus();
 
 		}
 	}
@@ -247,7 +238,7 @@ void TruthTable::Exits() {
 		}
 }
 
-/* detects if the value of those coordinates */
+/* Checks if the value of coordinates is on exit button */
 bool TruthTable::IsButton(int x,int y) {
 	return (y < 30 && y > 0 && x > mColumns * 100 + 190 && x < mColumns * 100 + 210);
 }

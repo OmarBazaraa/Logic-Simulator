@@ -7,9 +7,9 @@ LoadAction::LoadAction(ApplicationManager* pAppMan) : Action(pAppMan) {
 
 /* Reads parameters required for action to execute */
 bool LoadAction::ReadActionParameters() {
-	Dialog dialog("Loading old file will cause current file deletion!");
+	Dialog dialog("Loading old file will cause current file deletion!",Type_B);
 
-	if (dialog.GetUserClick() != DialogBoxButton::YES) {
+	if (dialog.GetUserClick() != DialogBoxButton::OK) {
 		return false;
 	}
 
