@@ -42,16 +42,24 @@ bool Move::Execute() {
 	Output* pOut = mAppManager->GetOutput();
 	Input* pIn = mAppManager->GetInput();
 
+	int x = mStartX, prvX = x, dx = 0;
+	int y = mStartY, prvY = y, dy = 0;
+
+	int minX = 0;
+	int maxX = UI.Width;
+	int minY = UI.ToolBarHeight + UI.GateBarHeight;
+	int maxY = UI.Height - UI.StatusBarHeight;
+
 	// Store the previous window
 	image wind;
 	pOut->StoreImage(wind, 0, 0, UI.Width, UI.Height);
 
-	int x = mStartX, prvX = x, dx = 0;
-	int y = mStartY, prvY = y, dy = 0;
-
 	// Reading the mouse input from the user
 	while (pIn->GetButtonState(LEFT_BUTTON, x, y) == BUTTON_DOWN) {
 		normalizeCoordinates(x, y);
+
+		if (x < minX || x > maxX) x = prvX;
+		if (y < minY || y > maxY) y = prvY;
 		
 		dx = x - mStartX;
 		dy = y - mStartY;
@@ -175,8 +183,8 @@ bool Move::IsValidArea(const GraphicsInfo& gfxInfo) {
 	Output* pOut = mAppManager->GetOutput();
 	Component* pComp;
 
-	for (int x = gfxInfo.x1; x < gfxInfo.x2; x++) {
-		for (int y = gfxInfo.y1; y < gfxInfo.y2; y++) {
+	for (int x = gfxInfo.x1; x < gfxInfo.x2; x += UI.PinOffset) {
+		for (int y = gfxInfo.y1; y < gfxInfo.y2; y += UI.PinOffset) {
 			pComp = pOut->GetComponentAtPin(x, y);
 
 			if (pComp != NULL && !pComp->IsSelected() && pComp->GetAddActionType() != ADD_CONNECTION) {

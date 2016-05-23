@@ -180,15 +180,15 @@ void Output::ClearDrawingArea() const {
 	int startY = UI.ToolBarHeight + UI.GateBarHeight;
 	int endY = startY + UI.VerPinsCount * UI.PinOffset;
 
-	//// Vertical lines
-	//for (int x = startX; x <= endX; x += UI.PinOffset) {
-	//	pWind->DrawLine(x, startY, x, endY);
-	//}
+	// Vertical lines
+	for (int x = startX; x <= endX; x += UI.PinOffset) {
+		pWind->DrawLine(x, startY, x, endY);
+	}
 
-	//// Horizontal lines
-	//for (int y = startY; y <= endY; y += UI.PinOffset) {
-	//	pWind->DrawLine(startX, y, endX, y);
-	//}
+	// Horizontal lines
+	for (int y = startY; y <= endY; y += UI.PinOffset) {
+		pWind->DrawLine(startX, y, endX, y);
+	}
 	
 	startX += UI.PinMargin;
 	endX -= UI.PinMargin;
@@ -378,15 +378,15 @@ void Output::DrawConnection(const vector<GraphicsInfo>& path, bool selected, boo
 
 /* Checks if the given coordinates is within the drawing area */
 bool Output::IsDrawingArea(int x, int y) {
-	if (x < 0 || x >= UI.Width) return false;
-	if (y < UI.ToolBarHeight + UI.GateBarHeight || y >= UI.Height - UI.StatusBarHeight) return false;
+	if (x < 0 || x > UI.Width) return false;
+	if (y < UI.ToolBarHeight + UI.GateBarHeight || y > UI.Height - UI.StatusBarHeight) return false;
 	return true;
 }
 
 /* Checks if the given area of pins is empty */
 bool Output::IsEmptyArea(const GraphicsInfo& gfxInfo) const {
-	int x1 = gfxInfo.x1, y1 = gfxInfo.y1;
-	int x2 = gfxInfo.x2, y2 = gfxInfo.y2;
+	int x1 = gfxInfo.x1, x2 = gfxInfo.x2 - 1;
+	int y1 = gfxInfo.y1, y2 = gfxInfo.y2 - 1;
 	getPinIndices(x1, y1);
 	getPinIndices(x2, y2);
 
@@ -394,8 +394,8 @@ bool Output::IsEmptyArea(const GraphicsInfo& gfxInfo) const {
 		return false;
 	}
 
-	for (int x = x1; x < x2; x++) {
-		for (int y = y1; y < y2; y++) {
+	for (int x = x1; x <= x2; x++) {
+		for (int y = y1; y <= y2; y++) {
 			if (mPinGrid[x][y].Type != PinType::EMPTY) return false;	// Occupied area
 		}
 	}
