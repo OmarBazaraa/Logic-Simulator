@@ -14,27 +14,47 @@
 using namespace std;
 class TruthTable : public Action
 {
-	LED**leds;              // List of existing leds
-	Switch**switches;       // List of existing switches
-	int*switchesDefault;
-	int rows;               // Number of rows in truth table
-	int columns;            // Number of columns in truth table
-	int switchesCount;      // Number of switches in design
-	int ledsCount;          // Number of leds in design
+	LED** mLeds;              // List of existing leds
+	Switch** mSwitches;       // List of existing switches
+	int* mSwitchesDefault;
+	int mRows;               // Number of rows in truth table
+	int mColumns;            // Number of columns in truth table
+	int mSwitchesCount;      // Number of switches in design
+	int mLedsCount;          // Number of leds in design
 	window* pWind;			// Pointer to the graphical Window object
-	bool canDraw;           // If you can write on window or not
-	ofstream write;         // txt file to write truth table
+	bool mCanDraw;           // If you can write on window or not
+	ofstream mWrite;         // txt file to write truth table
+
 public:
 	/* Constructor */
 	TruthTable(ApplicationManager* pAppMan);
 
+	/* Reads parameters required for action to execute */
+	virtual bool ReadActionParameters();
+
 	/* Executes action */
 	virtual bool Execute();
+
+	/* Undo action */
+	virtual void Undo();
+
+	//* Redo action */
+	virtual void Redo();
+
+	/* Destructor */
+	virtual ~TruthTable();
+
+private:
+	/* Populates */
+	void Populate();
+
+	/* Draws truth table window */
+	void DrawWindow();
 
 	/* Creates a new Window object */
 	window* CreateWind(int w, int h, int x, int y) const;
 
-	/* Chnages the title of the Window */
+	/* Changes the title of the Window */
 	void ChangeTitle(const string& title) const;
 
 	/*Clears the drawing area */
@@ -45,12 +65,15 @@ public:
 
 	/* Draws exit button */
 	void DrawExit() const;
+	
+	/* Draws headers */
+	void DrawHeaders();
 
-	/* Exits Truth Table */
-	void Exits();
+	/* Normalize message position */
+	void Normalizetxt(string& msg);
 
 	/*Create Compinations*/
-	void CreateCompinations(string k);
+	void CreateCompinations(string compination);
 
 	/*Test input*/
 	void Test(string k);
@@ -61,22 +84,16 @@ public:
 	/*Tests the output on a led*/
 	int TestGate(Component*);
 
-	/*Draw headers*/
-	void DrawHeaders();
+	/* Returns switches status to default */
+	void ReturnToDefault();
 
-	/* Normalize message position */
-	void Normalizetxt(string&);
+	/* Exits Truth Table */
+	void Exits();
 
-	/* Reads parameters required for action to execute */
-	virtual bool ReadActionParameters() { return true; }
+	/* detects if the value of those coordinates */
+	bool TruthTable::IsButton(int x, int y);
 
-	/* Undo action */
-	virtual void Undo() {}
-
-	///* Redo action */
-	virtual void Redo() {}
-
-	/* Destructor */
-	virtual ~TruthTable();
+	/* Hovers */
+	void Hover(bool stopHovering);
 };
 
