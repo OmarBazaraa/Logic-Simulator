@@ -39,9 +39,6 @@ public:
 	/* Draws the status bar */
 	void CreateStatusBar() const;
 
-	/* Updates the window with double buffering */
-	void UpdateBuffer();
-
 	/* Clears the drawing area */
 	void ClearDrawingArea() const;
 
@@ -51,11 +48,14 @@ public:
 	/* Prints a message on the status bar */
 	void PrintMsg(const string& msg) const;
 
-	/* Draws label */
+	/* Draws the hovered label */
 	void DrawLabel(int x, int y, const string& label) const;
 
 	/* Draws the selection rectangle from the given coordinates */
 	void DrawSelectionRectangle(int x1, int y1, int x2, int y2);
+
+	/* Draws the move line from a ceratin to a certain coordinates */
+	void DrawMoveLine(int x1, int y1, int x2, int y2);
 
 	/* Draws components */
 	void DrawAND(const GraphicsInfo& gfxInfo, bool selected = false) const;
@@ -75,7 +75,7 @@ public:
 	/* Draws connection */
 	void DrawConnection(const vector<GraphicsInfo>& path, bool selected = false, bool on = false);
 
-	/* Checks if the given y-coordinate is within the drawing area */
+	/* Checks if the given coordinates is within the drawing area */
 	bool IsDrawingArea(int x, int y);
 
 	/* Checks if the given area of pins is empty */
@@ -96,23 +96,17 @@ public:
 	/* Returns the shortest available path for the connection, null if no path found */
 	vector<GraphicsInfo>* GetConnectionPath(const GraphicsInfo& gfxInfo);
 
+	/* Updates the window with double buffering */
+	void UpdateBuffer();
+
 	/* Stores and returns an image with certain coordinates */
-	void StoreImage(image &imgThis, const unsigned usX, const unsigned short usY, const unsigned short usWidth, const unsigned short usHeight);
+	void StoreImage(image& img, int x, int y, int width, int height);
 
-	/* Draws a given Image to the window */
-	void DrawImage(const image &imgThis, const int iX, const int iY, const int iWidth, const int iHeight);
+	/* Draws a given image to the window */
+	void DrawImage(const image& img, int x, int y, int width, int height);
 
-	/* Draws a given Image to the window */
+	/* Draws a given image to the window */
 	void DrawPNG(string dir, int x, int y);
-
-	/* Sets the Pen with a certain color */
-	color SetPen(const color c,int width);
-
-	/* Draws a line from a ceratin to a certain coordinates */
-	void DrawLine(const int iX1, const int iY1, const int iX2, const int iY2, const drawstyle dsStyle = FRAME);
-
-	/* Flushes all the press to the mouse queue */
-	void FlushMouseQueue();
 
 	/* Destructor */
 	~Output();

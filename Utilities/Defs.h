@@ -149,13 +149,13 @@ struct Node {
 	}
 
 	/* Equality operator for ease of access */
-	bool operator==(const Node& right) const {
-		return (x == right.x && y == right.y);
+	bool operator==(const Node& rhs) const {
+		return (x == rhs.x && y == rhs.y);
 	}
 
 	/* Non-equality operator for ease of access */
-	bool operator!=(const Node& right) const {
-		return (x != right.x || y != right.y);
+	bool operator!=(const Node& rhs) const {
+		return (x != rhs.x || y != rhs.y);
 	}
 };
 
@@ -175,6 +175,10 @@ struct GraphicsInfo {
 		this->y1 = y1;
 		this->x2 = x2;
 		this->y2 = y2;
+
+		// To reserve the upper left and lower right points
+		if (x1 > x2) swap(x1, x2);
+		if (y1 > y2) swap(y1, y2);
 	}
 
 	/* Equality operator for ease of access */

@@ -2,29 +2,18 @@
 #include "..\Actions\Action.h"
 #include "..\ApplicationManager.h"
 #include "..\Components\Component.h"
-#include "..\Components\AND.h"
-#include "..\Components\OR.h"
-#include "..\Components\NOT.h"
-#include "..\Components\NAND.h"
-#include "..\Components\NOR.h"
-#include "..\Components\XOR.h"
-#include "..\Components\XNOR.h"
-#include "..\Components\AND3.h"
-#include "..\Components\NOR3.h"
-#include "..\Components\XOR3.h"
-#include "..\Components\Buffer.h"
-#include "..\Components\Switch.h"
-#include "..\Components\LED.h"
+#include "..\Components\Gate.h"
 #include "..\Components\Connection.h"
+#include <vector>
 
 class Move : public Action
 {
 private:
-	int mX, mY;
-	vector<Gate*> mMovedGates;					// list of gates to be moved
+	int mStartX, mStartY;
+	vector<Gate*> mSelectedGates;				// list of selected gates to be moved
 	vector<Connection*> mConnections;			// list of all connections to be updated
 	vector<GraphicsInfo> mPrvGatesCoordinates;	// list of previous coordinates of the moved gates
-	vector<GraphicsInfo> mNewGatesCoordinates;	// list of new coordinates of the moved gates
+	vector<GraphicsInfo> mNewGatesCoordinates;	// list of new coordinates of the selected gates
 
 public:
 	/* Constructor */
@@ -46,18 +35,15 @@ public:
 	virtual ~Move();
 
 private:
-	/* Checks for the validity of the coordinates when adding the relative distance */
-	bool ValidCoordinates(int dx, int dy, Component * Comp);
+	/* Checks if the given area is valid for moving a component to it or not */
+	bool IsValidArea(const GraphicsInfo& gfxInfo);
 
-	/* Calculates the new Graphics Info that the component will be drawn in */
-	GraphicsInfo CalculateDimensions(Component* Comp,int dx, int dy);
-
-	/* Checks if the area of the graphics info is valid for a component to move into */
-	bool ValidArea(GraphicsInfo& GfxInfo);
-
-	/* Draws the component while the move is active highlighted when invalid coordinate */
-	void DrawComponent(Component* pComp,GraphicsInfo& GfxInfo,bool invalid);
-
-	/* Sets the component new Graphics Info if it goes out of borders */
+	/* Sets the component new coordinates if it goes out of borders */
 	bool SetNewGateBorders(GraphicsInfo& GfxInfo);
+
+	/* Calculates and returns the new coordinates of the gate */
+	GraphicsInfo CalculateDimensions(Component* pComp, int dx, int dy);
+
+	/* Draws the component in its current state: faded or invalid */
+	void DrawComponent(Component* pComp, const GraphicsInfo& gfxInfo, bool invalid);
 };

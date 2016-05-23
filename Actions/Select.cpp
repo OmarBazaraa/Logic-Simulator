@@ -1,5 +1,4 @@
 #include "Select.h"
-#include "..\CMUgraphicsLib\auxil.h"	// where Pause is found
 
 /* Constructor */
 Select::Select(ApplicationManager* pAppMan) : Action(pAppMan) {
@@ -25,6 +24,7 @@ bool Select::ReadActionParameters() {
 		int minY = UI.ToolBarHeight + UI.GateBarHeight;
 		int maxY = UI.Height - UI.StatusBarHeight;
 
+		// Store the previous window
 		image wind;
 		pOut->StoreImage(wind, minX, minY, maxX, maxY - minY);
 
@@ -37,9 +37,8 @@ bool Select::ReadActionParameters() {
 				pOut->DrawSelectionRectangle(mStartX, mStartY, x, y);
 				prvX = x;
 				prvY = y;
-
-				//Pause(10);	// Pause to smooth up flickering
 			}
+
 			pOut->UpdateBuffer();
 		}
 
@@ -47,7 +46,9 @@ bool Select::ReadActionParameters() {
 		if (mStartX > mEndX) swap(mStartX, mEndX);
 		if (mStartY > mEndY) swap(mStartY, mEndY);
 
+		// Redraw the initial window
 		pOut->DrawImage(wind, minX, minY, maxX, maxY - minY);
+		pOut->UpdateBuffer();
 	}
 
 	// Added the selected components to the set

@@ -9,6 +9,7 @@ Output::Output() {
 	UI.BackgroundColor = color(117, 117, 117);
 	UI.DarkColor = color(66, 66, 66);
 	UI.SelectionColor = color(255, 193, 7);
+	UI.InvalidColor = color(213, 0, 0);
 	UI.MsgColor = WHITE;
 	UI.ConnectionColor = BLACK;
 	UI.ConnectionOnColor = color(139, 195, 74);
@@ -16,18 +17,18 @@ Output::Output() {
 	// Create and initialize the drawing window
 	pWind = CreateWind(UI.Width, UI.Height, UI.StartX, UI.StartY);
 	pWind->SetWaitClose(false);
-	ChangeTitle("Logic Simulator");
 	pWind->SetBuffering(true);
+	ChangeTitle("Logic Simulator");
 	CreateToolBar();
 	CreateGateBar();
+	ClearDrawingArea();
 	CreateStatusBar();
-	
+
+	pWind->UpdateBuffer();
 
 	// Initialize the pin grid
 	mPinGrid = new PinInfo*[UI.HorPinsCount];
 	for (int x = 0; x < UI.HorPinsCount; x++) mPinGrid[x] = new PinInfo[UI.VerPinsCount];
-	ClearDrawingArea();
-	pWind->UpdateBuffer();
 }
 
 /* Creates an Input object and assigns it to the same Window */
@@ -164,10 +165,6 @@ void Output::CreateStatusBar() const {
 	pWind->DrawRectangle(0, UI.Height - UI.StatusBarHeight, UI.Width, UI.Height);
 }
 
-void Output::UpdateBuffer() {
-	pWind->UpdateBuffer();
-}
-
 /* Clears the drawing area */
 void Output::ClearDrawingArea() const {
 	pWind->SetBrush(UI.BackgroundColor);
@@ -249,7 +246,7 @@ void Output::PrintMsg(const string& msg) const {
 	pWind->UpdateBuffer();
 }
 
-/* Draws label */
+/* Draws the hovered label */
 void Output::DrawLabel(int x, int y, const string& label) const {
 	int w, h;
 	pWind->SetBrush(UI.DarkColor);
@@ -265,6 +262,12 @@ void Output::DrawLabel(int x, int y, const string& label) const {
 void Output::DrawSelectionRectangle(int x1, int y1, int x2, int y2) {
 	pWind->SetPen(UI.SelectionColor, 2);
 	pWind->DrawRectangle(x1, y1, x2, y2, FRAME);
+}
+
+/* Draws the move line from a ceratin to a certain coordinates */
+void Output::DrawMoveLine(int x1, int y1, int x2, int y2) {
+	pWind->SetPen(WHITE, 2);
+	pWind->DrawLine(x1, y1, x2, y2);
 }
 
 /* Draws AND gate */
@@ -376,7 +379,7 @@ void Output::DrawConnection(const vector<GraphicsInfo>& path, bool selected, boo
 /* Checks if the given coordinates is within the drawing area */
 bool Output::IsDrawingArea(int x, int y) {
 	if (x < 0 || x >= UI.Width) return false;
-	if (y <= UI.ToolBarHeight + UI.GateBarHeight || y >= UI.Height - UI.StatusBarHeight) return false;
+	if (y < UI.ToolBarHeight + UI.GateBarHeight || y >= UI.Height - UI.StatusBarHeight) return false;
 	return true;
 }
 
@@ -520,6 +523,10 @@ Component* Output::GetComponentAtPin(int x, int y) const {
 
 /* Returns the shortest available path for the connection, null if no path found */
 vector<GraphicsInfo>* Output::GetConnectionPath(const GraphicsInfo& gfxInfo) {
+	if (!(IsDrawingArea(gfxInfo.x1, gfxInfo.y1) && IsDrawingArea(gfxInfo.x2, gfxInfo.y2))) {
+		return NULL;
+	}
+
 	int dx[] = { 0, 0, 1, -1 };
 	int dy[] = { 1, -1, 0, 0 };
 
@@ -551,30 +558,6 @@ vector<GraphicsInfo>* Output::GetConnectionPath(const GraphicsInfo& gfxInfo) {
 	}
 
 	return (u != dst ? NULL : GenerateConnectionPath(src, dst, parents));
-}
-
-void Output::StoreImage(image & imgThis, const unsigned usX, const unsigned short usY, const unsigned short usWidth, const unsigned short usHeight) {
-	pWind->StoreImage(imgThis, usX, usY, usWidth, usHeight);
-}
-
-void Output::DrawPNG(string dir, int x, int y) {
-	pWind->DrawPNG(dir, x, y);
-}
-
-void Output::DrawImage(const image & imgThis, const int iX, const int iY, const int iWidth, const int iHeight) {
-	pWind->DrawImage(&imgThis, iX, iY, iWidth, iHeight);
-}
-
-color Output::SetPen(const color c, int width) {
-	return pWind->SetPen(c, width);
-}
-
-void Output::DrawLine(const int iX1, const int iY1, const int iX2, const int iY2, const drawstyle dsStyle) {
-	pWind->DrawLine(iX1, iY1, iX2, iY2, dsStyle);
-}
-
-void Output::FlushMouseQueue() {
-	pWind->FlushMouseQueue();
 }
 
 /* Generate the connection path */
@@ -636,4 +619,22 @@ Output::~Output() {
 	delete pWind;
 	for (int x = 0; x < UI.HorPinsCount; x++) delete[] mPinGrid[x];
 	delete[] mPinGrid;
+}
+
+
+
+void Output::UpdateBuffer() {
+	pWind->UpdateBuffer();
+}
+
+void Output::StoreImage(image& img, int x, int y, int width, int height) {
+	pWind->StoreImage(img, x, y, width, height);
+}
+
+void Output::DrawImage(const image& img, int x, int y, int width, int height) {
+	pWind->DrawImage(&img, x, y, width, height);
+}
+
+void Output::DrawPNG(string dir, int x, int y) {
+	pWind->DrawPNG(dir, x, y);
 }

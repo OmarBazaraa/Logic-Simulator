@@ -12,8 +12,8 @@ __declspec(selectany)	// This line to prevent "redefinition error"
 struct UserInterface
 {
 	// Windows Dimension constants
-	static const int Width = 1344,	Height = 800;				// Window width and height
-	static const int StartX = 15,	StartY = 15;				// Window starting coordinates
+	static const int Width = 1344,	Height = 768;				// Window width and height
+	static const int StartX = 10,	StartY = 10;				// Window starting coordinates
 	static const int ToolBarHeight = 50;						// Tool bar height
 	static const int ToolItemWidth = 50;						// Width of each item in the tool bar menu
 	static const int GateBarHeight = 75;						// Gate bar height
@@ -37,6 +37,7 @@ struct UserInterface
 	color BackgroundColor;
 	color DarkColor;
 	color SelectionColor;
+	color InvalidColor;
 	color MsgColor;
 	color ConnectionColor;
 	color ConnectionOnColor;
