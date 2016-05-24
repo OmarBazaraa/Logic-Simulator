@@ -184,7 +184,7 @@ int TruthTable::ToInt(string k) {
 }
 
 /* Tests the output on a gate */
-void TruthTable::TestGate(queue<Component*>q) {
+void TruthTable::TestGate(queue<Component*> q) {
 	while (!q.empty()) {
 		q.front()->Operate();
 		if (dynamic_cast<Connection*>(q.front()))

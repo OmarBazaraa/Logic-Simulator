@@ -24,8 +24,8 @@ bool Simulate::Execute() {
 		visited.clear();
 	}	
 
-	ActionType act = DESIGN_MODE;
 	if (stopSimulation||circuit.size()) {
+		ActionType act = DESIGN_MODE;
 		Dialog *d = new Dialog("Circuit Not Valid",Type_C);
 		d->GetUserClick();
 		delete d;

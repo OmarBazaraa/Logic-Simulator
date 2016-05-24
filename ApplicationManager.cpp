@@ -15,6 +15,7 @@
 #include "Actions\Select.h"
 #include "Actions\Move.h"
 #include "Actions\Hover.h"
+#include "Actions\Exit.h"
 using namespace std;
 
 /* Constructor */
@@ -65,7 +66,7 @@ ActionType ApplicationManager::GetUserAction() {
 }
 
 /* Creates an action and executes it */
-void ApplicationManager::ExecuteAction(ActionType &actType) {
+void ApplicationManager::ExecuteAction(ActionType& actType) {
 	Action* pAct = NULL;
 
 	switch (actType) {
@@ -149,21 +150,21 @@ void ApplicationManager::ExecuteAction(ActionType &actType) {
 			//pOut->PrintMsg("STATUS BAR");
 			break;
 		case EXIT:
-			Dialog *d = new Dialog("Would you like to save before exit?");
-			if (d->GetUserClick() == YES)
-				pAct = new SaveAction(this);
-			else if (d->GetUserClick() == NO);
-			else actType = DESIGN_MODE;
-			delete d;
+			pAct = new Exit(this);
 			break;
 	}
 
-	if (pAct) {
+	if (pAct != NULL) {
 		if (pAct->Execute()) {
 			mUndoStack.push(pAct);
 			while (!mRedoStack.empty()) delete mRedoStack.top(), mRedoStack.pop();	// Clear the RedoStack
 		}
 		else {
+			// To cancel exit action
+			if (actType == EXIT) {
+				actType = GATE_BAR;
+			}
+
 			delete pAct;
 		}
 	}
