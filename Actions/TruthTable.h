@@ -79,7 +79,7 @@ private:
 	int ToInt(string k);
 
 	/* Tests the output on a gate */
-	int TestGate(Gate*);
+	void TestGate(queue<Component*>q);
 
 	/* Returns switches status to default */
 	void ReturnToDefault();

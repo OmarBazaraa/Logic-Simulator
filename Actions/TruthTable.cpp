@@ -1,5 +1,5 @@
 #include "TruthTable.h"
-
+#include "queue"
 
 /* Constructor */
 TruthTable::TruthTable(ApplicationManager* pAppMan) : Action(pAppMan) {
@@ -66,7 +66,7 @@ void TruthTable::Populate() {
 
 /* Draws truth table window */
 void TruthTable::DrawWindow() {
-	pWind = new window(mColumns * 100 + 230, mRows * 20 + 80, UI.StartX, UI.StartY);
+	pWind = new window(mColumns * 100 + 70, mRows * 20 + 80, UI.StartX, UI.StartY);
 	pWind->ChangeTitle("");
 	ClearDrawingArea();
 	DrawTruthTable();
@@ -84,13 +84,13 @@ void TruthTable::ClearDrawingArea() const {
 void TruthTable::DrawTruthTable() const {
 	// Vertical lines
 	pWind->SetPen(BLACK);
-	for (int x = 0; x <= (mColumns + 1) * 100; x += 100) {
-		pWind->DrawLine(x, 20, x, (2 + mRows) * 20);
+	for (int x = 0; x < (mColumns + 1) * 100; x += 100) {
+		pWind->DrawLine(x + 20, 20, x + 20, (2 + mRows) * 20);
 	}
 
 	// Horizontal lines
-	for (int y = 0; y <= (2 + mRows) * 20; y += 20) {
-		pWind->DrawLine(100, y, (1 + mColumns) * 100, y);
+	for (int y = 20; y <= (2 + mRows) * 20; y += 20) {
+		pWind->DrawLine(20, y, mColumns * 100 + 20, y);
 	}
 }
 
@@ -99,14 +99,14 @@ void TruthTable::Hover(bool stopHovering) {
 	pWind->SetFont(40, BOLD, BY_NAME, "Arial");
 	if (stopHovering)
 		pWind->SetPen(WHITE);
-	else
+	else 
 		pWind->SetPen(RED);
 	DrawExit();
 }
 
 /* Draws exit button */
 void TruthTable::DrawExit() const {
-	pWind->DrawString(mColumns * 100 + 190, 0, "x");
+	pWind->DrawString(mColumns * 100 + 30 , 0, "x");
 }
 
 /* Draws headers */
@@ -117,16 +117,16 @@ void TruthTable::DrawHeaders() {
 	int n = mSwitchesCount;
 	int count = 0;
 
-	for (int i = 100; i <= mColumns * 100; i += 100) {
-		if (i / 100 <= n)
-			msg = mSwitches[i / 100 - 1]->GetLabel();
+	for (int i = 20; i < mColumns * 100; i += 100) {
+		if (i / 100 < n)
+			msg = mSwitches[i / 100]->GetLabel();
 		else
 			msg = mLeds[count++]->GetLabel();
 		Normalizetxt(msg);
 		int w, h;
 		pWind->GetStringSize(w, h, msg);
 		if (mCanDraw)
-			pWind->DrawString(i +(100-w)/2, 20, msg);
+			pWind->DrawString(i + (100 - w) / 2 , 20, msg);
 		mWrite << msg << "   ";
 	}
 	mWrite << endl;
@@ -154,18 +154,21 @@ void TruthTable::CreateCompinations(string compination) {
 void TruthTable::Test(string compination) {
 	int pos = ToInt(compination) * 20 + 40;
 	string status;
+	queue<Component*>q;
 	for (int i = 0; i < mSwitchesCount; i++) {
-		mSwitches[i]->GetOutputPin()->SetStatus(Status(compination[i] - '0'));
+		mSwitches[i]->GetOutputPin()->SetStatus(Status(compination[i] - '0') == HIGH ? LOW : HIGH);
 		status = compination[i];
-		if (mCanDraw)pWind->DrawString((i + 1) * 100 + 45, pos, status);
+		q.push(mSwitches[i]);
+		if (mCanDraw)pWind->DrawString(i * 100 + 65, pos, status);
 		mWrite << "   " << status << "       ";
 	}
+	TestGate(q);
 	for (int i = 0; i < mLedsCount; i++) {
 		status = "";
-		status += ('0' + TestGate(mLeds[i]));
+		status += ('0' + mLeds[i]->GetInputPinStatus(0));
 		if (status[0] - '0')pWind->SetPen(GREEN);
 		else pWind->SetPen(RED);
-		if (mCanDraw)pWind->DrawString((i + 1) * 100 + 45 + mSwitchesCount * 100, pos, status);
+		if (mCanDraw)pWind->DrawString(i * 100 + 65 + mSwitchesCount * 100, pos, status);
 		mWrite << "   " << status << "       ";
 		pWind->SetPen(WHITE);
 	}
@@ -181,49 +184,33 @@ int TruthTable::ToInt(string k) {
 }
 
 /* Tests the output on a gate */
-int TruthTable::TestGate(Gate*pGate) {
-
-	int returnValue;
-
-	if (pGate != NULL) {
-		if (dynamic_cast<Switch*>(pGate)) {
-			return pGate->GetOutputPinStatus();
-		}
-		else if (dynamic_cast<LED*>(pGate)) {
-			returnValue = TestGate(((LED*)pGate)->GetInputPin(0)->GetConnection(0)->GetSourcePin()->GetGate());
-			((LED*)pGate)->SetInputPinStatus(0, returnValue ? Status::HIGH : Status::LOW);
-			return returnValue;
-		}
-		else if (dynamic_cast<LogicGate*>(pGate)) {
-
-			for (int i = 0; i<((LogicGate*)pGate)->GetInputsCount(); i++) {
-				returnValue = TestGate(((LogicGate*)pGate)->GetInputPin(i)->GetConnection(0)->GetSourcePin()->GetGate());
-				((Gate*)pGate)->SetInputPinStatus(i, returnValue ? Status::HIGH : Status::LOW);
-			}
-
-			((LogicGate*)pGate)->Operate();
-			return ((LogicGate*)pGate)->GetOutputPinStatus();
-
-		}
+void TruthTable::TestGate(queue<Component*>q) {
+	while (!q.empty()) {
+		q.front()->Operate();
+		if (dynamic_cast<Connection*>(q.front()))
+			q.push(((Connection*)q.front())->GetDestinationPin()->GetGate());
+		else if (!dynamic_cast<LED*>(q.front()))
+			for (int i = 0; i < ((Gate*)q.front())->GetOutputPin()->GetConnectionsCount(); i++)
+				q.push(((Gate*)q.front())->GetOutputPin()->GetConnection(i));
+		q.pop();
 	}
-	else return 0;
 }
 
 /* Returns switches status to default */
 void TruthTable::ReturnToDefault() {
+	queue<Component*>q;
 	for (int i = 0; i<mSwitchesCount; i++) {
 		mSwitches[i]->GetOutputPin()->SetStatus((Status)mSwitchesDefault[i]);
+		q.push(mSwitches[i]);
 	}
-	for (int i = 0; i < mLedsCount; i++) {
-		TestGate(mLeds[i]);
-	}
+	TestGate(q);
 }
 
 /* Exits Truth Table */
 void TruthTable::Exits() {
 	int x=0, y=0;
 	bool isHovering = 0;
-	while(!IsButton(x, y))
+	while (!IsButton(x, y)) {
 		while (pWind->GetButtonState(LEFT_BUTTON, x, y) == BUTTON_UP) {
 			if (IsButton(x, y)) {
 				if (!isHovering)
@@ -236,9 +223,11 @@ void TruthTable::Exits() {
 				isHovering = false;
 			}
 		}
+	}
+
 }
 
 /* Checks if the value of coordinates is on exit button */
 bool TruthTable::IsButton(int x,int y) {
-	return (y < 30 && y > 0 && x > mColumns * 100 + 190 && x < mColumns * 100 + 210);
+	return (y < 30 && y > 0 && x > mColumns * 100 + 30 && x < mColumns * 100 + 50);
 }
