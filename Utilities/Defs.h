@@ -171,14 +171,14 @@ struct GraphicsInfo {
 
 	/* Constructor for ease of access */
 	GraphicsInfo(int x1, int y1, int x2, int y2) {
+		// To preserve the upper left and lower right points
+		if (x1 > x2) swap(x1, x2);
+		if (y1 > y2) swap(y1, y2);
+
 		this->x1 = x1;
 		this->y1 = y1;
 		this->x2 = x2;
 		this->y2 = y2;
-
-		// To reserve the upper left and lower right points
-		if (x1 > x2) swap(x1, x2);
-		if (y1 > y2) swap(y1, y2);
 	}
 
 	/* Equality operator for ease of access */

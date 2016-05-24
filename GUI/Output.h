@@ -48,6 +48,18 @@ public:
 	/* Prints a message on the status bar */
 	void PrintMsg(const string& msg) const;
 
+	/* Updates the window with double buffering */
+	void UpdateScreen();
+
+	/* Stores and returns an image with certain coordinates */
+	void StoreImage(image& img, int x, int y, int width, int height);
+
+	/* Draws a given image to the window */
+	void DrawImage(const image& img, int x, int y, int width, int height);
+
+	/* Draws a given PNG image to the window */
+	void DrawPNG(const string& dir, int x, int y);
+
 	/* Draws the hovered label */
 	void DrawLabel(int x, int y, const string& label) const;
 
@@ -95,18 +107,6 @@ public:
 
 	/* Returns the shortest available path for the connection, null if no path found */
 	vector<GraphicsInfo>* GetConnectionPath(const GraphicsInfo& gfxInfo);
-
-	/* Updates the window with double buffering */
-	void UpdateBuffer();
-
-	/* Stores and returns an image with certain coordinates */
-	void StoreImage(image& img, int x, int y, int width, int height);
-
-	/* Draws a given image to the window */
-	void DrawImage(const image& img, int x, int y, int width, int height);
-
-	/* Draws a given image to the window */
-	void DrawPNG(string dir, int x, int y);
 
 	/* Destructor */
 	~Output();

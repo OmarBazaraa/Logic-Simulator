@@ -88,12 +88,12 @@ bool Move::Execute() {
 			prvY = y;
 		}
 
-		pOut->UpdateBuffer();
+		pOut->UpdateScreen();
 	}
 	
 	// Redraw the initial window
 	pOut->DrawImage(wind, 0, 0, UI.Width, UI.Height);
-	pOut->UpdateBuffer();
+	pOut->UpdateScreen();
 
 	// No changes in the positions
 	if (dx == 0 && dy == 0) {
