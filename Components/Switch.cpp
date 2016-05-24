@@ -33,7 +33,7 @@ int Switch::GetOutputPinStatus() const {
 
 /* Calculates the output of the Switch gate */
 void Switch::Operate() {
-	return;
+	mOutputPin.SetStatus(mOutputPin.GetStatus() == HIGH ? LOW : HIGH);
 }
 
 /* Draws the Switch gate */
@@ -49,9 +49,7 @@ void Switch::Select() {
 		mSelected = !mSelected;
 	}
 	else {
-		bool out = (mOutputPin.GetStatus() == Status::HIGH);
-		mOutputPin.SetStatus(out ? Status::LOW : Status::HIGH);
-		Refresh(&mOutputPin);
+		Refresh();
 	}
 }
 
@@ -71,18 +69,17 @@ void Switch::Restore(Output* pOut) {
 }
 
 /* Simulates due to change in pin status */
-void  Switch::Refresh(Pin* p) {
-	
-	for (int i = 0; i < p->GetConnectionsCount(); i++)	{
-
-		if (p->GetConnection(i)) {
-			Pin* d = p->GetConnection(i)->GetDestinationPin();
-			d->SetStatus(p->GetStatus());
-			d->GetGate()->Operate();
-			if (!dynamic_cast<LED*>(d->GetGate()))
-				Refresh(d->GetGate()->GetOutputPin());
-
-		}
+void  Switch::Refresh() {
+	queue<Component*> q;
+	q.push(this);
+	while (!q.empty()) {
+		q.front()->Operate();
+		if (dynamic_cast<Connection*>(q.front()))
+			q.push(((Connection*)q.front())->GetDestinationPin()->GetGate());
+		else if (!dynamic_cast<LED*>(q.front()))
+			for (int i = 0; i < ((Gate*)q.front())->GetOutputPin()->GetConnectionsCount(); i++)
+				q.push(((Gate*)q.front())->GetOutputPin()->GetConnection(i));
+		q.pop();
 	}
 }
 
