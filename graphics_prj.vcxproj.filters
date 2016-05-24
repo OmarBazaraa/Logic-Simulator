@@ -452,4 +452,7 @@
       <UniqueIdentifier>{e9b7c77c-4258-4c7f-a59e-a041dec06954}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\..\..\Sobeih%27s\Source\Repos\Logic-Simulator\ClassDiagram.cd" />
+  </ItemGroup>
 </Project>

@@ -14,7 +14,7 @@ TruthTable::TruthTable(ApplicationManager* pAppMan) : Action(pAppMan) {
 bool TruthTable::ReadActionParameters() {
 	mRows = pow(2, mSwitchesCount);
 	mColumns = mLedsCount + mSwitchesCount;
-	return (mSwitchesCount < 6 && mColumns < 12);
+	return (mSwitchesCount < 6 && mColumns < 12 && mColumns);
 }
 
 /* Executes action */
@@ -66,7 +66,10 @@ void TruthTable::Populate() {
 
 /* Draws truth table window */
 void TruthTable::DrawWindow() {
-	pWind = new window(mColumns * 100 + 70, mRows * 20 + 80, UI.StartX, UI.StartY);
+	pWind = new window(mColumns * UI.Column + 2 * UI.TruthTableMargin + UI.ExitMargin + UI.Exit,
+		UI.Row * (1 + mRows) + 3 * UI.TruthTableMargin,
+		(UI.Width - mColumns * UI.Column + 2 * UI.TruthTableMargin + UI.ExitMargin + UI.Exit) / 2,
+		(UI.Height -(1+ mRows) * UI.Row + 3 * UI.TruthTableMargin) / 2);
 	pWind->ChangeTitle("");
 	ClearDrawingArea();
 	DrawTruthTable();
@@ -84,13 +87,13 @@ void TruthTable::ClearDrawingArea() const {
 void TruthTable::DrawTruthTable() const {
 	// Vertical lines
 	pWind->SetPen(BLACK);
-	for (int x = 0; x < (mColumns + 1) * 100; x += 100) {
-		pWind->DrawLine(x + 20, 20, x + 20, (2 + mRows) * 20);
+	for (int x = 0; x < (mColumns + 1) * UI.Column; x += UI.Column) {
+		pWind->DrawLine(x + UI.Row, UI.Row, x + UI.Row, (2 + mRows) * UI.Row);
 	}
 
 	// Horizontal lines
-	for (int y = 20; y <= (2 + mRows) * 20; y += 20) {
-		pWind->DrawLine(20, y, mColumns * 100 + 20, y);
+	for (int y = UI.Row; y <= (2 + mRows) * UI.Row; y += UI.Row) {
+		pWind->DrawLine(UI.Row, y, mColumns * UI.Column + UI.Row, y);
 	}
 }
 
@@ -106,7 +109,7 @@ void TruthTable::Hover(bool stopHovering) {
 
 /* Draws exit button */
 void TruthTable::DrawExit() const {
-	pWind->DrawString(mColumns * 100 + 30 , 0, "x");
+	pWind->DrawString(mColumns * UI.Column + UI.TruthTableMargin + UI.ExitMargin, 0, "x");
 }
 
 /* Draws headers */
@@ -117,16 +120,16 @@ void TruthTable::DrawHeaders() {
 	int n = mSwitchesCount;
 	int count = 0;
 
-	for (int i = 20; i < mColumns * 100; i += 100) {
-		if (i / 100 < n)
-			msg = mSwitches[i / 100]->GetLabel();
+	for (int i = UI.TruthTableMargin; i < mColumns * UI.Column; i += UI.Column) {
+		if (i / UI.Column < n)
+			msg = mSwitches[i / UI.Column]->GetLabel();
 		else
 			msg = mLeds[count++]->GetLabel();
 		Normalizetxt(msg);
 		int w, h;
 		pWind->GetStringSize(w, h, msg);
 		if (mCanDraw)
-			pWind->DrawString(i + (100 - w) / 2 , 20, msg);
+			pWind->DrawString(i + (UI.Column - w) / 2 , UI.TruthTableMargin, msg);
 		mWrite << msg << "   ";
 	}
 	mWrite << endl;
@@ -136,10 +139,10 @@ void TruthTable::DrawHeaders() {
 void TruthTable::Normalizetxt(string& msg) {
 	string temp = "";
 	int l = msg.length();
-	for (int i = 0; i<8 && i < l; i++)
+	for (int i = 0; i < 8 && i < l; i++)
 		temp += msg[i];
 	if (l > 8)
-		temp[7] = '-';
+		temp[6] = temp[7] = '.';
 	msg = temp;
 }
 
@@ -152,14 +155,17 @@ void TruthTable::CreateCompinations(string compination) {
 
 /* Tests input */
 void TruthTable::Test(string compination) {
-	int pos = ToInt(compination) * 20 + 40;
+	int pos = (1 + ToInt(compination)) * UI.Row + UI.TruthTableMargin;
 	string status;
 	queue<Component*>q;
+	if (compination[mSwitchesCount - 1] == '0')pWind->SetPen(UI.BackgroundColor);
+	else pWind->SetPen(WHITE);
 	for (int i = 0; i < mSwitchesCount; i++) {
 		mSwitches[i]->GetOutputPin()->SetStatus(Status(compination[i] - '0') == HIGH ? LOW : HIGH);
 		status = compination[i];
 		q.push(mSwitches[i]);
-		if (mCanDraw)pWind->DrawString(i * 100 + 65, pos, status);
+
+		if (mCanDraw)pWind->DrawString(i * UI.Column + UI.TruthTableMargin + UI.StatusMargin, pos, status);
 		mWrite << "   " << status << "       ";
 	}
 	TestGate(q);
@@ -168,7 +174,7 @@ void TruthTable::Test(string compination) {
 		status += ('0' + mLeds[i]->GetInputPinStatus(0));
 		if (status[0] - '0')pWind->SetPen(GREEN);
 		else pWind->SetPen(RED);
-		if (mCanDraw)pWind->DrawString(i * 100 + 65 + mSwitchesCount * 100, pos, status);
+		if (mCanDraw)pWind->DrawString(i * UI.Column + UI.TruthTableMargin + UI.StatusMargin + mSwitchesCount * UI.Column, pos, status);
 		mWrite << "   " << status << "       ";
 		pWind->SetPen(WHITE);
 	}
@@ -229,5 +235,7 @@ void TruthTable::Exits() {
 
 /* Checks if the value of coordinates is on exit button */
 bool TruthTable::IsButton(int x,int y) {
-	return (y < 30 && y > 0 && x > mColumns * 100 + 30 && x < mColumns * 100 + 50);
+	return (y < UI.ExitMargin + UI.Exit && y > 0 
+		&& x > mColumns * UI.Column + UI.TruthTableMargin + UI.ExitMargin 
+		&& x < mColumns * UI.Column + UI.TruthTableMargin * 2 + UI.ExitMargin);
 }

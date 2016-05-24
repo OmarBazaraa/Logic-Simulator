@@ -123,6 +123,7 @@
     <Bscmake>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <OutputFile>.\Debug/graphics_prj.bsc</OutputFile>
+      <PreserveSbr>true</PreserveSbr>
     </Bscmake>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -270,6 +271,9 @@
     <ClInclude Include="Pins\Pin.h" />
     <ClInclude Include="Utilities\Defs.h" />
     <ClInclude Include="Utilities\Utility.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\..\..\Sobeih%27s\Source\Repos\Logic-Simulator\ClassDiagram.cd" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
