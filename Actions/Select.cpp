@@ -39,7 +39,7 @@ bool Select::ReadActionParameters() {
 				prvY = y;
 			}
 
-			pOut->UpdateBuffer();
+			pOut->UpdateScreen();
 		}
 
 		mEndX = x, mEndY = y;
@@ -48,7 +48,7 @@ bool Select::ReadActionParameters() {
 
 		// Redraw the initial window
 		pOut->DrawImage(wind, minX, minY, maxX, maxY - minY);
-		pOut->UpdateBuffer();
+		pOut->UpdateScreen();
 	}
 
 	// Added the selected components to the set

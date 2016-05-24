@@ -127,6 +127,7 @@
     </Bscmake>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Actions\Exit.cpp" />
     <ClCompile Include="GUI\Dialog.cpp" />
     <ClCompile Include="Actions\AddConnection.cpp" />
     <ClCompile Include="Actions\AddGate.cpp" />
@@ -207,6 +208,7 @@
     <ClCompile Include="Utilities\Utility.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Actions\Exit.h" />
     <ClInclude Include="GUI\Dialog.h" />
     <ClInclude Include="Actions\Action.h" />
     <ClInclude Include="Actions\AddConnection.h" />
@@ -273,7 +275,7 @@
     <ClInclude Include="Utilities\Utility.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\..\..\..\Sobeih%27s\Source\Repos\Logic-Simulator\ClassDiagram.cd" />
+    <Text Include="Back Up.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

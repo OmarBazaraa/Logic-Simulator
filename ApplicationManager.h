@@ -46,7 +46,7 @@ public:
 	ActionType GetUserAction();
 	
 	/* Creates an action and executes it */
-	void ExecuteAction(ActionType &actType);
+	void ExecuteAction(ActionType& actType);
 	
 	/* Redraws all the drawing window */
 	void UpdateInterface();	

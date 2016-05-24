@@ -246,6 +246,26 @@ void Output::PrintMsg(const string& msg) const {
 	pWind->UpdateBuffer();
 }
 
+/* Updates the window with double buffering */
+void Output::UpdateScreen() {
+	pWind->UpdateBuffer();
+}
+
+/* Stores and returns an image with certain coordinates */
+void Output::StoreImage(image& img, int x, int y, int width, int height) {
+	pWind->StoreImage(img, x, y, width, height);
+}
+
+/* Draws a given image to the window */
+void Output::DrawImage(const image& img, int x, int y, int width, int height) {
+	pWind->DrawImage(&img, x, y, width, height);
+}
+
+/* Draws a given PNG image to the window */
+void Output::DrawPNG(const string& dir, int x, int y) {
+	pWind->DrawPNG(dir, x, y);
+}
+
 /* Draws the hovered label */
 void Output::DrawLabel(int x, int y, const string& label) const {
 	int w, h;
@@ -385,17 +405,17 @@ bool Output::IsDrawingArea(int x, int y) {
 
 /* Checks if the given area of pins is empty */
 bool Output::IsEmptyArea(const GraphicsInfo& gfxInfo) const {
-	int x1 = gfxInfo.x1, x2 = gfxInfo.x2 - 1;
-	int y1 = gfxInfo.y1, y2 = gfxInfo.y2 - 1;
+	int x1 = gfxInfo.x1, y1 = gfxInfo.y1;
+	int x2 = gfxInfo.x2, y2 = gfxInfo.y2;
 	getPinIndices(x1, y1);
 	getPinIndices(x2, y2);
 
-	if (x1 < 0 || x2 >= UI.HorPinsCount || y1 < 0 || y2 >= UI.VerPinsCount) {
+	if (x1 < 0 || x2 > UI.HorPinsCount || y1 < 0 || y2 > UI.VerPinsCount) {
 		return false;
 	}
 
-	for (int x = x1; x <= x2; x++) {
-		for (int y = y1; y <= y2; y++) {
+	for (int x = x1; x < x2; x++) {
+		for (int y = y1; y < y2; y++) {
 			if (mPinGrid[x][y].Type != PinType::EMPTY) return false;	// Occupied area
 		}
 	}
@@ -427,8 +447,6 @@ void Output::MarkConnectionPins(const vector<GraphicsInfo>& path, Component* com
 			int x2 = path[i].x2 / UI.PinOffset;
 			int y = (path[i].y1 - UI.ToolBarHeight - UI.GateBarHeight) / UI.PinOffset;
 
-			if (x1 > x2) swap(x1, x2);
-
 			for (int x = x1; x <= x2; x++) {
 				if (mPinGrid[x][y].Type == EMPTY) {
 					mPinGrid[x][y].Type = PinType::HOR_CONNECTION;
@@ -446,8 +464,6 @@ void Output::MarkConnectionPins(const vector<GraphicsInfo>& path, Component* com
 			int y1 = (path[i].y1 - UI.ToolBarHeight - UI.GateBarHeight) / UI.PinOffset;
 			int y2 = (path[i].y2 - UI.ToolBarHeight - UI.GateBarHeight) / UI.PinOffset;
 			int x = path[i].x1 / UI.PinOffset;
-
-			if (y1 > y2) swap(y1, y2);
 
 			for (int y = y1; y <= y2; y++) {
 				if (mPinGrid[x][y].Type == EMPTY) {
@@ -473,8 +489,6 @@ void Output::ClearConnectionPins(const vector<GraphicsInfo>& path) {
 			int x2 = path[i].x2 / UI.PinOffset;
 			int y = (path[i].y1 - UI.ToolBarHeight - UI.GateBarHeight) / UI.PinOffset;
 
-			if (x1 > x2) swap(x1, x2);
-
 			for (int x = x1; x <= x2; x++) {
 				if (mPinGrid[x][y].Type == INTERSECTING_CONNECTIONS) {
 					mPinGrid[x][y].Type = PinType::VER_CONNECTION;
@@ -492,8 +506,6 @@ void Output::ClearConnectionPins(const vector<GraphicsInfo>& path) {
 			int y1 = (path[i].y1 - UI.ToolBarHeight - UI.GateBarHeight) / UI.PinOffset;
 			int y2 = (path[i].y2 - UI.ToolBarHeight - UI.GateBarHeight) / UI.PinOffset;
 			int x = path[i].x1 / UI.PinOffset;
-
-			if (y1 > y2) swap(y1, y2);
 
 			for (int y = y1; y <= y2; y++) {
 				if (mPinGrid[x][y].Type == INTERSECTING_CONNECTIONS) {
@@ -523,7 +535,7 @@ Component* Output::GetComponentAtPin(int x, int y) const {
 
 /* Returns the shortest available path for the connection, null if no path found */
 vector<GraphicsInfo>* Output::GetConnectionPath(const GraphicsInfo& gfxInfo) {
-	if (!(IsDrawingArea(gfxInfo.x1, gfxInfo.y1) && IsDrawingArea(gfxInfo.x2, gfxInfo.y2))) {
+	if (!IsDrawingArea(gfxInfo.x1, gfxInfo.y1) || !IsDrawingArea(gfxInfo.x2, gfxInfo.y2)) {
 		return NULL;
 	}
 
@@ -619,22 +631,4 @@ Output::~Output() {
 	delete pWind;
 	for (int x = 0; x < UI.HorPinsCount; x++) delete[] mPinGrid[x];
 	delete[] mPinGrid;
-}
-
-
-
-void Output::UpdateBuffer() {
-	pWind->UpdateBuffer();
-}
-
-void Output::StoreImage(image& img, int x, int y, int width, int height) {
-	pWind->StoreImage(img, x, y, width, height);
-}
-
-void Output::DrawImage(const image& img, int x, int y, int width, int height) {
-	pWind->DrawImage(&img, x, y, width, height);
-}
-
-void Output::DrawPNG(string dir, int x, int y) {
-	pWind->DrawPNG(dir, x, y);
 }
