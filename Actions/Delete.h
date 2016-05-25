@@ -2,12 +2,14 @@
 #include "..\Actions\Action.h"
 #include "..\ApplicationManager.h"
 #include "..\Components\Component.h"
+#include "..\Components\Connection.h"
 #include <vector>
 
 class Delete : public Action
 {
 private:
 	vector<Component*> mDeletedComps;
+	vector<Connection*> mConnections;
 
 public:
 	/* Constructor */

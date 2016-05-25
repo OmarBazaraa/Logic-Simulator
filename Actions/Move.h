@@ -35,15 +35,12 @@ public:
 	virtual ~Move();
 
 private:
-	/* Checks if the given area is valid for moving a component to it or not */
-	bool IsValidArea(const GraphicsInfo& gfxInfo);
-
-	/* Sets the component new coordinates if it goes out of borders */
-	bool SetNewGateBorders(GraphicsInfo& GfxInfo);
+	/* Adjusts gate's coordinates if it goes out of borders */
+	bool AdjustGateCoordinates(GraphicsInfo& GfxInfo);
 
 	/* Calculates and returns the new coordinates of the gate */
 	GraphicsInfo CalculateDimensions(Component* pComp, int dx, int dy);
 
-	/* Draws the component in its current state: faded or invalid */
-	void DrawComponent(Component* pComp, const GraphicsInfo& gfxInfo, bool invalid);
+	/* Draws the gate in its current state: faded or invalid */
+	void DrawGate(Component* pComp, const GraphicsInfo& gfxInfo, bool valid);
 };

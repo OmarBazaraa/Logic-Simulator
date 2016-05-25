@@ -113,6 +113,7 @@ void ApplicationManager::ExecuteAction(ActionType& actType) {
 			pOut->PrintMsg("SIMULATION MODE");
 			UI.AppMode = Mode::SIMULATION;
 			pOut->CreateToolBar();
+			pOut->CreateGateBar();
 			pAct = new Simulate(this);
 			break;
 		case DESIGN_MODE:
@@ -140,6 +141,9 @@ void ApplicationManager::ExecuteAction(ActionType& actType) {
 		case HOVER:
 			pAct = new Hover(this);
 			break;
+		case EXIT:
+			pAct = new Exit(this);
+			break;
 		case TOOL_BAR:
 			//pOut->PrintMsg("TOOL BAR");
 			break;
@@ -149,9 +153,6 @@ void ApplicationManager::ExecuteAction(ActionType& actType) {
 		case STATUS_BAR:
 			//pOut->PrintMsg("STATUS BAR");
 			break;
-		case EXIT:
-			pAct = new Exit(this);
-			break;
 	}
 
 	if (pAct != NULL) {
@@ -160,11 +161,7 @@ void ApplicationManager::ExecuteAction(ActionType& actType) {
 			while (!mRedoStack.empty()) delete mRedoStack.top(), mRedoStack.pop();	// Clear the RedoStack
 		}
 		else {
-			// To cancel exit action
-			if (actType == EXIT) {
-				actType = GATE_BAR;
-			}
-
+			if (actType == EXIT) actType = GATE_BAR;	// To cancel exit action
 			delete pAct;
 		}
 	}
@@ -192,7 +189,7 @@ void ApplicationManager::DeselectComponents() {
 }
 
 /* Counts and returns the number of selected components */
-int ApplicationManager::CountSelectedComponents() {
+int ApplicationManager::CountSelectedComponents() const {
 	int n = 0;
 
 	for (int i = 0; i < mCompCount; i++) {
@@ -202,6 +199,49 @@ int ApplicationManager::CountSelectedComponents() {
 	}
 
 	return n;
+}
+
+/* Returns a vector of all selected components */
+vector<Component*> ApplicationManager::GetSelectedComponents() {
+	vector<Component*> vec;
+
+	for (int i = 0; i < mCompCount; i++) {
+		if (!mCompList[i]->IsDeleted() && mCompList[i]->IsSelected()) {
+			vec.push_back(mCompList[i]);
+		}
+	}
+
+	return vec;
+}
+
+/* Returns a vector of all selected gates */
+vector<Gate*> ApplicationManager::GetSelectedGates() {
+	vector<Gate*> vec;
+
+	for (int i = 0; i < mCompCount; i++) {
+		Gate* ptr = dynamic_cast<Gate*>(mCompList[i]);
+
+		if (ptr != NULL && !ptr->IsDeleted() && ptr->IsSelected()) {
+			vec.push_back(ptr);
+		}
+	}
+
+	return vec;
+}
+
+/* Returns a vector of all connections */
+vector<Connection*> ApplicationManager::GetConnections() {
+	vector<Connection*> vec;
+
+	for (int i = 0; i < mCompCount; i++) {
+		Connection* ptr = dynamic_cast<Connection*>(mCompList[i]);
+
+		if (ptr != NULL && !ptr->IsDeleted()) {
+			vec.push_back(ptr);
+		}
+	}
+
+	return vec;
 }
 
 /* Undoes the last action */

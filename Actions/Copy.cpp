@@ -10,6 +10,9 @@ bool Copy::ReadActionParameters() {
 	Input* pIn = mAppManager->GetInput();
 	Output* pOut = mAppManager->GetOutput();
 
+	mAppManager->DeselectComponents();
+	mAppManager->UpdateInterface();
+
 	pOut->PrintMsg("Please select a component to copy");
 	pIn->WaitMouseClick(mX, mY);
 	pOut->ClearStatusBar();

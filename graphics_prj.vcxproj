@@ -203,7 +203,6 @@
     <ClCompile Include="GUI\Input.cpp" />
     <ClCompile Include="GUI\Output.cpp" />
     <ClCompile Include="Main.cpp" />
-    <ClCompile Include="Demo.cpp" />
     <ClCompile Include="Pins\Pin.cpp" />
     <ClCompile Include="Utilities\Utility.cpp" />
   </ItemGroup>
@@ -273,9 +272,6 @@
     <ClInclude Include="Pins\Pin.h" />
     <ClInclude Include="Utilities\Defs.h" />
     <ClInclude Include="Utilities\Utility.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <Text Include="Back Up.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

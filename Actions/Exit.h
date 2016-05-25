@@ -1,11 +1,10 @@
 #pragma once
 #include "..\Actions\Action.h"
+#include "..\Actions\SaveAction.h"
 #include "..\ApplicationManager.h"
+#include"..\GUI\Dialog.h"
 #include <fstream>
-#include<iostream>
-#include<string>
-using namespace std;
-
+#include <string>
 
 class Exit : public Action
 {

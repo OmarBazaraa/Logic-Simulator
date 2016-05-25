@@ -7,45 +7,66 @@ Delete::Delete(ApplicationManager* pAppMan) : Action(pAppMan) {
 
 /* Reads parameters required for action to execute */
 bool Delete::ReadActionParameters() {
-	return true;
+	mDeletedComps = mAppManager->GetSelectedComponents();
+
+	return (!mDeletedComps.empty());
 }
 
 /* Executes action */
 bool Delete::Execute() {
-	int n = mAppManager->GetComponentsCount();
-	Component** list = mAppManager->GetComponentList();
-	Output* pOut = mAppManager->GetOutput();
-
-	for (int i = 0; i < n; i++) {
-		if (list[i]->IsSelected() && !list[i]->IsDeleted()) {
-			list[i]->Delete(pOut);
-			mDeletedComps.push_back(list[i]);
-		}
-	}
-
-	if (mDeletedComps.empty()) {
+	if (!ReadActionParameters()) {
 		return false;
 	}
 
+	Output* pOut = mAppManager->GetOutput();
+
+	// Delete selected components
+	for (int i = 0; i < mDeletedComps.size(); i++) {
+		mDeletedComps[i]->Delete(pOut);
+	}
+
+	// Update the path of all connections
+	mConnections = mAppManager->GetConnections();
+	for (int i = 0; i < mConnections.size(); i++) pOut->ClearConnectionPins(mConnections[i]->GetPath());
+	for (int i = 0; i < mConnections.size(); i++) mConnections[i]->UpdatePath(pOut);
+
 	pOut->ClearDrawingArea();
-	pOut->PrintMsg("Deleted items: " + to_string(mDeletedComps.size()));
+	pOut->PrintMsg("Deleted");
 	return true;
 }
 
 /* Undo action */
 void Delete::Undo() {
+	Output* pOut = mAppManager->GetOutput();
+
+	// Restore deleted components
 	for (int i = 0; i < (int)mDeletedComps.size(); i++) {
-		mDeletedComps[i]->Restore(mAppManager->GetOutput());
+		mDeletedComps[i]->Restore(pOut);
 	}
+
+	vector<Connection*> connections = mAppManager->GetConnections();
+
+	// Update the path of all connections
+	for (int i = 0; i < connections.size(); i++) pOut->ClearConnectionPins(connections[i]->GetPath());
+	for (int i = 0; i < connections.size(); i++) connections[i]->UpdatePath(pOut);
+
+	pOut->ClearDrawingArea();
 }
 
 /* Redo action */
 void Delete::Redo() {
+	Output* pOut = mAppManager->GetOutput();
+
+	// Delete selected components
 	for (int i = 0; i < (int)mDeletedComps.size(); i++) {
-		mDeletedComps[i]->Delete(mAppManager->GetOutput());
+		mDeletedComps[i]->Delete(pOut);
 	}
 
-	mAppManager->GetOutput()->ClearDrawingArea();
+	// Update the path of all connections
+	for (int i = 0; i < mConnections.size(); i++) pOut->ClearConnectionPins(mConnections[i]->GetPath());
+	for (int i = 0; i < mConnections.size(); i++) mConnections[i]->UpdatePath(pOut);
+
+	pOut->ClearDrawingArea();
 }
 
 /* Destructor */

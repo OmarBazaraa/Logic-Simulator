@@ -1,4 +1,5 @@
 #include "Output.h"
+#include "..\Components\Component.h"
 
 /* Constructor that initializes the user interface */
 Output::Output() {
@@ -372,7 +373,7 @@ bool Output::IsEmptyArea(const GraphicsInfo& gfxInfo) const {
 
 	for (int x = x1; x < x2; x++) {
 		for (int y = y1; y < y2; y++) {
-			if (mPinGrid[x][y].Type != PinType::EMPTY) return false;	// Occupied area
+			if (mPinGrid[x][y].Type == PinType::GATE && !mPinGrid[x][y].Comp->IsSelected()) return false;	// Occupied area
 		}
 	}
 
@@ -406,14 +407,7 @@ void Output::MarkConnectionPins(const vector<GraphicsInfo>& path, Component* com
 			int y = (path[i].y1 - UI.ToolBarHeight - UI.GateBarHeight) / UI.PinOffset;
 
 			for (int x = x1; x <= x2; x++) {
-				if (mPinGrid[x][y].Type == EMPTY) {
-					mPinGrid[x][y].Type = PinType::HOR_CONNECTION;
-				}
-				else {
-					mPinGrid[x][y].Type = PinType::INTERSECTING_CONNECTIONS;
-					mPinGrid[x][y].PreviousComp = mPinGrid[x][y].Comp;
-				}
-
+				mPinGrid[x][y].Type = (mPinGrid[x][y].Type == EMPTY) ? PinType::HOR_CONNECTION : PinType::INTERSECTING_CONNECTIONS;
 				mPinGrid[x][y].Comp = comp;
 			}
 		}
@@ -424,14 +418,7 @@ void Output::MarkConnectionPins(const vector<GraphicsInfo>& path, Component* com
 			int x = path[i].x1 / UI.PinOffset;
 
 			for (int y = y1; y <= y2; y++) {
-				if (mPinGrid[x][y].Type == EMPTY) {
-					mPinGrid[x][y].Type = PinType::VER_CONNECTION;
-				}
-				else {
-					mPinGrid[x][y].Type = PinType::INTERSECTING_CONNECTIONS;
-					mPinGrid[x][y].PreviousComp = mPinGrid[x][y].Comp;
-				}
-
+				mPinGrid[x][y].Type = (mPinGrid[x][y].Type == EMPTY) ? PinType::VER_CONNECTION : PinType::INTERSECTING_CONNECTIONS;
 				mPinGrid[x][y].Comp = comp;
 			}
 		}
@@ -450,15 +437,8 @@ void Output::ClearConnectionPins(const vector<GraphicsInfo>& path) {
 			int y = (path[i].y1 - UI.ToolBarHeight - UI.GateBarHeight) / UI.PinOffset;
 
 			for (int x = x1; x <= x2; x++) {
-				if (mPinGrid[x][y].Type == INTERSECTING_CONNECTIONS) {
-					mPinGrid[x][y].Type = PinType::VER_CONNECTION;
-					mPinGrid[x][y].Comp = mPinGrid[x][y].PreviousComp;
-					mPinGrid[x][y].PreviousComp = NULL;
-				}
-				else {
-					mPinGrid[x][y].Type = PinType::EMPTY;
-					mPinGrid[x][y].Comp = NULL;
-				}
+				mPinGrid[x][y].Type = PinType::EMPTY;
+				mPinGrid[x][y].Comp = NULL;
 			}
 		}
 		// Vertical line
@@ -468,15 +448,8 @@ void Output::ClearConnectionPins(const vector<GraphicsInfo>& path) {
 			int x = path[i].x1 / UI.PinOffset;
 
 			for (int y = y1; y <= y2; y++) {
-				if (mPinGrid[x][y].Type == INTERSECTING_CONNECTIONS) {
-					mPinGrid[x][y].Type = PinType::HOR_CONNECTION;
-					mPinGrid[x][y].Comp = mPinGrid[x][y].PreviousComp;
-					mPinGrid[x][y].PreviousComp = NULL;
-				}
-				else {
-					mPinGrid[x][y].Type = PinType::EMPTY;
-					mPinGrid[x][y].Comp = NULL;
-				}
+				mPinGrid[x][y].Type = PinType::EMPTY;
+				mPinGrid[x][y].Comp = NULL;
 			}
 		}
 	}
