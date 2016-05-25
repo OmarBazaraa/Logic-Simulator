@@ -14,7 +14,7 @@ TruthTable::TruthTable(ApplicationManager* pAppMan) : Action(pAppMan) {
 bool TruthTable::ReadActionParameters() {
 	mRows = pow(2, mSwitchesCount);
 	mColumns = mLedsCount + mSwitchesCount;
-	return (mSwitchesCount < 6 && mColumns < 12);
+	return (mSwitchesCount < 6 && mColumns < 12 && mColumns > 0);
 }
 
 /* Executes action */
@@ -45,7 +45,8 @@ void TruthTable::Redo() {
 
 
 TruthTable::~TruthTable() {
-	delete pWind;
+	if (mCanDraw)
+		delete pWind;
 	if (mWrite.is_open())
 		mWrite.close();
 }
@@ -118,8 +119,10 @@ void TruthTable::DrawExit() const {
 
 /* Draws headers */
 void TruthTable::DrawHeaders() {
-	pWind->SetPen(UI.MsgColor);
-	pWind->SetFont(UI.FontSize, BOLD, BY_NAME, "Arial");
+	if (mCanDraw) {
+		pWind->SetPen(UI.MsgColor);
+		pWind->SetFont(UI.FontSize, BOLD, BY_NAME, "Arial");
+	}
 	string msg = "header";
 	int n = mSwitchesCount;
 	int count = 0;
@@ -131,9 +134,10 @@ void TruthTable::DrawHeaders() {
 			msg = mLeds[count++]->GetLabel();
 		Normalizetxt(msg);
 		int w, h;
-		pWind->GetStringSize(w, h, msg);
-		if (mCanDraw)
-			pWind->DrawString(i + (UI.Column - w) / 2 , UI.TruthTableMargin, msg);
+		if (mCanDraw) {
+			pWind->GetStringSize(w, h, msg);
+			pWind->DrawString(i + (UI.Column - w) / 2, UI.TruthTableMargin, msg);
+		}
 		mWrite << msg << "   ";
 	}
 	mWrite << endl;
@@ -162,8 +166,10 @@ void TruthTable::Test(string compination) {
 	int pos = (1 + ToInt(compination)) * UI.Row + UI.TruthTableMargin;
 	string status;
 	queue<Component*>q;
-	if (compination[mSwitchesCount - 1] == '0')pWind->SetPen(UI.BackgroundColor);
-	else pWind->SetPen(WHITE);
+	if (mCanDraw) {
+		if (compination[mSwitchesCount - 1] == '0')pWind->SetPen(UI.BackgroundColor);
+		else pWind->SetPen(WHITE);
+	}
 	for (int i = 0; i < mSwitchesCount; i++) {
 		mSwitches[i]->GetOutputPin()->SetStatus(Status(compination[i] - '0') == HIGH ? LOW : HIGH);
 		status = compination[i];
@@ -228,7 +234,7 @@ void TruthTable::ReturnToDefault() {
 void TruthTable::Exits() {
 	int x=0, y=0;
 	bool isHovering = 0;
-	while (!IsButton(x, y)) {
+	while (!IsButton(x, y) && mCanDraw) {
 		while (pWind->GetButtonState(LEFT_BUTTON, x, y) == BUTTON_UP) {
 			if (IsButton(x, y)) {
 				if (!isHovering)
