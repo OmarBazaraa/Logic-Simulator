@@ -54,6 +54,12 @@ public:
 	/* Returns the status of the output pin, if LED returns -1 */
 	virtual int GetOutputPinStatus() const = 0;
 
+	/* Returns next connected */
+	virtual Component* GetNextComponent(int index) = 0;
+
+	/* Returns number of connected components */
+	virtual int GetConnectedCount() = 0;
+	
 	/* Calculates the output according to the inputs */
 	virtual void Operate() = 0;
 

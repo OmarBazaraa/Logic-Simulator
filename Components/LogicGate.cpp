@@ -47,6 +47,17 @@ int LogicGate::GetOutputPinStatus() const {
 	return mOutputPin.GetStatus();
 }
 
+/* Returns next connected */
+Component* LogicGate::GetNextComponent(int index) {
+	return ((Component*)(mOutputPin.GetConnection(index)));
+}
+
+/* Returns number of connected components */
+int LogicGate::GetConnectedCount() {
+	return mOutputPin.GetConnectionsCount();
+}
+
+
 /* Deletes the component */
 void LogicGate::Delete(Output* pOut) {
 	mSelected = false;

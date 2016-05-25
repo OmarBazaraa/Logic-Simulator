@@ -28,6 +28,12 @@ public:
 	/* Returns the status of the output pin */
 	virtual int GetOutputPinStatus() const;
 
+	/* Returns next connected */
+	virtual Component* GetNextComponent(int index);
+
+	/* Returns number of connected components */
+	virtual int GetConnectedCount();
+
 	/* Calculates the output of the switch */
 	virtual void Operate();
 

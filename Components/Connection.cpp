@@ -95,6 +95,16 @@ int Connection::GetOutputPinStatus() const {
 	return mDstPin->GetStatus();
 }
 
+/* Returns next connected */
+Component* Connection::GetNextComponent(int index) {
+	return GetDestinationPin()->GetGate();
+}
+
+/* Returns number of connected components */
+int Connection::GetConnectedCount() {
+	return 1;
+}
+
 /* Calculates the output according to the inputs */
 void Connection::Operate() {
 	mDstPin->SetStatus(mSrcPin->GetStatus());

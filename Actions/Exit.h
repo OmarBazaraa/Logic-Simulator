@@ -2,7 +2,6 @@
 #include "..\Actions\Action.h"
 #include "..\ApplicationManager.h"
 #include <fstream>
-#include<iostream>
 #include<string>
 using namespace std;
 

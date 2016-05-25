@@ -37,6 +37,17 @@ int LED::GetOutputPinStatus() const {
 	return -1;
 }
 
+/* Returns next connected */
+Component* LED::GetNextComponent(int index) {
+	return NULL;
+}
+
+/* Returns number of connected components */
+int LED::GetConnectedCount() {
+	return 0;
+}
+
+
 /* Calculates the output of the LED */
 void LED::Operate() {
 	return;

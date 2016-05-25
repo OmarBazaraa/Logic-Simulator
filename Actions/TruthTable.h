@@ -76,11 +76,11 @@ private:
 	/* Tests input */
 	void Test(string k);
 
+	/* Cascades */
+	void Cascade(queue<Component*>qComp);
+
 	/* changes string to int */
 	int ToInt(string k);
-
-	/* Tests the output on a gate */
-	void TestGate(queue<Component*>q);
 
 	/* Returns switches status to default */
 	void ReturnToDefault();

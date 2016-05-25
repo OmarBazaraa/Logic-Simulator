@@ -24,8 +24,15 @@ bool Exit::ReadActionParameters() {
 		std::getline(originalFile, s1);
 		std::getline(backUpFile, s2);
 
-		if (s1 != s2) return true;
+		if (s1 != s2) {
+			originalFile.close();
+			backUpFile.close();
+			return true;
+		}
+
 	}
+	originalFile.close();
+	backUpFile.close();
 
 	return false;
 }
