@@ -1,6 +1,4 @@
 #include "Exit.h"
-#include"..\GUI\Dialog.h"
-#include"SaveAction.h"
 
 /* Constructor */
 Exit::Exit(ApplicationManager* pAppMan) : Action(pAppMan) {
@@ -50,11 +48,12 @@ bool Exit::Execute() {
 
 		DialogBoxButton cType = dialog.GetUserClick();
 
-		if (cType == YES) {
+		if (cType == DialogBoxButton::YES) {
 			Action*	pAct = new SaveAction(this->mAppManager);
 			pAct->Execute();
+			delete pAct;
 		}
-		else if (cType == CANCEL) {
+		else if (cType == DialogBoxButton::CANCEL) {
 			return false;
 		}
 	}

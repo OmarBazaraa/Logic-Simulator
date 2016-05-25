@@ -124,12 +124,10 @@ enum PinType {
 struct PinInfo {
 	PinType Type;
 	Component* Comp;
-	Component* PreviousComp;	// Used to get the overlapped connection
 
 	PinInfo() {
 		Type = PinType::EMPTY;
 		Comp = NULL;
-		PreviousComp = NULL;
 	}
 };
 

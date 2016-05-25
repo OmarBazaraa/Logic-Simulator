@@ -194,7 +194,6 @@
       <Filter>Actions</Filter>
     </ClCompile>
     <ClCompile Include="Main.cpp" />
-    <ClCompile Include="Demo.cpp" />
     <ClCompile Include="Components\LogicGate.cpp">
       <Filter>Components</Filter>
     </ClCompile>
@@ -457,8 +456,5 @@
     <Filter Include="GUI">
       <UniqueIdentifier>{e9b7c77c-4258-4c7f-a59e-a041dec06954}</UniqueIdentifier>
     </Filter>
-  </ItemGroup>
-  <ItemGroup>
-    <Text Include="Back Up.txt" />
   </ItemGroup>
 </Project>

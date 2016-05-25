@@ -1,7 +1,5 @@
 #include "Component.h"
 
-//int Component::sCount = 1;
-
 /* Constructor */
 Component::Component() {
 	mSelected = false;
@@ -12,11 +10,6 @@ Component::Component() {
 Component::Component(const GraphicsInfo& gfxInfo) : Component() {
 	mGfxInfo = gfxInfo;	
 }
-
-/* Returns the ID of the component */
-/*int Component::GetID() const {
-	return mID;
-}*/
 
 /* Sets the selection of the component */
 void Component::SetSelected(bool s) {

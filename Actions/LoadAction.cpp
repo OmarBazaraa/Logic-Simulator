@@ -13,7 +13,7 @@ bool LoadAction::ReadActionParameters() {
 		return false;
 	}
 
-	Dialog dialog("Loading old file will cause current file deletion!",Type_B);
+	Dialog dialog("Any unsaved data will be deleted. Continue?",Type_B);
 
 	if (dialog.GetUserClick() != DialogBoxButton::OK) {
 		return false;
