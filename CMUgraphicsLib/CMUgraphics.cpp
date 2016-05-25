@@ -215,11 +215,16 @@ hInstance(GetModuleHandle(0)), iWindowWidth(iWindWidth), iWindowHeight(iWindHeig
 	wndcWindow.lpszClassName = ccDefWindClassName;
 	RegisterClass(&wndcWindow);
 
+	/*
 	hwndWindow = CreateWindow(ccDefWindClassName, ccDefWindTitle, WS_CAPTION | WS_SYSMENU | WS_VISIBLE | WS_MINIMIZEBOX , iWindXPos, 
 		                      iWindYPos, iWindowWidth + GetSystemMetrics(SM_CXEDGE), 
 							  iWindowHeight + GetSystemMetrics(SM_CYCAPTION) + GetSystemMetrics(SM_CYEDGE) - 1, // Not sure why I need to subtract 1
 							  HWND_DESKTOP, NULL, hInstance, 0);
-							  							  
+	*/						  							  
+	hwndWindow = CreateWindow(ccDefWindClassName, ccDefWindTitle, WS_CAPTION | WS_VISIBLE, iWindXPos,
+		iWindYPos, iWindowWidth + GetSystemMetrics(SM_CXEDGE),
+		iWindowHeight + GetSystemMetrics(SM_CYCAPTION) + GetSystemMetrics(SM_CYEDGE) - 1, // Not sure why I need to subtract 1
+		HWND_DESKTOP, NULL, hInstance, 0); 
 	if (hwndWindow) {
 		ShowWindow(hwndWindow, SW_SHOW);
 		dcScreen = GetDC(hwndWindow);

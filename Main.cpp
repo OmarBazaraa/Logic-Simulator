@@ -1,6 +1,8 @@
 #include "ApplicationManager.h"
 
 int main() {
+    #pragma comment(linker, "/SUBSYSTEM:windows /ENTRY:mainCRTStartup") 
+	
 	ActionType ActType;
 	ApplicationManager AppManager;
 
