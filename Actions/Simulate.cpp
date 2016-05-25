@@ -103,6 +103,8 @@ int Simulate::TestGate(Component* pComp) {
 		}
 	}
 	else return 0;
+
+	return 0;
 }
 
 /* Undo action */

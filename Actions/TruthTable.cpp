@@ -12,7 +12,7 @@ TruthTable::TruthTable(ApplicationManager* pAppMan) : Action(pAppMan) {
 
 /* Reads parameters required for action to execute */
 bool TruthTable::ReadActionParameters() {
-	mRows = pow(2, mSwitchesCount);
+	mRows = (int)pow(2, mSwitchesCount);
 	mColumns = mLedsCount + mSwitchesCount;
 	return (mSwitchesCount < 6 && mColumns < 12 && mColumns > 0);
 }

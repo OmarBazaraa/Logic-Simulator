@@ -21,14 +21,14 @@ bool Delete::Execute() {
 	Output* pOut = mAppManager->GetOutput();
 
 	// Delete selected components
-	for (int i = 0; i < mDeletedComps.size(); i++) {
+	for (int i = 0; i < (int)mDeletedComps.size(); i++) {
 		mDeletedComps[i]->Delete(pOut);
 	}
 
 	// Update the path of all connections
 	mConnections = mAppManager->GetConnections();
-	for (int i = 0; i < mConnections.size(); i++) pOut->ClearConnectionPins(mConnections[i]->GetPath());
-	for (int i = 0; i < mConnections.size(); i++) mConnections[i]->UpdatePath(pOut);
+	for (int i = 0; i < (int)mConnections.size(); i++) pOut->ClearConnectionPins(mConnections[i]->GetPath());
+	for (int i = 0; i < (int)mConnections.size(); i++) mConnections[i]->UpdatePath(pOut);
 
 	pOut->ClearDrawingArea();
 	pOut->PrintMsg("Deleted");
@@ -47,8 +47,8 @@ void Delete::Undo() {
 	vector<Connection*> connections = mAppManager->GetConnections();
 
 	// Update the path of all connections
-	for (int i = 0; i < connections.size(); i++) pOut->ClearConnectionPins(connections[i]->GetPath());
-	for (int i = 0; i < connections.size(); i++) connections[i]->UpdatePath(pOut);
+	for (int i = 0; i < (int)connections.size(); i++) pOut->ClearConnectionPins(connections[i]->GetPath());
+	for (int i = 0; i < (int)connections.size(); i++) connections[i]->UpdatePath(pOut);
 
 	pOut->ClearDrawingArea();
 }
@@ -63,8 +63,8 @@ void Delete::Redo() {
 	}
 
 	// Update the path of all connections
-	for (int i = 0; i < mConnections.size(); i++) pOut->ClearConnectionPins(mConnections[i]->GetPath());
-	for (int i = 0; i < mConnections.size(); i++) mConnections[i]->UpdatePath(pOut);
+	for (int i = 0; i < (int)mConnections.size(); i++) pOut->ClearConnectionPins(mConnections[i]->GetPath());
+	for (int i = 0; i < (int)mConnections.size(); i++) mConnections[i]->UpdatePath(pOut);
 
 	pOut->ClearDrawingArea();
 }

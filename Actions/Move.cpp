@@ -23,7 +23,7 @@ bool Move::ReadActionParameters() {
 	mSelectedGates = mAppManager->GetSelectedGates();
 	mConnections = mAppManager->GetConnections();
 
-	for (int i = 0; i < mSelectedGates.size(); i++) {
+	for (int i = 0; i < (int)mSelectedGates.size(); i++) {
 		mPrvGatesCoordinates.push_back(mSelectedGates[i]->GetGraphicsInfo());
 	}
 
@@ -63,7 +63,7 @@ bool Move::Execute() {
 		if (x != prvX || y != prvY) {
 			pOut->DrawImage(wind, 0, 0, UI.Width, UI.Height);
 
-			for (int i = 0; i < mSelectedGates.size(); i++) {
+			for (int i = 0; i < (int)mSelectedGates.size(); i++) {
 				GraphicsInfo prvCoord = mSelectedGates[i]->GetGraphicsInfo();
 
 				int x1 = (prvCoord.x1 + prvCoord.x2) / 2;
@@ -97,7 +97,7 @@ bool Move::Execute() {
 	}
 
 	// Check for the validity of the coordinates
-	for (int i = 0; i < mSelectedGates.size(); i++) {
+	for (int i = 0; i < (int)mSelectedGates.size(); i++) {
 		GraphicsInfo newCoord = CalculateDimensions(mSelectedGates[i], dx, dy);
 
 		if (!pOut->IsEmptyArea(newCoord)) {
@@ -106,24 +106,24 @@ bool Move::Execute() {
 	}
 
 	// Clear all connections' path to free up space for moving the gates
-	for (int i = 0; i < mConnections.size(); i++) {
+	for (int i = 0; i < (int)mConnections.size(); i++) {
 		pOut->ClearConnectionPins(mConnections[i]->GetPath());
 	}
 
 	// Clear all selected gate's from the grid
-	for (int i = 0; i < mSelectedGates.size(); i++) {
+	for (int i = 0; i < (int)mSelectedGates.size(); i++) {
 		pOut->MarkPins(mSelectedGates[i]->GetGraphicsInfo(), PinType::EMPTY, NULL);
 	}
 
 	// Set the new coordinates of the gates
-	for (int i = 0; i < mSelectedGates.size(); i++) {
+	for (int i = 0; i < (int)mSelectedGates.size(); i++) {
 		GraphicsInfo newCoord = CalculateDimensions(mSelectedGates[i], dx, dy);
 		mSelectedGates[i]->SetGraphicsInfo(pOut, newCoord);
 		mNewGatesCoordinates.push_back(newCoord);
 	}
 
 	// Update connections' path if available
-	for (int i = 0; i < mConnections.size(); i++) {
+	for (int i = 0; i < (int)mConnections.size(); i++) {
 		if (!mConnections[i]->UpdatePath(pOut)) {
 			Undo();
 			return false;
@@ -140,19 +140,19 @@ bool Move::Execute() {
 void Move::Undo() {
 	Output* pOut = mAppManager->GetOutput();
 
-	for (int i = 0; i < mConnections.size(); i++) {
+	for (int i = 0; i < (int)mConnections.size(); i++) {
 		pOut->ClearConnectionPins(mConnections[i]->GetPath());
 	}
 		
-	for (int i = 0; i < mSelectedGates.size(); i++) {
+	for (int i = 0; i < (int)mSelectedGates.size(); i++) {
 		pOut->MarkPins(mSelectedGates[i]->GetGraphicsInfo(), PinType::EMPTY, NULL);
 	}
 
-	for (int i = 0; i < mSelectedGates.size(); i++) {
+	for (int i = 0; i < (int)mSelectedGates.size(); i++) {
 		mSelectedGates[i]->SetGraphicsInfo(pOut, mPrvGatesCoordinates[i]);
 	}
 		
-	for (int i = 0; i < mConnections.size(); i++) {
+	for (int i = 0; i < (int)mConnections.size(); i++) {
 		mConnections[i]->UpdatePath(pOut);
 	}
 		
@@ -163,19 +163,19 @@ void Move::Undo() {
 void Move::Redo() {
 	Output* pOut = mAppManager->GetOutput();
 
-	for (int i = 0; i < mConnections.size(); i++) {
+	for (int i = 0; i < (int)mConnections.size(); i++) {
 		pOut->ClearConnectionPins(mConnections[i]->GetPath());
 	}
 
-	for (int i = 0; i < mSelectedGates.size(); i++) {
+	for (int i = 0; i < (int)mSelectedGates.size(); i++) {
 		pOut->MarkPins(mSelectedGates[i]->GetGraphicsInfo(), PinType::EMPTY, NULL);
 	}
 
-	for (int i = 0; i < mSelectedGates.size(); i++) {
+	for (int i = 0; i < (int)mSelectedGates.size(); i++) {
 		mSelectedGates[i]->SetGraphicsInfo(pOut, mNewGatesCoordinates[i]);
 	}
 
-	for (int i = 0; i < mConnections.size(); i++) {
+	for (int i = 0; i < (int)mConnections.size(); i++) {
 		mConnections[i]->UpdatePath(pOut);
 	}
 

@@ -122,7 +122,7 @@ void image::Open(const char *cpFileName, imagetype itThisType) {
    		    throw OUT_OF_MEMORY;
 		}
 
-        for(i = 0, j = 0; i < ((usWidth * 3) * usHeight); i += 3, j += 4) {
+        for(i = 0, j = 0; i < (unsigned long)((usWidth * 3) * usHeight); i += 3, j += 4) {
 		    ucpImageData[j] = ucpTmp[i + 2];
 		    ucpImageData[j + 1] = ucpTmp[i + 1];
 			ucpImageData[j + 2] = ucpTmp[i];
