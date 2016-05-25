@@ -114,7 +114,7 @@ ActionType Input::GetUserAction(Output* pOut) {
 				break;
 			}
 		}
-		else if (KeyType == keytype::DELETE_) {
+		else if (KeyType == keytype::KEY_DEL) {
 			pWind->FlushKeyQueue();
 			return ActionType::DEL;
 		}

@@ -37,7 +37,7 @@ bool Hover::Execute() {
 	pOut->StoreImage(wind, minX, minY, maxX, maxY);
 
 	// Loop until the user click the mouse left button
-	while (pIn->GetButtonState(LEFT_BUTTON, x, y) == BUTTON_UP && (pIn->GetKeyState(c) != ASCII || c > 26) && pIn->GetKeyState(c) != DELETE_) {
+	while (pIn->GetButtonState(LEFT_BUTTON, x, y) == BUTTON_UP && (pIn->GetKeyState(c) != ASCII || c > CTRL_Z) && pIn->GetKeyState(c) != KEY_DEL) {
 
 		pIn->GetKeyPress(c);
 

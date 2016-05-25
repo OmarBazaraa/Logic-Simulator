@@ -16,8 +16,8 @@ enum keytype {
 	ARROW,
 	FUNCTION,
 	ESCAPE,
-	DELETE_,
-	HOTKEY
+	KEY_DEL,
+	KEY_CTRL
 };
 
 

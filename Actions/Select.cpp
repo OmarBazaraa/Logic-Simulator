@@ -19,23 +19,23 @@ bool Select::ReadActionParameters() {
 	if (mHotKey == HotKeyType::CTRL_A)
 		return true;
 
-	if (mKeyType == HOTKEY) {
-		for (int x = 0; x < UI.Width; x++) {
-			for (int y = 0; y < UI.Height; y++) {
-				Component* pComp = pOut->GetComponentAtPin(x, y);
-				if (pComp != NULL && pComp->IsSelected())
-					mSelectedComps.insert(pComp);
-			}
-		}
-		Component* pComp = pOut->GetComponentAtPin(mStartX, mStartY);
-		if (pComp != NULL) {
-			if (!pComp->IsSelected())
-				mSelectedComps.insert(pComp);
-			else
-				mSelectedComps.erase(pComp);
-		}
-		return true;
-	}
+	//if (mKeyType == KEY_CTRL) {
+	//	for (int x = 0; x < UI.Width; x++) {
+	//		for (int y = 0; y < UI.Height; y++) {
+	//			Component* pComp = pOut->GetComponentAtPin(x, y);
+	//			if (pComp != NULL && pComp->IsSelected())
+	//				mSelectedComps.insert(pComp);
+	//		}
+	//	}
+	//	Component* pComp = pOut->GetComponentAtPin(mStartX, mStartY);
+	//	if (pComp != NULL) {
+	//		if (!pComp->IsSelected())
+	//			mSelectedComps.insert(pComp);
+	//		else
+	//			mSelectedComps.erase(pComp);
+	//	}
+	//	return true;
+	//}
 
 	// Multi-selection
 	if (pOut->GetComponentAtPin(mStartX, mStartY) == NULL) {
@@ -95,14 +95,12 @@ bool Select::Execute() {
 	Output* pOut = mAppManager->GetOutput();
 	Input* pIn = mAppManager->GetInput();
 
-	//char key = 0;
-	//pIn->GetKeyPress(key);
-	//if (key != 'z') {
-	//	// Clear previous selection
-	//	mAppManager->DeselectComponents();
-	//}
+	if (mKeyType != KEY_CTRL) {
+		// Clear previous selection
+		mAppManager->DeselectComponents();
+	}
 	if (mHotKey == CTRL_A) {
-		mAppManager->SelectComponents();
+		//mAppManager->SelectComponents();
 		int selectedCount = mAppManager->CountSelectedComponents();
 
 		if (selectedCount > 0)
@@ -113,7 +111,7 @@ bool Select::Execute() {
 	}
 
 	// Clear previous selection
-	mAppManager->DeselectComponents();
+	//mAppManager->DeselectComponents();
 
 	// Highlight selected components
 	for (auto it = mSelectedComps.begin(); it != mSelectedComps.end(); it++) {

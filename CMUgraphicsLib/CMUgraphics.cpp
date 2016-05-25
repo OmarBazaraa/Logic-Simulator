@@ -60,12 +60,12 @@ static LRESULT CALLBACK WindowProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lP
 	    switch(wParam) {
 		case VK_DELETE:
 			if (wipInput != NULL) {
-				wipInput->SetKeyInfo(hwnd, DELETE_, 0);
+				wipInput->SetKeyInfo(hwnd, KEY_DEL, 0);
 			}
 			break;
 		case VK_CONTROL:
 			if (wipInput != NULL) {
-				wipInput->SetKeyInfo(hwnd, HOTKEY, 0);
+				wipInput->SetKeyInfo(hwnd, KEY_CTRL, 0);
 			}
 			break;
 		  case VK_END:
