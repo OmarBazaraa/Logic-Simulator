@@ -181,13 +181,6 @@ void ApplicationManager::AddComponent(Component* pComp) {
 	}
 }
 
-/* Deselects all the components */
-void ApplicationManager::DeselectComponents() {
-	for (int i = 0; i < mCompCount; i++) {
-		mCompList[i]->SetSelected(false);
-	}
-}
-
 /* Counts and returns the number of selected components */
 int ApplicationManager::CountSelectedComponents() const {
 	int n = 0;
@@ -199,6 +192,13 @@ int ApplicationManager::CountSelectedComponents() const {
 	}
 
 	return n;
+}
+
+/* Sets a selection value to all components */
+void ApplicationManager::SetSelectionOfComponents(bool s) {
+	for (int i = 0; i < mCompCount; i++) {
+		mCompList[i]->SetSelected(s);
+	}
 }
 
 /* Returns a vector of all selected components */

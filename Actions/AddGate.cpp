@@ -20,7 +20,7 @@ bool AddGate::ReadActionParameters() {
 	Input* pIn = mAppManager->GetInput();
 
 	if (!mIsLoaded) {
-		mAppManager->DeselectComponents();
+		mAppManager->SetSelectionOfComponents(false);
 		mAppManager->UpdateInterface();
 
 		pOut->PrintMsg(GetActionMsg());

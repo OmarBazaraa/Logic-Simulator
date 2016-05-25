@@ -16,27 +16,11 @@ bool Select::ReadActionParameters() {
 	mEndX = mStartX;
 	mEndY = mStartY;
 
-	if (mHotKey == HotKeyType::CTRL_A)
+	// Select all components
+	if (mHotKey == CTRL_A) {
 		return true;
-
-	//if (mKeyType == KEY_CTRL) {
-	//	for (int x = 0; x < UI.Width; x++) {
-	//		for (int y = 0; y < UI.Height; y++) {
-	//			Component* pComp = pOut->GetComponentAtPin(x, y);
-	//			if (pComp != NULL && pComp->IsSelected())
-	//				mSelectedComps.insert(pComp);
-	//		}
-	//	}
-	//	Component* pComp = pOut->GetComponentAtPin(mStartX, mStartY);
-	//	if (pComp != NULL) {
-	//		if (!pComp->IsSelected())
-	//			mSelectedComps.insert(pComp);
-	//		else
-	//			mSelectedComps.erase(pComp);
-	//	}
-	//	return true;
-	//}
-
+	}
+		
 	// Multi-selection
 	if (pOut->GetComponentAtPin(mStartX, mStartY) == NULL) {
 		int x = mStartX, prvX = x;
@@ -99,29 +83,25 @@ bool Select::Execute() {
 	Output* pOut = mAppManager->GetOutput();
 	Input* pIn = mAppManager->GetInput();
 
+	char c;
+	mKeyType = pIn->GetKeyState(c);
+
+	// Clear previous selection if CTRL is not pressed
 	if (mKeyType != KEY_CTRL) {
-		// Clear previous selection
-		mAppManager->DeselectComponents();
+		mAppManager->SetSelectionOfComponents(false);
 	}
+
+	// Select all components
 	if (mHotKey == CTRL_A) {
-		//mAppManager->SelectComponents();
-		int selectedCount = mAppManager->CountSelectedComponents();
-
-		if (selectedCount > 0)
-			pOut->PrintMsg(to_string(selectedCount) + " Selected Component(s)");
-		else
-			pOut->ClearStatusBar();
-		return false;
+		mAppManager->SetSelectionOfComponents(true);
 	}
-
-	// Clear previous selection
-	//mAppManager->DeselectComponents();
-
-	// Highlight selected components
-	for (auto it = mSelectedComps.begin(); it != mSelectedComps.end(); it++) {
-		(*it)->Select();
+	// Toggle the selection of the components
+	else {
+		for (auto it = mSelectedComps.begin(); it != mSelectedComps.end(); it++) {
+			(*it)->Select();
+		}
 	}
-
+	
 	// Reflect some information about selected components to the screen
 	int selectedCount = mAppManager->CountSelectedComponents();
 	

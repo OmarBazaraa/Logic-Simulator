@@ -21,7 +21,7 @@ bool AddConnection::ReadActionParameters() {
 	Output* pOut = mAppManager->GetOutput();
 	
 	if (!mIsLoaded) {
-		mAppManager->DeselectComponents();
+		mAppManager->SetSelectionOfComponents(false);
 		mAppManager->UpdateInterface();
 
 		pOut->PrintMsg("Connection: select the source pin");

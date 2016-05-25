@@ -7,10 +7,10 @@
 class Select : public Action
 {
 private:
-	char mHotKey;
-	keytype mKeyType;
 	int mStartX, mEndX;
 	int mStartY, mEndY;
+	char mHotKey;
+	keytype mKeyType;
 	set<Component*> mSelectedComps;
 
 public:

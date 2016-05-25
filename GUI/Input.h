@@ -30,7 +30,7 @@ public:
 
 	// Returns the user's key press
 	keytype GetKeyPress(char& c);
-	
+
 	// Returns the user's key press without removing it from the queue
 	keytype GetKeyState(char &c);
 

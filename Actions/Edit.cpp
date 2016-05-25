@@ -17,6 +17,9 @@ bool Edit::ReadActionParameters() {
 	Input* pIn = mAppManager->GetInput();
 	Output* pOut = mAppManager->GetOutput();
 
+	mAppManager->SetSelectionOfComponents(false);
+	mAppManager->UpdateInterface();
+
 	bool ret = false;
 
 	pOut->PrintMsg("Please select a component to edit");

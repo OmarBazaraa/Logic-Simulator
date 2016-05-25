@@ -10,17 +10,12 @@ bool Copy::ReadActionParameters() {
 	Input* pIn = mAppManager->GetInput();
 	Output* pOut = mAppManager->GetOutput();
 
-	mAppManager->DeselectComponents();
+	mAppManager->SetSelectionOfComponents(false);
 	mAppManager->UpdateInterface();
 
 	pOut->PrintMsg("Please select a component to copy");
 	pIn->WaitMouseClick(mX, mY);
 	pOut->ClearStatusBar();
-
-	if (!pOut->IsDrawingArea(mX, mY)) {
-		pOut->PrintMsg("Invalid position. Operation was cancelled");
-		return false;
-	}
 
 	mComp = pOut->GetComponentAtPin(mX, mY);
 

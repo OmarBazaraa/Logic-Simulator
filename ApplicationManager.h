@@ -57,11 +57,11 @@ public:
 	/* Adds a new component to the list of components */
 	void AddComponent(Component* pComp);
 
-	/* Deselects all the components */
-	void DeselectComponents();
-
 	/* Counts and returns the number of selected components */
 	int CountSelectedComponents() const;
+
+	/* Sets a selection value to all components */
+	void SetSelectionOfComponents(bool s);
 
 	/* Returns a vector of all selected components */
 	vector<Component*> GetSelectedComponents();

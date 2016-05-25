@@ -16,7 +16,7 @@ bool Move::ReadActionParameters() {
 	Component* pComp = pOut->GetComponentAtPin(mStartX, mStartY);
 
 	if (pComp != NULL && !pComp->IsSelected()) {
-		mAppManager->DeselectComponents();
+		mAppManager->SetSelectionOfComponents(false);
 		pComp->SetSelected(true);
 	}
 

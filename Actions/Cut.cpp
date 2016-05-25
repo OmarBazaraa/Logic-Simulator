@@ -10,17 +10,12 @@ bool Cut::ReadActionParameters() {
 	Input* pIn = mAppManager->GetInput();
 	Output* pOut = mAppManager->GetOutput();
 
-	mAppManager->DeselectComponents();
+	mAppManager->SetSelectionOfComponents(false);
 	mAppManager->UpdateInterface();
 
 	pOut->PrintMsg("Please select a component to cut");
 	pIn->WaitMouseClick(mX, mY);
 	pOut->ClearStatusBar();
-
-	if (!pOut->IsDrawingArea(mX, mY)) {
-		pOut->PrintMsg("Invalid position. Operation was cancelled");
-		return false;
-	}
 
 	mComp = pOut->GetComponentAtPin(mX, mY);
 
@@ -43,25 +38,30 @@ bool Cut::Execute() {
 	}
 
 	Output* pOut = mAppManager->GetOutput();
+
+	// Set copied
 	mAppManager->SetCopiedComp(mComp);
-	mComp->Delete(pOut);
-	pOut->ClearDrawingArea();
+
+	// Delete
+	mComp->SetSelected(true);
+	mDeleteAct = new Delete(mAppManager);
+	mDeleteAct->Execute();
+
 	pOut->PrintMsg("Cut");
 	return true;
 }
 
 /* Undo action */
 void Cut::Undo() {
-	mComp->Restore(mAppManager->GetOutput());
+	mDeleteAct->Undo();
 }
 
 /* Redo action */
 void Cut::Redo() {
-	mComp->Delete(mAppManager->GetOutput());
-	mAppManager->GetOutput()->ClearDrawingArea();
+	mDeleteAct->Redo();
 }
 
 /* Destructor */
 Cut::~Cut() {
-
+	delete mDeleteAct;
 }

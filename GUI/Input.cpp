@@ -21,18 +21,20 @@ void Input::WaitMouseClick(int& x, int& y) {
 	mLastY = y;
 }
 
+/* Returns information on the current state of the mouse buttons and it's position */
+buttonstate Input::GetButtonState(const button btMouse, int& x, int& y) {
+	return pWind->GetButtonState(btMouse, x, y);;
+}
+
 // Returns the user's key press
 keytype Input::GetKeyPress(char& key) {
 	//pWind->FlushKeyQueue();
 	return pWind->GetKeyPress(key);
 }
+
+// Returns the user's key press without removing it from the queue
 keytype Input::GetKeyState(char& key) {
 	return pWind->GetKeyState(key);
-}
-
-/* Returns information on the current state of the mouse buttons and it's position */
-buttonstate Input::GetButtonState(const button btMouse, int& x, int& y) {
-	return pWind->GetButtonState(btMouse, x, y);;
 }
 
 /* Returns the string entered by the user and reflect it on the status bar */
@@ -76,19 +78,24 @@ ActionType Input::GetUserAction(Output* pOut) {
 	pWind->FlushMouseQueue();
 
 	int x, y;
-	char HotKey = 0;
-	keytype KeyType = pWind->GetKeyState(HotKey);
+	char hotKey;
+	keytype keyType;
 
 	while (GetButtonState(LEFT_BUTTON, x, y) == BUTTON_UP) {
-		KeyType = pWind->GetKeyState(HotKey);
-		if (KeyType == NO_KEYPRESS)
+		keyType = pWind->GetKeyState(hotKey);
+
+		if (keyType == NO_KEYPRESS) {
 			return ActionType::HOVER;
-		if (KeyType == ASCII) {
-			switch (HotKey)
+		}
+		else if (keyType == keytype::KEY_DEL) {
+			pWind->FlushKeyQueue();
+			return ActionType::DEL;
+		}
+		else if (keyType == ASCII) {
+			switch (hotKey)
 			{
 			case CTRL_A:
 				return ActionType::SELECT;
-				break;
 			case CTRL_S:
 				pWind->FlushKeyQueue();
 				return ActionType::SAVE;
@@ -110,14 +117,9 @@ ActionType Input::GetUserAction(Output* pOut) {
 			case CTRL_O:
 				pWind->FlushKeyQueue();
 				return ActionType::LOAD;
-			default:
-				break;
 			}
 		}
-		else if (KeyType == keytype::KEY_DEL) {
-			pWind->FlushKeyQueue();
-			return ActionType::DEL;
-		}
+		
 		pWind->FlushKeyQueue();
 	}
 
