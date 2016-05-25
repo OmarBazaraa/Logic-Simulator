@@ -1,6 +1,4 @@
 #pragma once
-#include<fstream>
-#include<string>
 #include "Action.h"
 #include "..\GUI\UserInterface.h"
 #include "..\ApplicationManager.h"
@@ -9,15 +7,18 @@
 #include "..\CMUgraphicsLib\CMUgraphics.h"
 #include "..\Components\LED.h"
 #include "..\Components\Switch.h"
-#include"..\Components\LogicGate.h"
+#include "..\Components\LogicGate.h"
 #include "..\Components\Connection.h"
+#include <fstream>
+#include <string>
 using namespace std;
+
 class TruthTable : public Action
 {
-	LED** mLeds;              // List of existing leds
-	Switch** mSwitches;       // List of existing switches
-	int* mSwitchesDefault;
-	int mRows;               // Number of rows in truth table
+	LED** mLeds;			// List of existing leds
+	Switch** mSwitches;		// List of existing switches
+	int* mSwitchesDefault;	
+	int mRows;				// Number of rows in truth table
 	int mColumns;            // Number of columns in truth table
 	int mSwitchesCount;      // Number of switches in design
 	int mLedsCount;          // Number of leds in design
@@ -72,7 +73,7 @@ private:
 	/* Creates all possible compinations of inputs on switches */
 	void CreateCompinations(string compination);
 
-	/*Tests input*/
+	/* Tests input */
 	void Test(string k);
 
 	/* changes string to int */

@@ -4,7 +4,7 @@
 /* Constructor that initializes the user interface */
 Dialog::Dialog(string s, DialogBoxType pType) {
 	// Create and initialize the drawing window
-	pWind = new window(414, 165, 485, 400);	
+	pWind = new window(UI.DialogWidth, UI.DialogHeight, UI.DialogStartX, UI.DialogStartY);
 	pWind->SetWaitClose(false);
 	mMsg = s;
 	mType = pType;
@@ -16,7 +16,7 @@ void Dialog::DrawDialog() const {
 
 	pWind->SetBrush(UI.BackgroundColor);
 	pWind->SetPen(UI.BackgroundColor);
-	pWind->DrawRectangle(0, 0, 400, 150);
+	pWind->DrawRectangle(0, 0, UI.DialogWidth, UI.DialogHeight);
 
 	pWind->ChangeTitle("");
 
@@ -42,40 +42,40 @@ void Dialog::DrawDialog() const {
 
 	}
 
-	pWind->DrawString(15, 35, mMsg);
+	pWind->DrawString(UI.MessageStartX, UI.MessageStartY, mMsg);
 
 }
 
 /* Draws OK button */
 void Dialog::DrawOK() const {
 	pWind->SetPen(UI.DarkColor);
-	pWind->DrawRectangle(150, 90, 250, 120);
+	pWind->DrawRectangle(2 * UI.DialogMargin + UI.ButtonWidht, UI.ButtonStartY, 2 * UI.DialogMargin + 2 * UI.ButtonWidht, UI.ButtonStartY + UI.ButtonHeight);
 	pWind->SetPen(WHITE);
-	pWind->DrawString(188, 95, "OK");
+	pWind->DrawString(UI.ButtonWidht + 2 * UI.DialogMargin + 38, UI.ButtonStartY + 5, "OK");
 }
 
 /* Draws YES button */
 void Dialog::DrawYES() const {
 	pWind->SetPen(UI.DarkColor);
-	pWind->DrawRectangle(25, 90, 125, 120);
+	pWind->DrawRectangle(UI.DialogMargin, UI.ButtonStartY, UI.DialogMargin+UI.ButtonWidht, UI.ButtonStartY+UI.ButtonHeight);
 	pWind->SetPen(WHITE);
-	pWind->DrawString(59, 95, "YES");
+	pWind->DrawString(UI.DialogMargin + 34, UI.ButtonStartY + 5, "YES");
 }
 
 /* Draws NO button */
 void Dialog::DrawNO() const {
 	pWind->SetPen(UI.DarkColor);
-	pWind->DrawRectangle(150, 90, 250, 120);
+	pWind->DrawRectangle(2 * UI.DialogMargin + UI.ButtonWidht, UI.ButtonStartY, 2 * UI.DialogMargin + 2 * UI.ButtonWidht, UI.ButtonStartY + UI.ButtonHeight);
 	pWind->SetPen(WHITE);
-	pWind->DrawString(188, 95, "NO");
+	pWind->DrawString(UI.ButtonWidht + 2 * UI.DialogMargin + 38, UI.ButtonStartY + 5, "NO");
 }
 
 /* Draws CANCEL button */
 void Dialog::DrawCANCEL() const {
 	pWind->SetPen(UI.DarkColor);
-	pWind->DrawRectangle(275, 90, 375, 120);
+	pWind->DrawRectangle(3 * UI.DialogMargin + 2 * UI.ButtonWidht, UI.ButtonStartY, 3 * UI.DialogMargin + 3 * UI.ButtonWidht, UI.ButtonStartY + UI.ButtonHeight);
 	pWind->SetPen(WHITE);
-	pWind->DrawString(292, 95, "CANCEL");
+	pWind->DrawString(2 * UI.ButtonWidht + 3 * UI.DialogMargin + 17, UI.ButtonStartY + 5, "CANCEL");
 }
 
 /* Gets user clicked button */
@@ -87,22 +87,22 @@ DialogBoxButton Dialog::GetUserClick() {
 
 			if (IsButton(x, y) && !IsButton(oldX, oldY)) {
 
-				if (x > 25 && x < 125) {
-					pWind->DrawRectangle(25, 90, 125, 120);
-					pWind->DrawString(59, 95, "YES");
+				if (x > UI.DialogMargin && x < UI.ButtonWidht + UI.DialogMargin) {
+					pWind->DrawRectangle(UI.DialogMargin, UI.ButtonStartY, UI.DialogMargin + UI.ButtonWidht, UI.ButtonStartY + UI.ButtonHeight);
+					pWind->DrawString(UI.DialogMargin + 34, UI.ButtonStartY + 5, "YES");
 				}
 
-				if (x > 150 && x < 250) {
-					pWind->DrawRectangle(150, 90, 250, 120);
+				if (x > UI.ButtonWidht + 2 * UI.DialogMargin && x < 2 * UI.ButtonWidht + 2 * UI.DialogMargin) {
+					pWind->DrawRectangle(2 * UI.DialogMargin + UI.ButtonWidht, UI.ButtonStartY, 2 * UI.DialogMargin + 2 * UI.ButtonWidht, UI.ButtonStartY + UI.ButtonHeight);
 					if (mType == Type_A)
-						pWind->DrawString(188, 95, "NO");
+						pWind->DrawString(UI.ButtonWidht + 2 * UI.DialogMargin + 38, UI.ButtonStartY + 5, "NO");
 					else
-						pWind->DrawString(188, 95, "OK");
+						pWind->DrawString(UI.ButtonWidht + 2 * UI.DialogMargin + 38, UI.ButtonStartY + 5, "OK");
 				}
 
-				if (x > 275 && x < 375) {
-					pWind->DrawRectangle(275, 90, 375, 120);
-					pWind->DrawString(292, 95, "CANCEL");
+				if (x > 2 * UI.ButtonWidht + 3 * UI.DialogMargin && x < 3 * UI.ButtonWidht + 2 * UI.DialogMargin) {
+					pWind->DrawRectangle(3 * UI.DialogMargin + 2 * UI.ButtonWidht, UI.ButtonStartY, 3 * UI.DialogMargin + 3 * UI.ButtonWidht, UI.ButtonStartY + UI.ButtonHeight);
+					pWind->DrawString(2 * UI.ButtonWidht + 3 * UI.DialogMargin + 17, UI.ButtonStartY + 5, "CANCEL");
 				}
 
 			}
@@ -119,18 +119,18 @@ DialogBoxButton Dialog::GetUserClick() {
 
 			if (IsButton(x, y)) {
 
-				if (x > 25 && x < 125) {
+				if (x > UI.DialogMargin && x < UI.ButtonWidht + UI.DialogMargin) {
 					return YES;
 				}
 
-				if (x > 150 && x < 250) {
+				if (x > UI.ButtonWidht + 2 * UI.DialogMargin && x < 2 * UI.ButtonWidht + 2 * UI.DialogMargin) {
 					if (mType == Type_A)
 						return NO;
 					else
 						return OK;
 				}
 
-				if (x > 275 && x < 375) {
+				if (x > 2 * UI.ButtonWidht + 3 * UI.DialogMargin && x < 3 * UI.ButtonWidht + 2 * UI.DialogMargin) {
 					return CANCEL;
 				}
 
@@ -141,7 +141,10 @@ DialogBoxButton Dialog::GetUserClick() {
 
 /* Checks if the given y-coordinate is button */
 bool Dialog::IsButton(int x, int y) {
-	return (y < 120 && y > 90 && (x > 25 && x < 125 && mType == Type_A || (x > 150 && x < 250) || (x > 275 && x < 375 && mType != Type_C)));
+	return (y < UI.ButtonHeight + UI.ButtonStartY && y > UI.ButtonStartY 
+		&& (x > UI.DialogMargin && x < UI.ButtonWidht + UI.DialogMargin && mType == Type_A
+			|| (x > UI.ButtonWidht + 2 * UI.DialogMargin && x < 2 * UI.ButtonWidht + 2 * UI.DialogMargin)
+			|| (x > 2 * UI.ButtonWidht + 3 * UI.DialogMargin && x < 3 * UI.ButtonWidht + 2 * UI.DialogMargin && mType != Type_C)));
 }
 
 /* Destructor */

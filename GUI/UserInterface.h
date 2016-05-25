@@ -25,6 +25,24 @@ struct UserInterface
 	static const int PinOffset = PinMargin * 2;					// The distance between two successive pins
 	static const int HorPinsCount = Width / PinOffset;
 	static const int VerPinsCount = (Height - ToolBarHeight - GateBarHeight - StatusBarHeight) / PinOffset;
+	static const int TruthTableMargin = 20;
+	static const int ExitMargin = 10;
+	static const int Column = 100;
+	static const int Row = 20;
+	static const int Exit = 20;
+	static const int StatusMargin = 45;
+	static const int DialogStartX = 485;
+	static const int DialogStartY = 400;
+	static const int DialogWidth = 414;
+	static const int DialogHeight = 165;
+	static const int ButtonWidht = 100;
+	static const int ButtonHeight = 30;
+	static const int DialogMargin = 25;
+	static const int ButtonStartY = 90;
+	static const int MessageStartX = 15;
+	static const int MessageStartY = 35;
+
+
 
 	// Components Dimension constants
 	static const int LogicGateWidth = 80,	LogicGateHeight = 48;
