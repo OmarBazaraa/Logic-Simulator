@@ -16,8 +16,10 @@ Output::Output() {
 
 	// Create and initialize the drawing window
 	pWind = CreateWind(UI.Width, UI.Height, UI.StartX, UI.StartY);
+
 	pWind->SetWaitClose(false);
 	pWind->SetBuffering(true);
+
 	ChangeTitle("Logic Simulator");
 	CreateToolBar();
 	CreateGateBar();
@@ -170,52 +172,6 @@ void Output::ClearDrawingArea() const {
 	pWind->SetBrush(UI.BackgroundColor);
 	pWind->SetPen(UI.BackgroundColor);
 	pWind->DrawRectangle(0, UI.ToolBarHeight + UI.GateBarHeight, UI.Width, UI.Height - UI.StatusBarHeight);
-
-	// ---- JUST FOR TESTING ----
-	/*
-	pWind->SetPen(WHITE, 1);
-	
-	int startX = 0;
-	int endX = UI.HorPinsCount * UI.PinOffset;
-	int startY = UI.ToolBarHeight + UI.GateBarHeight;
-	int endY = startY + UI.VerPinsCount * UI.PinOffset;
-
-	// Vertical lines
-	for (int x = startX; x <= endX; x += UI.PinOffset) {
-		pWind->DrawLine(x, startY, x, endY);
-	}
-
-	// Horizontal lines
-	for (int y = startY; y <= endY; y += UI.PinOffset) {
-		pWind->DrawLine(startX, y, endX, y);
-	}
-	
-	startX += UI.PinMargin;
-	endX -= UI.PinMargin;
-	startY += UI.PinMargin;
-	endY -= UI.PinMargin;
-
-	// Pins
-	for (int x = startX; x <= endX; x += UI.PinOffset) {
-		for (int y = startY; y <= endY; y += UI.PinOffset) {
-			int iX = x, iY = y;
-			getPinIndices(iX, iY);
-
-			if (mPinGrid[iX][iY].Type == PinType::INTERSECTING_CONNECTIONS) {
-				pWind->SetBrush(RED);
-				pWind->DrawRectangle(x - 5, y - 5, x + 5, y + 5);
-			}
-			else if (mPinGrid[iX][iY].Type == PinType::HOR_CONNECTION || mPinGrid[iX][iY].Type == PinType::VER_CONNECTION) {
-				pWind->SetBrush(GREEN);
-				pWind->DrawRectangle(x - 5, y - 5, x + 5, y + 5);
-			}				
-			else {
-				pWind->DrawPixel(x, y);
-			}
-				
-		}
-	}
-	*/
 }
 
 /* Clears the status bar */
@@ -440,7 +396,9 @@ void Output::MarkPins(const GraphicsInfo& gfxInfo, PinType mark, Component* comp
 
 /* Marks the pins of the connection as used */
 void Output::MarkConnectionPins(const vector<GraphicsInfo>& path, Component* comp) {
-	for (int i = 1; i < (int)path.size(); i++) {
+	int n = (int)path.size() - 1;
+
+	for (int i = 1; i < n; i++) {
 		// Horizontal line
 		if (path[i].y1 == path[i].y2) {
 			int x1 = path[i].x1 / UI.PinOffset;
@@ -482,7 +440,9 @@ void Output::MarkConnectionPins(const vector<GraphicsInfo>& path, Component* com
 
 /* Clears the pins of the connection */
 void Output::ClearConnectionPins(const vector<GraphicsInfo>& path) {
-	for (int i = 1; i < (int)path.size(); i++) {
+	int n = (int)path.size() - 1;
+
+	for (int i = 1; i < n; i++) {
 		// Horizontal line
 		if (path[i].y1 == path[i].y2) {
 			int x1 = path[i].x1 / UI.PinOffset;
@@ -624,6 +584,56 @@ bool Output::IsValidNode(const Node& cur, const Node& par) {
 	return mPinGrid[cur.x][cur.y].Type == PinType::EMPTY
 		|| (cur.y == par.y && mPinGrid[cur.x][cur.y].Type == PinType::VER_CONNECTION)
 		|| (cur.x == par.x && mPinGrid[cur.x][cur.y].Type == PinType::HOR_CONNECTION);
+}
+
+/* Visualize debugging */
+void Output::Debug() {
+	// ---- JUST FOR TESTING ----
+	pWind->SetPen(WHITE, 1);
+
+	int startX = 0;
+	int endX = UI.HorPinsCount * UI.PinOffset;
+	int startY = UI.ToolBarHeight + UI.GateBarHeight;
+	int endY = startY + UI.VerPinsCount * UI.PinOffset;
+
+	// Vertical lines
+	for (int x = startX; x <= endX; x += UI.PinOffset) {
+		pWind->DrawLine(x, startY, x, endY);
+	}
+
+	// Horizontal lines
+	for (int y = startY; y <= endY; y += UI.PinOffset) {
+		pWind->DrawLine(startX, y, endX, y);
+	}
+
+	startX += UI.PinMargin;
+	endX -= UI.PinMargin;
+	startY += UI.PinMargin;
+	endY -= UI.PinMargin;
+
+	// Pins
+	for (int x = startX; x <= endX; x += UI.PinOffset) {
+		for (int y = startY; y <= endY; y += UI.PinOffset) {
+			int iX = x, iY = y;
+			getPinIndices(iX, iY);
+
+			if (mPinGrid[iX][iY].Type == PinType::GATE) {
+				pWind->SetBrush(BLUE);
+				pWind->DrawRectangle(x - 5, y - 5, x + 5, y + 5);
+			}
+			else if (mPinGrid[iX][iY].Type == PinType::INTERSECTING_CONNECTIONS) {
+				pWind->SetBrush(RED);
+				pWind->DrawRectangle(x - 5, y - 5, x + 5, y + 5);
+			}
+			else if (mPinGrid[iX][iY].Type == PinType::HOR_CONNECTION || mPinGrid[iX][iY].Type == PinType::VER_CONNECTION) {
+				pWind->SetBrush(GREEN);
+				pWind->DrawRectangle(x - 5, y - 5, x + 5, y + 5);
+			}
+			else {
+				pWind->DrawPixel(x, y);
+			}
+		}
+	}
 }
 
 /* Destructor */

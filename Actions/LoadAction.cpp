@@ -7,13 +7,18 @@ LoadAction::LoadAction(ApplicationManager* pAppMan) : Action(pAppMan) {
 
 /* Reads parameters required for action to execute */
 bool LoadAction::ReadActionParameters() {
+	mRead.open("Data.txt");
+
+	if (!mRead.is_open()) {
+		return false;
+	}
+
 	Dialog dialog("Loading old file will cause current file deletion!",Type_B);
 
 	if (dialog.GetUserClick() != DialogBoxButton::OK) {
 		return false;
 	}
 
-	mRead.open("Data.txt");
 	return true;
 }
 

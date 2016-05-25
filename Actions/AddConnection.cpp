@@ -10,8 +10,8 @@ AddConnection::AddConnection(ApplicationManager* pAppMan, Data* pLoadedData) : A
 
 	if (pLoadedData != NULL) {
 		mIsLoaded = true;
-		mLabel = pLoadedData->Label;
 		mGfxInfo = pLoadedData->GfxInfo;
+		mLabel = pLoadedData->Label;
 	}
 }
 
@@ -27,7 +27,7 @@ bool AddConnection::ReadActionParameters() {
 	}
 
 	if (!DetectSourceComponent()) {
-		pOut->PrintMsg("Invalid source pin. Operation was cancelled");
+		if (!mIsLoaded) pOut->PrintMsg("Invalid source pin. Operation was cancelled");
 		return false;
 	}
 	
@@ -38,14 +38,14 @@ bool AddConnection::ReadActionParameters() {
 	}
 
 	if (!DetectDestinationComponent()) {
-		pOut->PrintMsg("Invalid destination pin. Operation was cancelled");
+		if (!mIsLoaded) pOut->PrintMsg("Invalid destination pin. Operation was cancelled");
 		return false;
 	}
 	
 	mPath = pOut->GetConnectionPath(mGfxInfo);
 
 	if (mPath == NULL) {
-		pOut->PrintMsg("There is no available path. Operation was cancelled");
+		if (!mIsLoaded) pOut->PrintMsg("There is no available path. Operation was cancelled");
 		return false;
 	}
 

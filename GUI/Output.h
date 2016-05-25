@@ -108,6 +108,9 @@ public:
 	/* Returns the shortest available path for the connection, null if no path found */
 	vector<GraphicsInfo>* GetConnectionPath(const GraphicsInfo& gfxInfo);
 
+	/* Visualize debugging */
+	void Debug();
+
 	/* Destructor */
 	~Output();
 
