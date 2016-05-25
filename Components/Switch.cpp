@@ -43,7 +43,7 @@ int Switch::GetConnectedCount() {
 
 /* Calculates the output of the Switch gate */
 void Switch::Operate() {
-	mOutputPin.SetStatus(mOutputPin.GetStatus() == HIGH ? LOW : HIGH);
+	//mOutputPin.SetStatus(mOutputPin.GetStatus() == HIGH ? LOW : HIGH);
 }
 
 /* Draws the Switch gate */
@@ -59,6 +59,7 @@ void Switch::Select() {
 		mSelected = !mSelected;
 	}
 	else {
+		mOutputPin.SetStatus(mOutputPin.GetStatus() == HIGH ? LOW : HIGH);
 		Refresh();
 	}
 }

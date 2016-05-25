@@ -1,5 +1,5 @@
 #include "TruthTable.h"
-#include "queue"
+#include <queue>
 
 /* Constructor */
 TruthTable::TruthTable(ApplicationManager* pAppMan) : Action(pAppMan) {
@@ -26,7 +26,7 @@ bool TruthTable::Execute() {
 		else
 			mCanDraw = false;
 		DrawHeaders();
-		CreateCompinations("");
+		CreateCombinations("");
 		ReturnToDefault();
 		Exits();
 	}
@@ -43,8 +43,12 @@ void TruthTable::Redo() {
 	return;
 }
 
-
+/* Destructor */
 TruthTable::~TruthTable() {
+	delete[] mLeds;
+	delete[] mSwitches;
+	delete[] mSwitchesDefault;
+
 	if (mCanDraw)
 		delete pWind;
 	if (mWrite.is_open())
@@ -154,25 +158,25 @@ void TruthTable::Normalizetxt(string& msg) {
 	msg = temp;
 }
 
-/* Creates all possible compinations of inputs on switches */
-void TruthTable::CreateCompinations(string compination) {
-	if (compination.length() == mSwitchesCount) { Test(compination); return; }
-	CreateCompinations(compination + '0');
-	CreateCompinations(compination + '1');
+/* Creates all possible Combinations of inputs on switches */
+void TruthTable::CreateCombinations(string Combination) {
+	if (Combination.length() == mSwitchesCount) { Test(Combination); return; }
+	CreateCombinations(Combination + '0');
+	CreateCombinations(Combination + '1');
 }
 
 /* Tests input */
-void TruthTable::Test(string compination) {
-	int pos = (1 + ToInt(compination)) * UI.Row + UI.TruthTableMargin;
+void TruthTable::Test(string Combination) {
+	int pos = (1 + ToInt(Combination)) * UI.Row + UI.TruthTableMargin;
 	string status;
 	queue<Component*>q;
 	if (mCanDraw) {
-		if (compination[mSwitchesCount - 1] == '0')pWind->SetPen(UI.BackgroundColor);
+		if (Combination[mSwitchesCount - 1] == '0')pWind->SetPen(UI.BackgroundColor);
 		else pWind->SetPen(WHITE);
 	}
 	for (int i = 0; i < mSwitchesCount; i++) {
-		mSwitches[i]->GetOutputPin()->SetStatus(Status(compination[i] - '0') == HIGH ? LOW : HIGH);
-		status = compination[i];
+		mSwitches[i]->GetOutputPin()->SetStatus(Status(Combination[i] - '0'));
+		status = Combination[i];
 		q.push(mSwitches[i]);
 
 		if (mCanDraw)pWind->DrawString(i * UI.Column + UI.TruthTableMargin + UI.StatusMargin, pos, status);
@@ -182,18 +186,13 @@ void TruthTable::Test(string compination) {
 	for (int i = 0; i < mLedsCount; i++) {
 		status = "";
 		status += ('0' + mLeds[i]->GetInputPinStatus(0));
-		/*if (status[0] - '0') {
-			if (compination[mSwitchesCount - 1] == '0')
-				pWind->SetPen(((color)(DARKGREEN)));
-			else
-				pWind->SetPen(((color)(GREEN)));
+
+		if (status[0] - '0') {
+			pWind->SetPen(((color)(GREEN)));
 		}
 		else { 
-			if (compination[mSwitchesCount - 1] == '0')				
-				pWind->SetPen(((color)(111)));
-			else 
-				pWind->SetPen(((color)(250)));
-		}*/
+			pWind->SetPen(((color)(250)));
+		}
 
 		if (mCanDraw)pWind->DrawString(i * UI.Column + UI.TruthTableMargin + UI.StatusMargin + mSwitchesCount * UI.Column, pos, status);
 		mWrite << "   " << status << "       ";
