@@ -58,6 +58,16 @@ static LRESULT CALLBACK WindowProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lP
 
 	  case WM_KEYDOWN:
 	    switch(wParam) {
+		case VK_DELETE:
+			if (wipInput != NULL) {
+				wipInput->SetKeyInfo(hwnd, DELETE_, 0);
+			}
+			break;
+		case VK_CONTROL:
+			if (wipInput != NULL) {
+				wipInput->SetKeyInfo(hwnd, HOTKEY, 0);
+			}
+			break;
 		  case VK_END:
             if(wipInput != NULL) {
                 wipInput->SetKeyInfo(hwnd, ARROW, 1);
@@ -534,6 +544,26 @@ keytype window::GetKeyPress(char &cKey) {
 		return ktTmp;
 
 	} else {
+		cKey = 0;
+		return NO_KEYPRESS;
+	}
+}
+
+keytype window::GetKeyState(char & cKey) {
+
+	kqueuenode* kqueTmp;
+	keytype ktTmp;
+
+	ProcessMessage(); // Kludge
+
+	kqueTmp = kqueInput.getHead();
+	if (kqueTmp != NULL) {
+		cKey = kqueTmp->cValue;
+		ktTmp = kqueTmp->ktInfo;
+
+		return ktTmp;
+	}
+	else {
 		cKey = 0;
 		return NO_KEYPRESS;
 	}

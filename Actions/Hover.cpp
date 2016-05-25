@@ -30,12 +30,17 @@ bool Hover::Execute() {
 	int hoveredItemOrder = -1;
 	int lastHoveredItemOrder = -1;
 
+	char c;
+
 	// Store the previous window
 	image wind;
 	pOut->StoreImage(wind, minX, minY, maxX, maxY);
 
 	// Loop until the user click the mouse left button
-	while (pIn->GetButtonState(LEFT_BUTTON, x, y) == BUTTON_UP) {
+	while (pIn->GetButtonState(LEFT_BUTTON, x, y) == BUTTON_UP && (pIn->GetKeyState(c) != ASCII || c > 26) && pIn->GetKeyState(c) != DELETE_) {
+
+		pIn->GetKeyPress(c);
+
 		// User hovers on the tool bar
 		if (y >= 0 && y < UI.ToolBarHeight) {
 			if (lastHovedArea != 0) {

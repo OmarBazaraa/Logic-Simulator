@@ -197,7 +197,12 @@ class window {
     // type of key that was pressed    
     // (see the keytype enum in keyqueue.h)
 	keytype GetKeyPress(char &cKey);
-	 
+	
+	// stuffs the key value into ucKey, and returns the
+	// type of key that was pressed    
+	// (see the keytype enum in keyqueue.h)
+	keytype GetKeyState(char &cKey);
+
 	// Same as above, but won't return unless there is a key
 	// event in the queue.  As a result it will wait until
 	// there is one

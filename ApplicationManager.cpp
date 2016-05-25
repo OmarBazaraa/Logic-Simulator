@@ -184,6 +184,13 @@ void ApplicationManager::AddComponent(Component* pComp) {
 	}
 }
 
+/* Selects all the components */
+void ApplicationManager::SelectComponents() {
+	for (int i = 0; i < mCompCount; i++) {
+		mCompList[i]->SetSelected(!mCompList[i]->IsDeleted());
+	}
+}
+
 /* Deselects all the components */
 void ApplicationManager::DeselectComponents() {
 	for (int i = 0; i < mCompCount; i++) {

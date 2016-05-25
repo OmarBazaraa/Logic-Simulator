@@ -1,6 +1,7 @@
 #include "Input.h"
 #include "Output.h"
 #include "..\Components\Gate.h"
+#include <iostream>
 
 /* Constructor */
 Input::Input(window* pW) {
@@ -24,6 +25,9 @@ void Input::WaitMouseClick(int& x, int& y) {
 keytype Input::GetKeyPress(char& key) {
 	//pWind->FlushKeyQueue();
 	return pWind->GetKeyPress(key);
+}
+keytype Input::GetKeyState(char& key) {
+	return pWind->GetKeyState(key);
 }
 
 /* Returns information on the current state of the mouse buttons and it's position */
@@ -72,9 +76,49 @@ ActionType Input::GetUserAction(Output* pOut) {
 	pWind->FlushMouseQueue();
 
 	int x, y;
+	char HotKey = 0;
+	keytype KeyType = pWind->GetKeyState(HotKey);
 
-	if (GetButtonState(LEFT_BUTTON, x, y) == BUTTON_UP) {
-		return ActionType::HOVER;
+	while (GetButtonState(LEFT_BUTTON, x, y) == BUTTON_UP) {
+		KeyType = pWind->GetKeyState(HotKey);
+		if (KeyType == NO_KEYPRESS)
+			return ActionType::HOVER;
+		if (KeyType == ASCII) {
+			switch (HotKey)
+			{
+			case CTRL_A:
+				return ActionType::SELECT;
+				break;
+			case CTRL_S:
+				pWind->FlushKeyQueue();
+				return ActionType::SAVE;
+			case CTRL_Z:
+				pWind->FlushKeyQueue();
+				return ActionType::UNDO;
+			case CTRL_Y:
+				pWind->FlushKeyQueue();
+				return ActionType::REDO;
+			case CTRL_C:
+				pWind->FlushKeyQueue();
+				return ActionType::COPY;
+			case CTRL_X:
+				pWind->FlushKeyQueue();
+				return ActionType::CUT;
+			case CTRL_V:
+				pWind->FlushKeyQueue();
+				return ActionType::PASTE;
+			case CTRL_O:
+				pWind->FlushKeyQueue();
+				return ActionType::LOAD;
+			default:
+				break;
+			}
+		}
+		else if (KeyType == keytype::DELETE_) {
+			pWind->FlushKeyQueue();
+			return ActionType::DEL;
+		}
+		pWind->FlushKeyQueue();
 	}
 
 	mLastX = x;
@@ -119,7 +163,7 @@ ActionType Input::GetUserAction(Output* pOut) {
 		}
 	}
 
-	WaitMouseClick(x, y);
+	pWind->WaitMouseClick(x, y);
 
 	// User clicks on the tool bar
 	if (y >= 0 && y < UI.ToolBarHeight) {

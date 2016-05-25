@@ -2,7 +2,7 @@
 
 /* Constructor */
 Select::Select(ApplicationManager* pAppMan) : Action(pAppMan) {
-
+	
 }
 
 /* Reads parameters required for action to execute */
@@ -10,9 +10,32 @@ bool Select::ReadActionParameters() {
 	Output* pOut = mAppManager->GetOutput();
 	Input* pIn = mAppManager->GetInput();
 
+	mKeyType = pIn->GetKeyPress(mHotKey);
+
 	pIn->GetLastPointClicked(mStartX, mStartY);
 	mEndX = mStartX;
 	mEndY = mStartY;
+
+	if (mHotKey == HotKeyType::CTRL_A)
+		return true;
+
+	if (mKeyType == HOTKEY) {
+		for (int x = 0; x < UI.Width; x++) {
+			for (int y = 0; y < UI.Height; y++) {
+				Component* pComp = pOut->GetComponentAtPin(x, y);
+				if (pComp != NULL && pComp->IsSelected())
+					mSelectedComps.insert(pComp);
+			}
+		}
+		Component* pComp = pOut->GetComponentAtPin(mStartX, mStartY);
+		if (pComp != NULL) {
+			if (!pComp->IsSelected())
+				mSelectedComps.insert(pComp);
+			else
+				mSelectedComps.erase(pComp);
+		}
+		return true;
+	}
 
 	// Multi-selection
 	if (pOut->GetComponentAtPin(mStartX, mStartY) == NULL) {
@@ -78,6 +101,16 @@ bool Select::Execute() {
 	//	// Clear previous selection
 	//	mAppManager->DeselectComponents();
 	//}
+	if (mHotKey == CTRL_A) {
+		mAppManager->SelectComponents();
+		int selectedCount = mAppManager->CountSelectedComponents();
+
+		if (selectedCount > 0)
+			pOut->PrintMsg(to_string(selectedCount) + " Selected Component(s)");
+		else
+			pOut->ClearStatusBar();
+		return false;
+	}
 
 	// Clear previous selection
 	mAppManager->DeselectComponents();

@@ -147,6 +147,11 @@ void Move::Undo() {
 	for (int i = 0; i < mConnections.size(); i++) {
 		pOut->ClearConnectionPins(mConnections[i]->GetPath());
 	}
+
+	// Clear all selected gate's from the grid
+	for (int i = 0; i < mSelectedGates.size(); i++) {
+		pOut->MarkPins(mSelectedGates[i]->GetGraphicsInfo(), PinType::EMPTY, NULL);
+	}
 		
 	for (int i = 0; i < mSelectedGates.size(); i++) {
 		mSelectedGates[i]->SetGraphicsInfo(pOut, mPrvGatesCoordinates[i]);
@@ -165,6 +170,11 @@ void Move::Redo() {
 
 	for (int i = 0; i < mConnections.size(); i++) {
 		pOut->ClearConnectionPins(mConnections[i]->GetPath());
+	}
+
+	// Clear all selected gate's from the grid
+	for (int i = 0; i < mSelectedGates.size(); i++) {
+		pOut->MarkPins(mSelectedGates[i]->GetGraphicsInfo(), PinType::EMPTY, NULL);
 	}
 
 	for (int i = 0; i < mSelectedGates.size(); i++) {

@@ -29,7 +29,10 @@ public:
 	buttonstate GetButtonState(const button btMouse, int& x, int& y);
 
 	// Returns the user's key press
-	keytype Input::GetKeyPress(char& c);
+	keytype GetKeyPress(char& c);
+	
+	// Returns the user's key press without removing it from the queue
+	keytype GetKeyState(char &c);
 
 	/* Returns the string entered by the user and reflect it on the status bar */
 	string GetSrting(Output* pOut, string msg, string str = "") const;

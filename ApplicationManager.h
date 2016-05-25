@@ -54,6 +54,9 @@ public:
 	/* Adds a new component to the list of components */
 	void AddComponent(Component* pComp);
 
+	/* selects all the components */
+	void SelectComponents();
+
 	/* Deselects all the components */
 	void DeselectComponents();
 

@@ -53,3 +53,7 @@ kqueuenode* kqueue::Remove() {
 	return kqueTmp;
 
 }
+
+kqueuenode* kqueue::getHead() {
+	return kqueHead;
+}

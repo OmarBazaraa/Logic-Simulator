@@ -15,7 +15,9 @@ enum keytype {
 	ASCII,
 	ARROW,
 	FUNCTION,
-	ESCAPE
+	ESCAPE,
+	DELETE_,
+	HOTKEY
 };
 
 
@@ -43,6 +45,7 @@ class kqueue {
 	~kqueue();
 	
 	void Insert(kqueuenode* kqueNode);
+	kqueuenode* getHead();
 	kqueuenode* Remove();
 };
 
