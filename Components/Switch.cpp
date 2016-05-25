@@ -31,6 +31,16 @@ int Switch::GetOutputPinStatus() const {
 	return mOutputPin.GetStatus();
 }
 
+/* Returns next connected */
+Component* Switch::GetNextComponent(int index) {
+	return ((Component*)(mOutputPin.GetConnection(index)));
+}
+
+/* Returns number of connected components */
+int Switch::GetConnectedCount() {
+	return mOutputPin.GetConnectionsCount();
+}
+
 /* Calculates the output of the Switch gate */
 void Switch::Operate() {
 	mOutputPin.SetStatus(mOutputPin.GetStatus() == HIGH ? LOW : HIGH);
@@ -70,16 +80,14 @@ void Switch::Restore(Output* pOut) {
 
 /* Simulates due to change in pin status */
 void  Switch::Refresh() {
-	queue<Component*> q;
-	q.push(this);
-	while (!q.empty()) {
-		q.front()->Operate();
-		if (dynamic_cast<Connection*>(q.front()))
-			q.push(((Connection*)q.front())->GetDestinationPin()->GetGate());
-		else if (!dynamic_cast<LED*>(q.front()))
-			for (int i = 0; i < ((Gate*)q.front())->GetOutputPin()->GetConnectionsCount(); i++)
-				q.push(((Gate*)q.front())->GetOutputPin()->GetConnection(i));
-		q.pop();
+	queue<Component*> qComp;
+	qComp.push(this); 
+	while (!qComp.empty()) {
+		qComp.front()->Operate();
+		int n = qComp.front()->GetConnectedCount();
+		for (int i = 0; i < n; i++)
+			qComp.push(qComp.front()->GetNextComponent(i));
+		qComp.pop();
 	}
 }
 

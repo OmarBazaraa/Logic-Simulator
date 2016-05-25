@@ -2,6 +2,7 @@
 #include "Utility.h"
 #include "..\GUI\UserInterface.h"
 
+
 /* Returns the indices of the pin based on the given coordinates */
 void getPinIndices(int& x, int& y) {
 	x = (x / UI.PinOffset);

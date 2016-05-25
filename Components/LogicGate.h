@@ -36,6 +36,12 @@ public:
 	/* Returns the status of the output pin */
 	virtual int GetOutputPinStatus() const;
 
+	/* Returns next connected */
+	virtual Component* GetNextComponent(int index);
+
+	/* Returns number of connected components */
+	virtual int GetConnectedCount();
+	
 	/* Deletes the component */
 	virtual void Delete(Output* pOut);
 

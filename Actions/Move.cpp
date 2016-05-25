@@ -7,10 +7,12 @@ Move::Move(ApplicationManager* pAppMan) : Action(pAppMan) {
 
 /* Reads parameters required for action to execute */
 bool Move::ReadActionParameters() {
-	mAppManager->GetInput()->GetLastPointClicked(mStartX, mStartY);
-	normalizeCoordinates(mStartX, mStartY);
-	
 	Output* pOut = mAppManager->GetOutput();
+	Input* pIn = mAppManager->GetInput();
+
+	pIn->GetLastPointClicked(mStartX, mStartY);
+	normalizeCoordinates(mStartX, mStartY);
+
 	Component* pComp = pOut->GetComponentAtPin(mStartX, mStartY);
 
 	if (pComp != NULL && !pComp->IsSelected()) {
@@ -18,17 +20,11 @@ bool Move::ReadActionParameters() {
 		pComp->SetSelected(true);
 	}
 
-	int n = mAppManager->GetComponentsCount();
-	Component** list = mAppManager->GetComponentList();
+	mSelectedGates = mAppManager->GetSelectedGates();
+	mConnections = mAppManager->GetConnections();
 
-	for (int i = 0; i < n; i++) {
-		if (list[i]->IsSelected() && list[i]->GetAddActionType() != ADD_CONNECTION) {
-			mSelectedGates.push_back((Gate*)list[i]);
-			mPrvGatesCoordinates.push_back(list[i]->GetGraphicsInfo());
-		}
-		else if (!list[i]->IsDeleted() && list[i]->GetAddActionType() == ADD_CONNECTION) {
-			mConnections.push_back((Connection*)list[i]);
-		}
+	for (int i = 0; i < mSelectedGates.size(); i++) {
+		mPrvGatesCoordinates.push_back(mSelectedGates[i]->GetGraphicsInfo());
 	}
 
 	mAppManager->UpdateInterface();
@@ -75,13 +71,13 @@ bool Move::Execute() {
 
 				GraphicsInfo newCoord = CalculateDimensions(mSelectedGates[i], dx, dy);
 
-				bool outOfBorders = SetNewGateBorders(newCoord);
+				bool outOfBorders = AdjustGateCoordinates(newCoord);
 
 				int x2 = (newCoord.x1 + newCoord.x2) / 2;
 				int y2 = (newCoord.y1 + newCoord.y2) / 2;				
 
 				pOut->DrawMoveLine(x1, y1, x2, y2);
-				DrawComponent(mSelectedGates[i], newCoord, !IsValidArea(newCoord) || outOfBorders);
+				DrawGate(mSelectedGates[i], newCoord, pOut->IsEmptyArea(newCoord) && !outOfBorders);
 			}
 
 			prvX = x;
@@ -104,7 +100,7 @@ bool Move::Execute() {
 	for (int i = 0; i < mSelectedGates.size(); i++) {
 		GraphicsInfo newCoord = CalculateDimensions(mSelectedGates[i], dx, dy);
 
-		if (!pOut->IsDrawingArea(newCoord.x1, newCoord.y1) || !pOut->IsDrawingArea(newCoord.x2, newCoord.y2) || !IsValidArea(newCoord)) {
+		if (!pOut->IsEmptyArea(newCoord)) {
 			return false;
 		}
 	}
@@ -149,6 +145,10 @@ void Move::Undo() {
 	}
 		
 	for (int i = 0; i < mSelectedGates.size(); i++) {
+		pOut->MarkPins(mSelectedGates[i]->GetGraphicsInfo(), PinType::EMPTY, NULL);
+	}
+
+	for (int i = 0; i < mSelectedGates.size(); i++) {
 		mSelectedGates[i]->SetGraphicsInfo(pOut, mPrvGatesCoordinates[i]);
 	}
 		
@@ -168,6 +168,10 @@ void Move::Redo() {
 	}
 
 	for (int i = 0; i < mSelectedGates.size(); i++) {
+		pOut->MarkPins(mSelectedGates[i]->GetGraphicsInfo(), PinType::EMPTY, NULL);
+	}
+
+	for (int i = 0; i < mSelectedGates.size(); i++) {
 		mSelectedGates[i]->SetGraphicsInfo(pOut, mNewGatesCoordinates[i]);
 	}
 
@@ -183,26 +187,8 @@ Move::~Move() {
 
 }
 
-/* Checks if the given area is valid for moving a component to it or not */
-bool Move::IsValidArea(const GraphicsInfo& gfxInfo) {
-	Output* pOut = mAppManager->GetOutput();
-	Component* pComp;
-
-	for (int x = gfxInfo.x1; x < gfxInfo.x2; x += UI.PinOffset) {
-		for (int y = gfxInfo.y1; y < gfxInfo.y2; y += UI.PinOffset) {
-			pComp = pOut->GetComponentAtPin(x, y);
-
-			if (pComp != NULL && !pComp->IsSelected() && pComp->GetAddActionType() != ADD_CONNECTION) {
-				return false;
-			}
-		}
-	}
-
-	return true;
-}
-
-/* Sets the component new coordinates if it goes out of borders */
-bool Move::SetNewGateBorders(GraphicsInfo& GfxInfo) {
+/* Adjusts gate's coordinates if it goes out of borders */
+bool Move::AdjustGateCoordinates(GraphicsInfo& GfxInfo) {
 	int dx = 0, dy = 0;
 
 	if (GfxInfo.x1 < 0)
@@ -240,8 +226,8 @@ GraphicsInfo Move::CalculateDimensions(Component* pComp, int dx, int dy) {
 	return GraphicsInfo(x1, y1, x2, y2);
 }
 
-/* Draws the component in its current state: faded or invalid */
-void Move::DrawComponent(Component* pComp, const GraphicsInfo& GfxInfo, bool Invalid) {
+/* Draws the gate in its current state: faded or invalid */
+void Move::DrawGate(Component* pComp, const GraphicsInfo& GfxInfo, bool valid) {
 	Output* pOut = mAppManager->GetOutput();
 	ActionType actType = pComp->GetAddActionType();
 	string dir;
@@ -249,43 +235,43 @@ void Move::DrawComponent(Component* pComp, const GraphicsInfo& GfxInfo, bool Inv
 	switch (actType)
 	{
 	case ADD_GATE_AND:
-		dir = (Invalid ? "Images\\components\\inactive\\and.png" : "Images\\components\\faded\\and.png");
+		dir = (valid ? "Images\\components\\faded\\and.png" : "Images\\components\\inactive\\and.png");
 		break;
 	case ADD_GATE_OR:
-		dir = (Invalid ? "Images\\components\\inactive\\or.png" : "Images\\components\\faded\\or.png");
+		dir = (valid ? "Images\\components\\faded\\or.png" : "Images\\components\\inactive\\or.png");
 		break;
 	case ADD_GATE_NOT:
-		dir = (Invalid ? "Images\\components\\inactive\\not.png" : "Images\\components\\faded\\not.png");
+		dir = (valid ? "Images\\components\\faded\\not.png" : "Images\\components\\inactive\\not.png");
 		break;
 	case ADD_GATE_NAND:
-		dir = (Invalid ? "Images\\components\\inactive\\nand.png" : "Images\\components\\faded\\nand.png");
+		dir = (valid ? "Images\\components\\faded\\nand.png" : "Images\\components\\inactive\\nand.png");
 		break;
 	case ADD_GATE_NOR:
-		dir = (Invalid ? "Images\\components\\inactive\\nor.png" : "Images\\components\\faded\\nor.png");
+		dir = (valid ? "Images\\components\\faded\\nor.png" : "Images\\components\\inactive\\nor.png");
 		break;
 	case ADD_GATE_XOR:
-		dir = (Invalid ? "Images\\components\\inactive\\xor.png" : "Images\\components\\faded\\xor.png");
+		dir = (valid ? "Images\\components\\faded\\xor.png" : "Images\\components\\inactive\\xor.png");
 		break;
 	case ADD_GATE_XNOR:
-		dir = (Invalid ? "Images\\components\\inactive\\xnor.png" : "Images\\components\\faded\\xnor.png");
+		dir = (valid ? "Images\\components\\faded\\xnor.png" : "Images\\components\\inactive\\xnor.png");
 		break;
 	case ADD_GATE_AND3:
-		dir = (Invalid ? "Images\\components\\inactive\\and3.png" : "Images\\components\\faded\\and3.png");
+		dir = (valid ? "Images\\components\\faded\\and3.png" : "Images\\components\\inactive\\and3.png");
 		break;
 	case ADD_GATE_NOR3:
-		dir = (Invalid ? "Images\\components\\inactive\\nor3.png" : "Images\\components\\faded\\nor3.png");
+		dir = (valid ? "Images\\components\\faded\\nor3.png" : "Images\\components\\inactive\\nor3.png");
 		break;
 	case ADD_GATE_XOR3:
-		dir = (Invalid ? "Images\\components\\inactive\\xor3.png" : "Images\\components\\faded\\xor3.png");
+		dir = (valid ? "Images\\components\\faded\\xor3.png" : "Images\\components\\inactive\\xor3.png");
 		break;
 	case ADD_GATE_BUFFER:
-		dir = (Invalid ? "Images\\components\\inactive\\buffer.png" : "Images\\components\\faded\\buffer.png");
+		dir = (valid ? "Images\\components\\faded\\buffer.png" : "Images\\components\\inactive\\buffer.png");
 		break;
 	case ADD_SWITCH:
-		dir = (Invalid ? "Images\\components\\inactive\\switch_off.png" : "Images\\components\\faded\\switch_off.png");
+		dir = (valid ? "Images\\components\\faded\\switch_off.png" : "Images\\components\\inactive\\switch_off.png");
 		break;
 	case ADD_LED:
-		dir = (Invalid ? "Images\\components\\inactive\\led_off.png" : "Images\\components\\faded\\led_off.png");
+		dir = (valid ? "Images\\components\\faded\\led_off.png" : "Images\\components\\inactive\\led_off.png");
 		break;
 	}
 

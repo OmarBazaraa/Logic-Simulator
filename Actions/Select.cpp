@@ -65,7 +65,11 @@ bool Select::ReadActionParameters() {
 			pOut->UpdateScreen();
 		}
 
+		if (x < minX || x > maxX) x = prvX;
+		if (y < minY || y > maxY) y = prvY;
+
 		mEndX = x, mEndY = y;
+
 		if (mStartX > mEndX) swap(mStartX, mEndX);
 		if (mStartY > mEndY) swap(mStartY, mEndY);
 

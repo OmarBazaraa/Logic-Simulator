@@ -21,13 +21,11 @@ void Connection::SetPath(Output* pOut, const GraphicsInfo& gfxInfo, const vector
 
 /* Updates the path of the connection */
 bool Connection::UpdatePath(Output* pOut) {
-	// Clear previous path
-	//pOut->ClearConnectionPins(mPath);
-
-	// Update path
+	// Update the source and destination pins coordinates
 	mSrcPin->GetGate()->GetOutputPinCoordinates(mGfxInfo.x1, mGfxInfo.y1);
 	mDstPin->GetGate()->GetInputPinCoordinates(mGfxInfo.x2, mGfxInfo.y2, mDstPinIndex);
 
+	// Generate a new path
 	vector<GraphicsInfo>* path = pOut->GetConnectionPath(mGfxInfo);
 
 	if (path == NULL) {
@@ -35,7 +33,9 @@ bool Connection::UpdatePath(Output* pOut) {
 	}
 
 	mPath = *path;
+	delete path;
 	pOut->MarkConnectionPins(mPath, this);
+	
 	return true;
 }
 
@@ -93,6 +93,16 @@ int Connection::GetInputPinStatus(int n) const {
 /* Returns the status of the output pin, if LED returns -1 */
 int Connection::GetOutputPinStatus() const {
 	return mDstPin->GetStatus();
+}
+
+/* Returns next connected */
+Component* Connection::GetNextComponent(int index) {
+	return GetDestinationPin()->GetGate();
+}
+
+/* Returns number of connected components */
+int Connection::GetConnectedCount() {
+	return 1;
 }
 
 /* Calculates the output according to the inputs */

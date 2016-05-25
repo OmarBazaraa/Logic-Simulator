@@ -29,6 +29,12 @@ public:
 	/* Returns the output pin of the component, NULL if LED */
 	virtual Pin* GetOutputPin() = 0;
 
+	/* Returns next connected */
+	virtual Component* GetNextComponent(int index) = 0;
+
+	/* Returns number of connected components */
+	virtual int GetConnectedCount() = 0;
+
 	/* Destructor */
 	virtual ~Gate();
 };

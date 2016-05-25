@@ -15,16 +15,18 @@
 #include "..\Components\Buffer.h"
 #include "..\Components\Switch.h"
 #include "..\Components\LED.h"
+#include <vector>
 
 class AddGate : public Action
 {
 private:
-	bool mIsLoaded;			// Indicates if the action is loaded from the file
-	int mX, mY;				// Center point of the gate
-	GraphicsInfo mGfxInfo;	// The parameters (coordinates) required to draw the gate
-	string mLabel;			// The label of the component
-	Gate* mGate;			// Pointer to the added gate
-	ActionType mActType;	// The type of the action
+	bool mIsLoaded;						// Indicates if the action is loaded from the file or not
+	int mX, mY;							// Center point of the gate
+	GraphicsInfo mGfxInfo;				// The parameters (coordinates) required to draw the gate
+	string mLabel;						// The label of the component
+	Gate* mGate;						// Pointer to the added gate
+	ActionType mActType;				// The type of the action
+	vector<Connection*> mConnections;	// list of all connections to be updated
 
 public:
 	/* Constructor */
@@ -51,6 +53,12 @@ private:
 
 	/* Calculates the rectangular bound of the gate */
 	void CalculateDimensions();
+
+	/* Adjusts gate's coordinates if it goes out of borders */
+	bool AddGate::AdjustGateCoordinates(GraphicsInfo& GfxInfo);
+
+	/* Draws the gate in its current state: faded or invalid */
+	void AddGate::DrawGate(bool valid);
 
 	/* Creates the required gate */
 	void CreateGate();

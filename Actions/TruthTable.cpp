@@ -14,20 +14,22 @@ TruthTable::TruthTable(ApplicationManager* pAppMan) : Action(pAppMan) {
 bool TruthTable::ReadActionParameters() {
 	mRows = pow(2, mSwitchesCount);
 	mColumns = mLedsCount + mSwitchesCount;
-	return (mSwitchesCount < 6 && mColumns < 12 && mColumns);
+	return (mSwitchesCount < 6 && mColumns < 12);
 }
 
 /* Executes action */
 bool TruthTable::Execute() {
-	Populate();
-	if (ReadActionParameters())
-		DrawWindow();
-	else
-		mCanDraw = false;
-	DrawHeaders();
-	CreateCompinations("");
-	ReturnToDefault();
-	Exits();
+	if (mWrite.is_open()) {
+		Populate();
+		if (ReadActionParameters())
+			DrawWindow();
+		else
+			mCanDraw = false;
+		DrawHeaders();
+		CreateCompinations("");
+		ReturnToDefault();
+		Exits();
+	}
 	return false;
 }
 
@@ -44,6 +46,8 @@ void TruthTable::Redo() {
 
 TruthTable::~TruthTable() {
 	delete pWind;
+	if (mWrite.is_open())
+		mWrite.close();
 }
 
 /* Populates */
@@ -168,38 +172,46 @@ void TruthTable::Test(string compination) {
 		if (mCanDraw)pWind->DrawString(i * UI.Column + UI.TruthTableMargin + UI.StatusMargin, pos, status);
 		mWrite << "   " << status << "       ";
 	}
-	TestGate(q);
+	Cascade(q);
 	for (int i = 0; i < mLedsCount; i++) {
 		status = "";
 		status += ('0' + mLeds[i]->GetInputPinStatus(0));
-		if (status[0] - '0')pWind->SetPen(GREEN);
-		else pWind->SetPen(RED);
+		/*if (status[0] - '0') {
+			if (compination[mSwitchesCount - 1] == '0')
+				pWind->SetPen(((color)(DARKGREEN)));
+			else
+				pWind->SetPen(((color)(GREEN)));
+		}
+		else { 
+			if (compination[mSwitchesCount - 1] == '0')				
+				pWind->SetPen(((color)(111)));
+			else 
+				pWind->SetPen(((color)(250)));
+		}*/
+
 		if (mCanDraw)pWind->DrawString(i * UI.Column + UI.TruthTableMargin + UI.StatusMargin + mSwitchesCount * UI.Column, pos, status);
 		mWrite << "   " << status << "       ";
-		pWind->SetPen(WHITE);
 	}
 	mWrite << endl;
 }
 
-/* Changes string to int */
-int TruthTable::ToInt(string k) {
-	int x = 0;
-	for (int i = 0; i < k.length(); i++)
-		x += (k[i] - '0')*(int)pow(2, k.length() - 1 - i);
-	return x;
+/* Cascades */
+void TruthTable::Cascade(queue<Component*>qComp) {
+	while (!qComp.empty()) {
+		qComp.front()->Operate();
+		int n = qComp.front()->GetConnectedCount();
+		for (int i = 0; i < n; i++)
+			qComp.push(qComp.front()->GetNextComponent(i));
+		qComp.pop();
+	}
 }
 
-/* Tests the output on a gate */
-void TruthTable::TestGate(queue<Component*> q) {
-	while (!q.empty()) {
-		q.front()->Operate();
-		if (dynamic_cast<Connection*>(q.front()))
-			q.push(((Connection*)q.front())->GetDestinationPin()->GetGate());
-		else if (!dynamic_cast<LED*>(q.front()))
-			for (int i = 0; i < ((Gate*)q.front())->GetOutputPin()->GetConnectionsCount(); i++)
-				q.push(((Gate*)q.front())->GetOutputPin()->GetConnection(i));
-		q.pop();
-	}
+/* Changes string to int */
+int TruthTable::ToInt(string k) {
+	int x = 0, n = k.length();
+	for (int i = 0; i < n; i++)
+		x += (k[i] - '0')*(int)pow(2, k.length() - 1 - i);
+	return x;
 }
 
 /* Returns switches status to default */
@@ -209,7 +221,7 @@ void TruthTable::ReturnToDefault() {
 		mSwitches[i]->GetOutputPin()->SetStatus((Status)mSwitchesDefault[i]);
 		q.push(mSwitches[i]);
 	}
-	TestGate(q);
+	Cascade(q);
 }
 
 /* Exits Truth Table */

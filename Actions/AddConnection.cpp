@@ -21,6 +21,9 @@ bool AddConnection::ReadActionParameters() {
 	Output* pOut = mAppManager->GetOutput();
 	
 	if (!mIsLoaded) {
+		mAppManager->DeselectComponents();
+		mAppManager->UpdateInterface();
+
 		pOut->PrintMsg("Connection: select the source pin");
 		pIn->WaitMouseClick(mGfxInfo.x1, mGfxInfo.y1);
 		pOut->ClearStatusBar();

@@ -1,6 +1,4 @@
 #include "Exit.h"
-#include"..\GUI\Dialog.h"
-#include"SaveAction.h"
 
 /* Constructor */
 Exit::Exit(ApplicationManager* pAppMan) : Action(pAppMan) {
@@ -24,8 +22,15 @@ bool Exit::ReadActionParameters() {
 		std::getline(originalFile, s1);
 		std::getline(backUpFile, s2);
 
-		if (s1 != s2) return true;
+		if (s1 != s2) {
+			originalFile.close();
+			backUpFile.close();
+			return true;
+		}
+
 	}
+	originalFile.close();
+	backUpFile.close();
 
 	return false;
 }
@@ -43,11 +48,12 @@ bool Exit::Execute() {
 
 		DialogBoxButton cType = dialog.GetUserClick();
 
-		if (cType == YES) {
+		if (cType == DialogBoxButton::YES) {
 			Action*	pAct = new SaveAction(this->mAppManager);
 			pAct->Execute();
+			delete pAct;
 		}
-		else if (cType == CANCEL) {
+		else if (cType == DialogBoxButton::CANCEL) {
 			return false;
 		}
 	}

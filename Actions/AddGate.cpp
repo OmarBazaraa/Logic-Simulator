@@ -16,39 +16,58 @@ AddGate::AddGate(ApplicationManager* pAppMan, ActionType actType, Data* pLoadedD
 
 /* Reads parameters required for action to execute */
 bool AddGate::ReadActionParameters() {
-	Input* pIn = mAppManager->GetInput();
 	Output* pOut = mAppManager->GetOutput();
+	Input* pIn = mAppManager->GetInput();
 
 	if (!mIsLoaded) {
+		mAppManager->DeselectComponents();
+		mAppManager->UpdateInterface();
+
 		pOut->PrintMsg(GetActionMsg());
-		pIn->WaitMouseClick(mX, mY);
-		pOut->ClearStatusBar();
+
+		int prvX = mX;
+		int prvY = mY;
+
+		int minX = 0;
+		int maxX = UI.Width;
+		int minY = UI.ToolBarHeight + UI.GateBarHeight;
+		int maxY = UI.Height - UI.StatusBarHeight;
+
+		// Store the previous window
+		image wind;
+		pOut->StoreImage(wind, 0, 0, UI.Width, UI.Height);
+
+		// Reading the mouse input from the user
+		while (pIn->GetButtonState(LEFT_BUTTON, mX, mY) == BUTTON_UP) {
+			normalizeCoordinates(mX, mY);
+
+			if (mX < minX || mX > maxX) mX = prvX;
+			if (mY < minY || mY > maxY) mY = prvY;
+
+			if (mX != prvX || mY != prvY) {
+				pOut->DrawImage(wind, 0, 0, UI.Width, UI.Height);
+
+				CalculateDimensions();
+
+				bool outOfBorders = AdjustGateCoordinates(mGfxInfo);
+
+				DrawGate(pOut->IsEmptyArea(mGfxInfo) && !outOfBorders);
+
+				prvX = mX;
+				prvY = mY;
+			}
+
+			pOut->UpdateScreen();
+		}
+
+		// Wait until the user release the mouse click
+		pIn->WaitMouseClick(prvX, prvY);
+
+		// Redraw the initial window
+		pOut->DrawImage(wind, 0, 0, UI.Width, UI.Height);
+		pOut->UpdateScreen();
 	}
 	
-	/*image wind;
-	pOut->StoreImage(wind, 0, 0, UI.Width, UI.Height);
-
-	int prvX = 0, prvY = 0;
-
-	while (pIn->GetButtonState(LEFT_BUTTON, mX, mY) == BUTTON_UP) {
-		CalculateDimensions();
-
-		if (mX != prvX || mY != prvY) {
-			pOut->DrawImage(wind, 0, 0, UI.Width, UI.Height);
-
-			if (pOut->IsEmptyArea(mGfxInfo)) {
-				pOut->DrawSelectionRectangle(mGfxInfo.x1, mGfxInfo.y1, mGfxInfo.x2, mGfxInfo.y2);
-			}
-			else {
-				pOut->DrawSelectionRectangle(mGfxInfo.x1, mGfxInfo.y1, mGfxInfo.x2, mGfxInfo.y2);
-				pOut->PrintMsg("Invalid position");
-			}
-
-			prvX = mX;
-			prvY = mY;
-		}
-	}*/
-
 	CalculateDimensions();
 
 	if (!pOut->IsEmptyArea(mGfxInfo)) {
@@ -65,22 +84,68 @@ bool AddGate::Execute() {
 		return false;
 	}
 
+	Output* pOut = mAppManager->GetOutput();
+
+	if (!mIsLoaded) {
+		mConnections = mAppManager->GetConnections();
+	}
+
+	// Clear all connections' path to free up space for the added gate
+	for (int i = 0; i < (int)mConnections.size(); i++) {
+		pOut->ClearConnectionPins(mConnections[i]->GetPath());
+	}
+
 	CreateGate();
 	mGate->SetLabel(mLabel);
+
+	// Update connections' path if available
+	for (int i = 0; i < (int)mConnections.size(); i++) {
+		if (!mConnections[i]->UpdatePath(pOut)) {
+			Undo();
+			delete mGate;
+			if (!mIsLoaded) pOut->PrintMsg("Invalid position. Operation was cancelled");
+			return false;
+		}
+	}
+
 	mAppManager->AddComponent(mGate);
+
+	pOut->ClearDrawingArea();
+	pOut->ClearStatusBar();
 
 	return true;
 }
 
 /* Undo action */
 void AddGate::Undo() {
-	mGate->Delete(mAppManager->GetOutput());
-	mAppManager->GetOutput()->ClearDrawingArea();
+	Output* pOut = mAppManager->GetOutput();
+
+	mGate->Delete(pOut);
+
+	// Update the path of all connections
+	for (int i = 0; i < (int)mConnections.size(); i++) pOut->ClearConnectionPins(mConnections[i]->GetPath());
+	for (int i = 0; i < (int)mConnections.size(); i++) mConnections[i]->UpdatePath(pOut);
+
+	pOut->ClearDrawingArea();
 }
 
 /* Redo action */
 void AddGate::Redo() {
-	mGate->Restore(mAppManager->GetOutput());
+	Output* pOut = mAppManager->GetOutput();
+
+	// Clear all connections' path to free up space for the added gate
+	for (int i = 0; i < (int)mConnections.size(); i++) {
+		pOut->ClearConnectionPins(mConnections[i]->GetPath());
+	}
+
+	mGate->Restore(pOut);
+
+	// Update connections' path if available
+	for (int i = 0; i < (int)mConnections.size(); i++) {
+		mConnections[i]->UpdatePath(pOut);
+	}
+
+	pOut->ClearDrawingArea();
 }
 
 /* Destructor */
@@ -149,6 +214,78 @@ void AddGate::CalculateDimensions() {
 	mGfxInfo.y1 = mY - h / 2;
 	mGfxInfo.x2 = mX + w / 2;
 	mGfxInfo.y2 = mY + h / 2;
+}
+
+/* Adjusts gate's coordinates if it goes out of borders */
+bool AddGate::AdjustGateCoordinates(GraphicsInfo& GfxInfo) {
+	int dx = 0, dy = 0;
+
+	if (GfxInfo.x1 < 0)
+		dx = -GfxInfo.x1;
+	if (GfxInfo.y1 < UI.GateBarHeight + UI.ToolBarHeight)
+		dy = UI.GateBarHeight + UI.ToolBarHeight - GfxInfo.y1;
+	if (GfxInfo.x2 >= UI.Width)
+		dx = UI.Width - GfxInfo.x2;
+	if (GfxInfo.y2 >= UI.Height - UI.StatusBarHeight)
+		dy = UI.Height - UI.StatusBarHeight - GfxInfo.y2;
+
+	GfxInfo.x1 += dx;
+	GfxInfo.y1 += dy;
+	GfxInfo.x2 += dx;
+	GfxInfo.y2 += dy;
+
+	return (dx != 0 || dy != 0);
+}
+
+/* Draws the gate in its current state: faded or invalid */
+void AddGate::DrawGate(bool valid) {
+	Output* pOut = mAppManager->GetOutput();
+	string dir;
+
+	switch (mActType)
+	{
+	case ADD_GATE_AND:
+		dir = (valid ? "Images\\components\\faded\\and.png" : "Images\\components\\inactive\\and.png");
+		break;
+	case ADD_GATE_OR:
+		dir = (valid ? "Images\\components\\faded\\or.png" : "Images\\components\\inactive\\or.png");
+		break;
+	case ADD_GATE_NOT:
+		dir = (valid ? "Images\\components\\faded\\not.png" : "Images\\components\\inactive\\not.png");
+		break;
+	case ADD_GATE_NAND:
+		dir = (valid ? "Images\\components\\faded\\nand.png" : "Images\\components\\inactive\\nand.png");
+		break;
+	case ADD_GATE_NOR:
+		dir = (valid ? "Images\\components\\faded\\nor.png" : "Images\\components\\inactive\\nor.png");
+		break;
+	case ADD_GATE_XOR:
+		dir = (valid ? "Images\\components\\faded\\xor.png" : "Images\\components\\inactive\\xor.png");
+		break;
+	case ADD_GATE_XNOR:
+		dir = (valid ? "Images\\components\\faded\\xnor.png" : "Images\\components\\inactive\\xnor.png");
+		break;
+	case ADD_GATE_AND3:
+		dir = (valid ? "Images\\components\\faded\\and3.png" : "Images\\components\\inactive\\and3.png");
+		break;
+	case ADD_GATE_NOR3:
+		dir = (valid ? "Images\\components\\faded\\nor3.png" : "Images\\components\\inactive\\nor3.png");
+		break;
+	case ADD_GATE_XOR3:
+		dir = (valid ? "Images\\components\\faded\\xor3.png" : "Images\\components\\inactive\\xor3.png");
+		break;
+	case ADD_GATE_BUFFER:
+		dir = (valid ? "Images\\components\\faded\\buffer.png" : "Images\\components\\inactive\\buffer.png");
+		break;
+	case ADD_SWITCH:
+		dir = (valid ? "Images\\components\\faded\\switch_off.png" : "Images\\components\\inactive\\switch_off.png");
+		break;
+	case ADD_LED:
+		dir = (valid ? "Images\\components\\faded\\led_off.png" : "Images\\components\\inactive\\led_off.png");
+		break;
+	}
+
+	pOut->DrawPNG(dir, mGfxInfo.x1, mGfxInfo.y1);
 }
 
 /* Creates the required gate */

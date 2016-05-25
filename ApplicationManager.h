@@ -3,7 +3,10 @@
 #include "GUI\Input.h"
 #include "GUI\Output.h"
 #include "Components\Component.h"
+#include "Components\Gate.h"
+#include "Components\Connection.h"
 #include "Actions\Action.h"
+#include <vector>
 #include <stack>
 
 /*
@@ -58,7 +61,16 @@ public:
 	void DeselectComponents();
 
 	/* Counts and returns the number of selected components */
-	int CountSelectedComponents();
+	int CountSelectedComponents() const;
+
+	/* Returns a vector of all selected components */
+	vector<Component*> GetSelectedComponents();
+
+	/* Returns a vector of all selected gates */
+	vector<Gate*> GetSelectedGates();
+
+	/* Returns a vector of all connections */
+	vector<Connection*> GetConnections();
 
 	/* Undoes the last action */
 	void Undo();
