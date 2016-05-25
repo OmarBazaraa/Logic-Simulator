@@ -8,9 +8,9 @@ AddGate::AddGate(ApplicationManager* pAppMan, ActionType actType, Data* pLoadedD
 
 	if (pLoadedData != NULL) {
 		mIsLoaded = true;
-		mLabel = pLoadedData->Label;
 		mX = pLoadedData->GfxInfo.x1;
 		mY = pLoadedData->GfxInfo.y1;
+		mLabel = pLoadedData->Label;
 	}
 }
 
@@ -52,14 +52,9 @@ bool AddGate::ReadActionParameters() {
 	CalculateDimensions();
 
 	if (!pOut->IsEmptyArea(mGfxInfo)) {
-		pOut->PrintMsg("Invalid position. Operation was cancelled");
+		if (!mIsLoaded) pOut->PrintMsg("Invalid position. Operation was cancelled");
 		return false;
 	}
-
-	/*if (mLabel.empty()) {
-		mLabel = pIn->GetSrting(pOut, "Please enter a name for the component: ");
-		pOut->ClearStatusBar();
-	}*/
 
 	return true;
 }

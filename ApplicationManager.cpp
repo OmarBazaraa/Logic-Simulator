@@ -172,6 +172,7 @@ void ApplicationManager::ExecuteAction(ActionType &actType) {
 /* Redraws all the drawing window */
 void ApplicationManager::UpdateInterface() {
 	for (int i = 0; i < mCompCount; i++) mCompList[i]->Draw(pOut);
+	//pOut->Debug();
 	pOut->UpdateScreen();
 }
 
@@ -244,6 +245,10 @@ void ApplicationManager::Load(ifstream& file) {
 	Action* pAct;
 
 	while (file >> compType, compType != "-1") {
+		if (file.eof()) {
+			break;
+		}
+
 		if (compType == "CONNECTION") {
 			file >> compData.Label;
 			file >> compData.GfxInfo.x1 >> compData.GfxInfo.y1 >> compData.GfxInfo.x2 >> compData.GfxInfo.y2;

@@ -8,7 +8,7 @@ Gate::Gate(Output* pOut, const GraphicsInfo& gfxInfo) {
 /* Sets the bound coordinates of the component */
 void Gate::SetGraphicsInfo(Output* pOut, const GraphicsInfo& gfxInfo) {
 	// Clear previous gate
-	pOut->MarkPins(mGfxInfo, PinType::EMPTY, NULL);
+	//pOut->MarkPins(mGfxInfo, PinType::EMPTY, NULL);
 
 	// Update gate
 	mGfxInfo = gfxInfo;

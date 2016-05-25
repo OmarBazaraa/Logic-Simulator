@@ -114,6 +114,11 @@ bool Move::Execute() {
 		pOut->ClearConnectionPins(mConnections[i]->GetPath());
 	}
 
+	// Clear all selected gate's from the grid
+	for (int i = 0; i < mSelectedGates.size(); i++) {
+		pOut->MarkPins(mSelectedGates[i]->GetGraphicsInfo(), PinType::EMPTY, NULL);
+	}
+
 	// Set the new coordinates of the gates
 	for (int i = 0; i < mSelectedGates.size(); i++) {
 		GraphicsInfo newCoord = CalculateDimensions(mSelectedGates[i], dx, dy);

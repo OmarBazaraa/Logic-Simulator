@@ -1,5 +1,6 @@
 #include "Input.h"
 #include "Output.h"
+#include "..\Components\Gate.h"
 
 /* Constructor */
 Input::Input(window* pW) {
@@ -82,7 +83,9 @@ ActionType Input::GetUserAction(Output* pOut) {
 	// User clicks on the drawing area
 	if (y >= UI.ToolBarHeight + UI.GateBarHeight && y < UI.Height - UI.StatusBarHeight) {
 		if (UI.AppMode == Mode::DESIGN) {
-			if (pOut->GetComponentAtPin(x, y) != NULL) {
+			Component* pComp = pOut->GetComponentAtPin(x, y);
+
+			if (pComp != NULL) {
 				int startX = x;
 				int startY = y;
 
@@ -90,6 +93,21 @@ ActionType Input::GetUserAction(Output* pOut) {
 					if (startX != x || startY != y) {
 						return ActionType::MOVE;
 					}
+				}
+			}
+
+			Gate* pGate = dynamic_cast<Gate*>(pComp);
+
+			int iX, iY;
+
+			if (pGate != NULL) {
+				pGate->GetOutputPinCoordinates(iX, iY);
+
+				getPinIndices(x, y);
+				getPinIndices(iX, iY);
+
+				if (x == iX - 1 && y == iY) {
+					return ActionType::ADD_CONNECTION;
 				}
 			}
 
