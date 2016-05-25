@@ -18,13 +18,15 @@ bool Simulate::Execute() {
 	for (int i = 0; i < count; i++)
 		if (!list[i]->IsDeleted())
 			circuit.insert(list[i]);
+	if (circuit.size() == 0)
+		stopSimulation = true;
 	for (int i = 0; i < count; i++) {
 		if (dynamic_cast<LED*>(list[i]) && !list[i]->IsDeleted())
 			TestGate(list[i]);		
 		visited.clear();
 	}	
 
-	if (stopSimulation||circuit.size()||count==0) {
+	if (stopSimulation || circuit.size() || count==0) {
 		ActionType act = DESIGN_MODE;
 		Dialog *d = new Dialog("Circuit Not Valid",Type_C);
 		d->GetUserClick();
@@ -101,6 +103,8 @@ int Simulate::TestGate(Component* pComp) {
 		}
 	}
 	else return 0;
+
+	return 0;
 }
 
 /* Undo action */

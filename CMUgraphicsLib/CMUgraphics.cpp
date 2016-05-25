@@ -783,7 +783,7 @@ void window::SetFont(const int iSize, const unsigned short usStyle, const fontfa
 
 	lf.lfPitchAndFamily |= DEFAULT_PITCH;
 	if(cFontName)
-		strcpy(lf.lfFaceName, cFontName);
+		strcpy_s(lf.lfFaceName, cFontName);
 	
 	fontObject = CreateFontIndirect(&lf);
 
@@ -1196,14 +1196,14 @@ void window::DrawString(const int iX, const int iY, const string strText) {
 void window::DrawInteger(const int iX, const int iY, const long lNumber) {
     
 	char cTmpStorage[128];
-	sprintf(cTmpStorage, "%d", lNumber);
+	sprintf_s(cTmpStorage, "%d", lNumber);
     DrawString(iX, iY, cTmpStorage);
 }
 
 void window::DrawDouble(const int iX, const int iY, const double dNumber) {
 
 	char cTmpStorage[128];
-	sprintf(cTmpStorage, "%f", dNumber);
+	sprintf_s(cTmpStorage, "%f", dNumber);
 	
     DrawString(iX, iY, cTmpStorage);
 }
@@ -1234,7 +1234,7 @@ void window::GetStringSize(int &iWidth, int &iHeight, const string strText) {
 void window::GetIntegerSize(int &iWidth, int &iHeight, const long lNumber) {
 
 	char cTmpStorage[128];
-	sprintf(cTmpStorage, "%d", lNumber);
+	sprintf_s(cTmpStorage, "%d", lNumber);
     GetStringSize(iWidth, iHeight, cTmpStorage);
 
 }
@@ -1242,7 +1242,7 @@ void window::GetIntegerSize(int &iWidth, int &iHeight, const long lNumber) {
 void window::GetDoubleSize(int &iWidth, int &iHeight, const double dNumber) {
 
 	char cTmpStorage[128];
-	sprintf(cTmpStorage, "%f", dNumber);
+	sprintf_s(cTmpStorage, "%f", dNumber);
 	
     GetStringSize(iWidth, iHeight, cTmpStorage);
 
@@ -1393,7 +1393,7 @@ void window::StoreImage(image *imgThis, const unsigned usX, const unsigned short
 
     HBITMAP bmapOld;
 
-    if((usX + usWidth > iWindowWidth) || (usY + usHeight > iWindowHeight)) {
+    if(((int)(usX + usWidth) > iWindowWidth) || ((int)(usY + usHeight) > iWindowHeight)) {
         cout << "Fatal Error: StoreImage selection extends outside the window!" << endl;
         return;
     }
