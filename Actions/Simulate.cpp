@@ -12,28 +12,32 @@ bool Simulate::ReadActionParameters() {
 
 /* Executes action */
 bool Simulate::Execute() {
+	mAppManager->SetSelectionOfComponents(false);
+
 	Component** list = mAppManager->GetComponentList();
 	int count = mAppManager->GetComponentsCount();
 
 	for (int i = 0; i < count; i++)
 		if (!list[i]->IsDeleted())
 			circuit.insert(list[i]);
+
 	if (circuit.size() == 0)
 		stopSimulation = true;
+
 	for (int i = 0; i < count; i++) {
 		if (dynamic_cast<LED*>(list[i]) && !list[i]->IsDeleted())
-			TestGate(list[i]);		
+			TestGate(list[i]);
+
 		visited.clear();
 	}	
 
 	if (stopSimulation || circuit.size() || count==0) {
-		ActionType act = DESIGN_MODE;
-		Dialog *d = new Dialog("Circuit Not Valid",Type_C);
-		d->GetUserClick();
-		delete d;
-		mAppManager->ExecuteAction(act);
+		ActionType act = ActionType::DESIGN_MODE;
 
-		mAppManager->GetOutput()->PrintMsg("Error !! : Components are not connected properly.");
+		Dialog dialog("Circuit is not valid. Cannot start simulation.", Type_C);
+		dialog.GetUserClick();
+
+		mAppManager->ExecuteAction(act);
 	}
 	
 	return false;
@@ -102,9 +106,8 @@ int Simulate::TestGate(Component* pComp) {
 
 		}
 	}
-	else return 0;
 
-	return 0;
+	return false;
 }
 
 /* Undo action */

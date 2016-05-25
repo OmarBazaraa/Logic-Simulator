@@ -19,12 +19,12 @@ class TruthTable : public Action
 	Switch** mSwitches;		// List of existing switches
 	int* mSwitchesDefault;	
 	int mRows;				// Number of rows in truth table
-	int mColumns;            // Number of columns in truth table
-	int mSwitchesCount;      // Number of switches in design
-	int mLedsCount;          // Number of leds in design
+	int mColumns;			// Number of columns in truth table
+	int mSwitchesCount;		// Number of switches in design
+	int mLedsCount;			// Number of leds in design
 	window* pWind;			// Pointer to the graphical Window object
-	bool mCanDraw;           // If you can write on window or not
-	ofstream mWrite;         // txt file to write truth table
+	bool mCanDraw;			// If you can write on window or not
+	ofstream mWrite;		// txt file to write truth table
 
 public:
 	/* Constructor */
@@ -70,8 +70,8 @@ private:
 	/* Normalizes message to fit */
 	void Normalizetxt(string& msg);
 
-	/* Creates all possible compinations of inputs on switches */
-	void CreateCompinations(string compination);
+	/* Creates all possible Combinations of inputs on switches */
+	void CreateCombinations(string Combination);
 
 	/* Tests input */
 	void Test(string k);
@@ -91,4 +91,3 @@ private:
 	/* Checks if the value of coordinates is on exit button */
 	bool TruthTable::IsButton(int x, int y);
 };
-

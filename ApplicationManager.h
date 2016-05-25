@@ -5,6 +5,8 @@
 #include "Components\Component.h"
 #include "Components\Gate.h"
 #include "Components\Connection.h"
+#include "Components\Switch.h"
+#include "Components\LED.h"
 #include "Actions\Action.h"
 #include <vector>
 #include <stack>

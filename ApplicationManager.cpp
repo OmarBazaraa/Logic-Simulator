@@ -110,18 +110,17 @@ void ApplicationManager::ExecuteAction(ActionType& actType) {
 			pAct = new RedoAction(this);
 			break;
 		case SIMULATION_MODE:
-			pOut->PrintMsg("SIMULATION MODE");
 			UI.AppMode = Mode::SIMULATION;
 			pOut->CreateToolBar();
 			pOut->CreateGateBar();
 			pAct = new Simulate(this);
+			//pOut->PrintMsg("SIMULATION MODE");
 			break;
 		case DESIGN_MODE:
-			pOut->PrintMsg("DESIGN MODE");
 			UI.AppMode = Mode::DESIGN;
 			pOut->CreateToolBar();
 			pOut->CreateGateBar();
-			//TODO:
+			//pOut->PrintMsg("DESIGN MODE");
 			break;
 		case CREATE_TRUTH_TABLE:
 			pAct = new TruthTable(this);
