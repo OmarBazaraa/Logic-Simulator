@@ -34,5 +34,7 @@ void Paste::Redo() {
 
 /* Destructor */
 Paste::~Paste() {
-
+	if (ReadActionParameters()) {
+		delete mAct;
+	}
 }
