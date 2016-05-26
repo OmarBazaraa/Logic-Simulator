@@ -30,15 +30,6 @@ ApplicationManager::ApplicationManager() {
 	pIn = pOut->CreateInput();
 }
 
-/* Returns the number of the existing components */
-int ApplicationManager::GetExistingComponentsCount() const {
-	int s = 0;
-	for (int i = 0; i < mCompCount; i++)
-		if (mCompList[i]->IsDeleted())
-			s++;
-	return mCompCount - s;
-}
-
 /* Sets the last copied/cut component */
 void ApplicationManager::SetCopiedComp(Component* pComp) {
 	mCopiedComp = pComp;
@@ -255,12 +246,12 @@ vector<Connection*> ApplicationManager::GetConnections() {
 	return vec;
 }
 
-/* Returns a vector of all leds */
-vector<LED*> ApplicationManager::GetLeds() {
-	vector<LED*> vec;
+/* Returns a vector of all switches */
+vector<Switch*> ApplicationManager::GetSwitches() {
+	vector<Switch*> vec;
 
 	for (int i = 0; i < mCompCount; i++) {
-		LED* ptr = dynamic_cast<LED*>(mCompList[i]);
+		Switch* ptr = dynamic_cast<Switch*>(mCompList[i]);
 
 		if (ptr != NULL && !ptr->IsDeleted()) {
 			vec.push_back(ptr);
@@ -270,12 +261,12 @@ vector<LED*> ApplicationManager::GetLeds() {
 	return vec;
 }
 
-/* Returns a vector of all switches */
-vector<Switch*> ApplicationManager::GetSwitches() {
-	vector<Switch*> vec;
+/* Returns a vector of all leds */
+vector<LED*> ApplicationManager::GetLeds() {
+	vector<LED*> vec;
 
 	for (int i = 0; i < mCompCount; i++) {
-		Switch* ptr = dynamic_cast<Switch*>(mCompList[i]);
+		LED* ptr = dynamic_cast<LED*>(mCompList[i]);
 
 		if (ptr != NULL && !ptr->IsDeleted()) {
 			vec.push_back(ptr);

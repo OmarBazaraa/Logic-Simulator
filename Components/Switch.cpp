@@ -1,4 +1,5 @@
 #include "Switch.h"
+#include <queue>
 
 /* Constructor */
 Switch::Switch(Output* pOut, const GraphicsInfo& gfxInfo, int fanOut) : Gate(pOut, gfxInfo), mOutputPin(fanOut) {

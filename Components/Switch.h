@@ -1,8 +1,5 @@
 #pragma once
 #include "Gate.h"
-#include"..\Actions\Simulate.h"
-#include"..\Components\LED.h"
-#include<queue>
 
 class Switch : public Gate
 {
