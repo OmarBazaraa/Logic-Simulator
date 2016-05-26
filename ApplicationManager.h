@@ -56,6 +56,9 @@ public:
 	/* Adds a new component to the list of components */
 	void AddComponent(Component* pComp);
 
+	/* Returns the number of the existing components */
+	int GetExistingComponentsCount() const;
+
 	/* Counts and returns the number of selected components */
 	int CountSelectedComponents() const;
 

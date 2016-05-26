@@ -2,7 +2,7 @@
 
 /* Constructor */
 Cut::Cut(ApplicationManager* pAppMan) : Action(pAppMan) {
-
+	mDeleteAct = new Delete(mAppManager);
 }
 
 /* Reads parameters required for action to execute */
@@ -44,7 +44,6 @@ bool Cut::Execute() {
 
 	// Delete
 	mComp->SetSelected(true);
-	mDeleteAct = new Delete(mAppManager);
 	mDeleteAct->Execute();
 
 	pOut->PrintMsg("Cut");

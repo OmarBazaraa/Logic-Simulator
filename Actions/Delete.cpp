@@ -39,15 +39,15 @@ bool Delete::Execute() {
 void Delete::Undo() {
 	Output* pOut = mAppManager->GetOutput();
 
-	vector<Connection*> connections = mAppManager->GetConnections();
-
 	// Clear all connections
-	for (int i = 0; i < connections.size(); i++) pOut->ClearConnectionPins(connections[i]->GetPath());
+	for (int i = 0; i < mConnections.size(); i++) pOut->ClearConnectionPins(mConnections[i]->GetPath());
 
 	// Restore deleted components
 	for (int i = 0; i < (int)mDeletedComps.size(); i++) {
 		mDeletedComps[i]->Restore(pOut);
 	}
+
+	vector<Connection*> connections = mAppManager->GetConnections();
 
 	// Update the path of all connections
 	for (int i = 0; i < connections.size(); i++) pOut->ClearConnectionPins(connections[i]->GetPath());

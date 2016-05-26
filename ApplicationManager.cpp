@@ -179,6 +179,19 @@ void ApplicationManager::AddComponent(Component* pComp) {
 	}
 }
 
+/* Returns the number of the existing components */
+int ApplicationManager::GetExistingComponentsCount() const {
+	int n = 0;
+
+	for (int i = 0; i < mCompCount; i++) {
+		if (!mCompList[i]->IsDeleted()) {
+			n++;
+		}
+	}
+
+	return n;
+}
+
 /* Counts and returns the number of selected components */
 int ApplicationManager::CountSelectedComponents() const {
 	int n = 0;
