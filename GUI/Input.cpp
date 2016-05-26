@@ -87,36 +87,40 @@ ActionType Input::GetUserAction(Output* pOut) {
 		if (keyType == NO_KEYPRESS) {
 			return ActionType::HOVER;
 		}
-		else if (keyType == keytype::KEY_DEL) {
-			pWind->FlushKeyQueue();
-			return ActionType::DEL;
-		}
-		else if (keyType == ASCII) {
-			switch (hotKey)
-			{
-			case CTRL_A:
-				return ActionType::SELECT;
-			case CTRL_S:
+
+		// Detecting actions using hotkeys
+		if (UI.AppMode == Mode::DESIGN) {
+			if (keyType == keytype::KEY_DEL) {
 				pWind->FlushKeyQueue();
-				return ActionType::SAVE;
-			case CTRL_Z:
-				pWind->FlushKeyQueue();
-				return ActionType::UNDO;
-			case CTRL_Y:
-				pWind->FlushKeyQueue();
-				return ActionType::REDO;
-			case CTRL_C:
-				pWind->FlushKeyQueue();
-				return ActionType::COPY;
-			case CTRL_X:
-				pWind->FlushKeyQueue();
-				return ActionType::CUT;
-			case CTRL_V:
-				pWind->FlushKeyQueue();
-				return ActionType::PASTE;
-			case CTRL_O:
-				pWind->FlushKeyQueue();
-				return ActionType::LOAD;
+				return ActionType::DEL;
+			}
+			else if (keyType == ASCII) {
+				switch (hotKey)
+				{
+				case CTRL_A:
+					return ActionType::SELECT;
+				case CTRL_S:
+					pWind->FlushKeyQueue();
+					return ActionType::SAVE;
+				case CTRL_Z:
+					pWind->FlushKeyQueue();
+					return ActionType::UNDO;
+				case CTRL_Y:
+					pWind->FlushKeyQueue();
+					return ActionType::REDO;
+				case CTRL_C:
+					pWind->FlushKeyQueue();
+					return ActionType::COPY;
+				case CTRL_X:
+					pWind->FlushKeyQueue();
+					return ActionType::CUT;
+				case CTRL_V:
+					pWind->FlushKeyQueue();
+					return ActionType::PASTE;
+				case CTRL_O:
+					pWind->FlushKeyQueue();
+					return ActionType::LOAD;
+				}
 			}
 		}
 		
