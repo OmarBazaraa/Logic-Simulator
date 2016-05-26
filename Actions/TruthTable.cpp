@@ -57,20 +57,20 @@ TruthTable::~TruthTable() {
 
 /* Populates */
 void TruthTable::Populate() {
-	Component ** list = mAppManager->GetComponentList();
-	int count = mAppManager->GetComponentsCount();
-	mLeds = new LED*[count];
-	mSwitches = new Switch*[count];
-	mSwitchesDefault = new int[count];
-	for (int i = 0; i < count; i++) {
-		if (dynamic_cast<LED*>(list[i]) && !list[i]->IsDeleted()) {
-			mLeds[mLedsCount++] = (LED*)list[i];
+	vector<LED*>leds = mAppManager->GetLeds();
+	vector<Switch*>switches = mAppManager->GetSwitches();
+	mLedsCount = leds.size();
+	mSwitchesCount = switches.size();
+	mLeds = new LED*[mLedsCount];
+	mSwitches = new Switch*[mSwitchesCount];
+	mSwitchesDefault = new int[mSwitchesCount];
+	for (int i = 0; i < mLedsCount; i++) {
+			mLeds[i] = leds[i];
 		}
-		else if (dynamic_cast<Switch*>(list[i]) && !list[i]->IsDeleted()) {
-			mSwitches[mSwitchesCount] = (Switch*)list[i];
-			mSwitchesDefault[mSwitchesCount++] = list[i]->GetOutputPinStatus();
-		}
-	}
+	for (int i = 0; i < mSwitchesCount; i++) {
+		mSwitches[i] = switches[i];
+		mSwitchesDefault[i] = mSwitches[i]->GetOutputPinStatus();
+	}		
 }
 
 /* Draws truth table window */
@@ -195,7 +195,7 @@ void TruthTable::Test(string Combination) {
 		}
 
 		if (mCanDraw)pWind->DrawString(i * UI.Column + UI.TruthTableMargin + UI.StatusMargin + mSwitchesCount * UI.Column, pos, status);
-		mWrite << "   " << status << "       ";
+		mWrite << "  " << status;
 	}
 	mWrite << endl;
 }

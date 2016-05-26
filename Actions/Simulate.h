@@ -17,8 +17,8 @@ using namespace std;
 class Simulate : public Action
 {
 private:
-	set<Component*> visited,circuit;
-	bool stopSimulation;
+	set<Component*> mVisited,mCircuit;
+	bool mStopSimulation;
 
 public:
 	/* Constructor */
@@ -31,7 +31,7 @@ public:
 	virtual bool Execute();
 
 	/* Tests the output on a led */
-	int TestGate(Component*);
+	int Cascade(Component*);
 
 	/* Undo action */
 	virtual void Undo();
