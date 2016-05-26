@@ -1,7 +1,6 @@
 #include "Input.h"
 #include "Output.h"
 #include "..\Components\Gate.h"
-#include <iostream>
 
 /* Constructor */
 Input::Input(window* pW) {

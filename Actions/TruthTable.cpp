@@ -187,11 +187,13 @@ void TruthTable::Test(string Combination) {
 		status = "";
 		status += ('0' + mLeds[i]->GetInputPinStatus(0));
 
-		if (status[0] - '0') {
-			pWind->SetPen(((color)(GREEN)));
-		}
-		else { 
-			pWind->SetPen(((color)(250)));
+		if (mCanDraw) {
+			if (status[0] - '0') {
+				pWind->SetPen(((color)(GREEN)));
+			}
+			else {
+				pWind->SetPen(((color)(250)));
+			}
 		}
 
 		if (mCanDraw)pWind->DrawString(i * UI.Column + UI.TruthTableMargin + UI.StatusMargin + mSwitchesCount * UI.Column, pos, status);

@@ -37,10 +37,9 @@ bool Hover::Execute() {
 	pOut->StoreImage(wind, minX, minY, maxX, maxY);
 
 	// Loop until the user click the mouse left button
-	while (pIn->GetButtonState(LEFT_BUTTON, x, y) == BUTTON_UP
-		&& (pIn->GetKeyState(c) != ASCII || c > CTRL_Z) && pIn->GetKeyState(c) != KEY_DEL) {
+	while (pIn->GetButtonState(LEFT_BUTTON, x, y) == BUTTON_UP && (pIn->GetKeyState(c) != ASCII || c > CTRL_Z) && pIn->GetKeyState(c) != KEY_DEL) {
 
-		pIn->GetKeyPress(c);
+		pIn->GetKeyPress(c);	// To return from the hover action
 
 		// User hovers on the tool bar
 		if (y >= 0 && y < UI.ToolBarHeight) {
