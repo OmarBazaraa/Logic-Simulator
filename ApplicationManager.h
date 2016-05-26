@@ -29,12 +29,6 @@ public:
 	/* Constructor */
 	ApplicationManager();
 
-	/* Returns the number of the components */
-	int GetComponentsCount() const;
-
-	/* Returns the list of components */
-	Component** GetComponentList() const;
-
 	/* Sets the last copied/cut component */
 	void SetCopiedComp(Component* pComp);
 
@@ -59,6 +53,9 @@ public:
 	/* Adds a new component to the list of components */
 	void AddComponent(Component* pComp);
 
+	/* Returns the number of the existing components */
+	int GetExistingComponentsCount() const;
+
 	/* Counts and returns the number of selected components */
 	int CountSelectedComponents() const;
 
@@ -73,6 +70,12 @@ public:
 
 	/* Returns a vector of all connections */
 	vector<Connection*> GetConnections();
+
+	/* Returns a vector of all leds */
+	vector<LED*> GetLeds();
+
+	/* Returns a vector of all switches */
+	vector<Switch*> GetSwitches();
 
 	/* Undoes the last action */
 	void Undo();

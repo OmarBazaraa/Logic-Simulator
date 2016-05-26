@@ -2,7 +2,7 @@
 
 /* Constructor */
 Simulate::Simulate(ApplicationManager* pAppMan) : Action(pAppMan) {
-	stopSimulation = false;
+	mStopSimulation = false;
 }
 
 /* Reads parameters required for action to execute */
@@ -12,26 +12,20 @@ bool Simulate::ReadActionParameters() {
 
 /* Executes action */
 bool Simulate::Execute() {
+
 	mAppManager->SetSelectionOfComponents(false);
 
-	Component** list = mAppManager->GetComponentList();
-	int count = mAppManager->GetComponentsCount();
+	int count = mAppManager->GetExistingComponentsCount();
 
-	for (int i = 0; i < count; i++)
-		if (!list[i]->IsDeleted())
-			circuit.insert(list[i]);
-
-	if (circuit.size() == 0)
-		stopSimulation = true;
-
-	for (int i = 0; i < count; i++) {
-		if (dynamic_cast<LED*>(list[i]) && !list[i]->IsDeleted())
-			TestGate(list[i]);
-
-		visited.clear();
+	vector<LED*>pLeds = mAppManager->GetLeds();
+	int n = pLeds.size();
+	
+	for (int i = 0; i < n; i++) {
+		Cascade(pLeds[i]);
+		mVisited.clear();
 	}	
 
-	if (stopSimulation || circuit.size() || count==0) {
+	if (mStopSimulation || mCircuit.size() < count || count == 0) {
 		ActionType act = ActionType::DESIGN_MODE;
 
 		Dialog dialog("Circuit is not valid. Cannot start simulation.", Type_C);
@@ -44,20 +38,20 @@ bool Simulate::Execute() {
 }
 
 /* Tests the output on a led */
-int Simulate::TestGate(Component* pComp) {
+int Simulate::Cascade(Component* pComp) {
 	//validation
 
-	int n = visited.size();
+	int n = mVisited.size();
 	if (pComp != NULL) {
-		circuit.erase(pComp);
-		visited.insert(pComp);
+		mCircuit.insert(pComp);
+		mVisited.insert(pComp);
 	}
 	else
 		return -1;
 
 	// Detects inner feedback
-	if (n == visited.size()) {
-		stopSimulation = true;
+	if (n == mVisited.size()) {
+		mStopSimulation = true;
 		return -1;
 	}
 
@@ -65,17 +59,17 @@ int Simulate::TestGate(Component* pComp) {
 
 	if (pComp != NULL) {
 		if (dynamic_cast<Switch*>(pComp)) {
-			visited.erase(pComp);
+			mVisited.erase(pComp);
 			return pComp->GetOutputPinStatus();
 		}
 		else if (dynamic_cast<LED*>(pComp)) {
 			if (((LED*)pComp)->GetInputPin(0)->IsFull()) {
-				circuit.erase(((LED*)pComp)->GetInputPin(0)->GetConnection(0));
-				returnValue = TestGate(((LED*)pComp)->GetInputPin(0)->GetConnection(0)->GetSourcePin()->GetGate());
+				mCircuit.insert(((LED*)pComp)->GetInputPin(0)->GetConnection(0));
+				returnValue = Cascade(((LED*)pComp)->GetInputPin(0)->GetConnection(0)->GetSourcePin()->GetGate());
 			}
 			else { 
 				returnValue = -1;
-				stopSimulation = true;
+				mStopSimulation = true;
 			}
 			if (returnValue > -1)
 				((LED*)pComp)->SetInputPinStatus(0, returnValue ? Status::HIGH : Status::LOW);
@@ -85,22 +79,22 @@ int Simulate::TestGate(Component* pComp) {
 
 			for (int i = 0; i<((LogicGate*)pComp)->GetInputsCount(); i++) {
 				if (((LogicGate*)pComp)->GetInputPin(i)->IsFull()) {
-					circuit.erase(((LED*)pComp)->GetInputPin(i)->GetConnection(0));
-					returnValue = TestGate(((LogicGate*)pComp)->GetInputPin(i)->GetConnection(0)->GetSourcePin()->GetGate());
+					mCircuit.insert(((LED*)pComp)->GetInputPin(i)->GetConnection(0));
+					returnValue = Cascade(((LogicGate*)pComp)->GetInputPin(i)->GetConnection(0)->GetSourcePin()->GetGate());
 					if (returnValue > -1)
 						((Gate*)pComp)->SetInputPinStatus(i, returnValue ? Status::HIGH : Status::LOW);
 					else {
-						visited.erase(pComp);
+						mVisited.erase(pComp);
 						return -1;
 					}
 				}
 				else {
-					stopSimulation = true;
+					mStopSimulation = true;
 					return -1;
 				}
 			}
 
-			visited.erase(pComp);
+			mVisited.erase(pComp);
 			((LogicGate*)pComp)->Operate();
 			return ((LogicGate*)pComp)->GetOutputPinStatus();
 
