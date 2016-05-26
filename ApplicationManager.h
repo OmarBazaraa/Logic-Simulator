@@ -29,9 +29,6 @@ public:
 	/* Constructor */
 	ApplicationManager();
 
-	/* Returns the number of the components */
-	int GetComponentsCount() const;
-
 	/* Returns the number of the existing components */
 	int GetExistingComponentsCount() const;
 

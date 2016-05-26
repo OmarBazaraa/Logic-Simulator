@@ -30,11 +30,6 @@ ApplicationManager::ApplicationManager() {
 	pIn = pOut->CreateInput();
 }
 
-/* Returns the number of components */
-int ApplicationManager::GetComponentsCount() const {
-	return mCompCount;
-}
-
 /* Returns the number of the existing components */
 int ApplicationManager::GetExistingComponentsCount() const {
 	int s = 0;
