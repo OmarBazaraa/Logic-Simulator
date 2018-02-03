@@ -3,15 +3,15 @@ A logic simulator application for Windows written in C++ using CMU graphics libr
 
 ### Features
 * Design and simulate combinational circuits.
-* Generate the truth table of the circuit.
+* Generate truth table for your circuits.
 * Save and restore your circuits.
 * Undo and redo your actions.
 * Copy, cut and paste logic gates and components.
-* Rename and delete added logic gates.
+* Rename and delete added gates.
 * Keyboard shortcuts for all available actions.
-* Simple user interface.
+* Simple and friendly user interface.
 
-
+### Screenshots
 ![alt text](https://raw.githubusercontent.com/OmarBazaraa/Logic-Simulator/master/Logic%20Sim%201.png)
 
 ![alt text](https://raw.githubusercontent.com/OmarBazaraa/Logic-Simulator/master/Logic%20Sim%202.png)
